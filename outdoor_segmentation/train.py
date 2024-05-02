@@ -182,8 +182,8 @@ class Trainer:
             if file == None:
                 raise FileNotFoundError
             checkpoint_hd = torch.load(self.ckp_dir / (file))
-            self.model.hd_model.classes_hv = checkpoint_hd['class_hv']
-            self.model.hd_model.random_projection = checkpoint_hd['projection_matrix']
+            model.hd_model.classes_hv = checkpoint_hd['class_hv']
+            model.hd_model.random_projection = checkpoint_hd['projection_matrix']
             print("Loaded HD")
 
         # set optimizer
