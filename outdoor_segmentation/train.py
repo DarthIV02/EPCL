@@ -556,7 +556,7 @@ def main():
         _, test_loader, _ = build_dataloader(
             data_cfgs=data_config,
             modality=cfgs.MODALITY,
-            batch_size=cfgs.OPTIM.BATCH_SIZE_PER_GPU,
+            batch_size=1,#cfgs.OPTIM.BATCH_SIZE_PER_GPU,
             dist=trainer.if_dist_train,
             workers=args.workers,
             logger=trainer.logger,
