@@ -89,7 +89,7 @@ def parse_config():
     parser.add_argument('--eval_interval', type=int, default=50,
                         help='number of training epochs')
     # == device configs ==
-    parser.add_argument('--workers', type=int, default=5,  
+    parser.add_argument('--workers', type=int, default=1,  
                         help='number of workers for dataloader') 
     parser.add_argument('--local_rank', type=int, default=0,
                         help='local rank for distributed training')
@@ -299,6 +299,7 @@ class Trainer:
         checkpoint_state['optimizer_state'] = self.optimizer.state_dict()
         checkpoint_state['scaler_state'] = self.scaler.state_dict()
         checkpoint_state['scheduler_state'] = self.scheduler.state_dict()
+        
 
         torch.save(checkpoint_state, f"{ckp_name}.pth")
 

@@ -17,6 +17,9 @@ from torchsparse.nn.utils import fapply
 from .utils import initial_voxelize, voxel_to_point
 from pcseg.loss import Losses
 from .transformer import EPCLEncoder
+import torchhd
+import torch.nn as nn
+from tqdm import tqdm
 
 __all__ = ['EPCLOutdoorSeg']
 
@@ -129,6 +132,67 @@ class ResidualBlock(nn.Module):
         out = self.relu(self.net(x) + self.downsample(x))
         return out
 
+class HD_model():
+    def __init__(self, classes = 20, d = 1000, num_features=409, lr = 0.01, **kwargs):
+        self.d = d
+        self.div = kwargs['div']
+        self.device = kwargs['device']
+        self.classes_hv = torch.zeros((classes, self.d))
+        self.flatten = nn.Flatten(0,1)
+        self.softmax = torch.nn.Softmax(dim=1)
+        self.random_projection = torchhd.embeddings.Projection(num_features, self.d, device=kwargs['device'])
+        self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
+        self.lr = lr
+
+    def to(self, *args):
+        self.classes_hv = self.classes_hv.to(*args)
+        self.random_projection = self.random_projection.to(*args)
+        self.random_projection_global = self.random_projection_global.to(*args)
+
+    def encode(self, input_x):
+        hv = self.random_projection(input_x).sign()
+        return hv
+    
+    def forward(self, input_h):
+        hv = self.encode(input_h)
+        sim = self.similarity(hv)
+        pred_label = torch.argmax(sim, dim=1)
+        return hv, sim, pred_label
+        
+    def similarity(self, point):
+        sim = torchhd.cosine_similarity(point, self.classes_hv)
+        sim = self.softmax(sim)
+        return sim
+    
+    def train(self, input_points, classification, **kwargs):
+        hv_all, sim_all, pred_labels = self.forward(input_points)
+        classification = classification.type(torch.LongTensor).to(self.device)
+        for idx in torch.arange(input_points.shape[0]).chunk(self.div):
+            idx = idx.to(self.device)
+            class_batch = classification[idx]
+
+            novelty = 1 - sim_all[idx, class_batch]
+            updates = hv_all[idx].transpose(0,1)*torch.mul(novelty, self.lr)
+            updates = updates.transpose(0,1)
+            
+            # Update all of the classes with the actual label
+            self.classes_hv.index_add_(0, class_batch, updates)
+            
+            #Substract when class is different then actual
+            
+            #if (pred_labels != c):
+            #    self.classes_hv[pred_labels] += -1*hv_all*self.lr*(1-sim_all[pred_labels])
+            
+            mask_dif = class_batch != pred_labels[idx]
+            
+            novelty = 1 - sim_all[idx[mask_dif], pred_labels[idx][mask_dif]] # only the ones updated
+            updates = hv_all[idx][mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            updates = torch.mul(updates, -1)
+            updates = updates.transpose(0,1)
+            updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
+            updates_2[mask_dif] = updates # update vectors for the ones that changed
+
+            self.classes_hv.index_add_(0, pred_labels[idx], updates_2)
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -183,7 +247,7 @@ class Bottleneck(nn.Module):
         out = self.relu(self.net(x) + self.downsample(x))
         return out
 
-class EPCLOutdoorSeg(BaseSegmentor):    
+class EPCLOutdoorSegHD(BaseSegmentor):    
     def __init__(
         self,
         model_cfgs,
@@ -363,6 +427,11 @@ class EPCLOutdoorSeg(BaseSegmentor):
         
         self.epcl_encoder = EPCLEncoder(model_cfgs.EPCL)
 
+        #HD Initialization
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.hd_model = HD_model(device=device, div=2)
+        self.hd_model.to(device)
+
     def _make_layer(self, block, out_channels, num_block, stride=1, if_dist=False):
         layers = []
         layers.append(
@@ -387,36 +456,20 @@ class EPCLOutdoorSeg(BaseSegmentor):
     def forward(self, batch_dict, return_logit=False, return_tta=False):
         x = batch_dict['lidar']
         x.F = x.F[:, :self.in_feature_dim]
-        # x: SparseTensor z: PointTensor
         z = PointTensor(x.F, x.C.float()) # dim=4
 
         x0 = initial_voxelize(z, self.pres, self.vres)
 
         x0 = self.stem(x0)
         z0 = voxel_to_point(x0, z, nearest=False)
-        #print("z0")
-        #print(z0.F.shape)
-        #print(z0.C.shape)
-        #print(z0.__dict__)
 
 
         x1 = self.stage1(x0) 
-        #print("x1")
-        #print(x1.F.shape)
         x2 = self.stage2(x1)
-        #print("x2")
-        #print(x2.F.shape)
         x3 = self.stage3(x2)
-        #print("x3")
-        #print(x3.F.shape) 
         x4 = self.stage4(x3) 
-        #print("x4")
-        #print(x4.F.shape)
         z1 = voxel_to_point(x4, z0)
-        #print("z1")
-        #print(z1.__dict__)
 
-        
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
         #print("Input CLIP")
@@ -477,47 +530,29 @@ class EPCLOutdoorSeg(BaseSegmentor):
         #print("\nOut")
         #print(out.shape)
 
+        
         if self.training:
             target = batch_dict['targets'].F.long().cuda(non_blocking=True)
 
             coords_xyz = batch_dict['lidar'].C[:, :3].float()
             offset = batch_dict['offset']
-            #loss = self.criterion_losses(out, target, xyz=coords_xyz, offset=offset)
-            
-            #ret_dict = {'loss': loss}
-            #disp_dict = {'loss': loss.item()}
-            #tb_dict = {'loss': loss.item()}
-            #return ret_dict, tb_dict, disp_dict
+            self.hd_model.train(z1.F, batch_dict['targets'].feats)
         else:
             invs = batch_dict['inverse_map']
             all_labels = batch_dict['targets_mapped']
-            #point_predict = []
+            point_predict = []
             point_labels = []
-            #point_predict_logits = []
+            hv, sim, pred_label = self.hd_model.forward(z1.F)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
                 cur_label = (all_labels.C[:, -1] == idx).cpu().numpy()
-                #if return_logit or return_tta:
-                #    outputs_mapped = out[cur_scene_pts][cur_inv].softmax(1)
-                #else:
-                #    outputs_mapped = out[cur_scene_pts][cur_inv].argmax(1)
-                    #print("cur_scene_pts")
-                    #print(cur_scene_pts)
-                    #print("cur_inv")
-                    #print(cur_inv)
-                    #print("outputs_mapped")
-                    #print(outputs_mapped)
-                #    outputs_mapped_logits = out[cur_scene_pts][cur_inv]
+                outputs_mapped = pred_label[cur_scene_pts][cur_inv].argmax(1)
                 targets_mapped = all_labels.F[cur_label]
-                #point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
+                point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
-                #point_predict_logits.append(outputs_mapped_logits[:batch_dict['num_points'][idx]].cpu().numpy())
 
-            """return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'],
-                    'point_predict_logits': point_predict_logits, 'output_CLIP': output_clip, 'z1':z1, 
-                    'concat_features':concat_feat}"""
-        return {'point_labels': point_labels, 'name': batch_dict['name'], 'z1':z1} #'output_CLIP': output_clip, 'concat_features':concat_feat
+        return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'z1':z1} #'output_CLIP': output_clip, 'concat_features':concat_feat
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)

@@ -14,6 +14,8 @@ from .range.cenet.model.semantic.cenet import CENet
 from .voxel.cylinder3d import Cylinder_TS
 from .voxel.cylinder3d.cylinder_ts import Cylinder_TS
 from .voxel.epcl.epcl_outdoor_seg import EPCLOutdoorSeg
+from .voxel.epcl_hd.epcl_outdoor_seg import EPCLOutdoorSegHD
+
 # multi-view fusion
 from .fusion.spvcnn.spvcnn import SPVCNN #, MinkUNet
 from .fusion.rpvnet.rpvnet import RPVNet
@@ -36,6 +38,7 @@ __all__ = {
     # voxel
     'Cylinder_TS': Cylinder_TS,
     'EPCLOutdoorSeg': EPCLOutdoorSeg,
+    'EPCL_HD': EPCLOutdoorSegHD,
 
     # multi-view fusion
     'SPVCNN': SPVCNN,
