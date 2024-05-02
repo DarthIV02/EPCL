@@ -178,6 +178,7 @@ class Trainer:
                 to_cpu=if_dist_train,
                 logger=logger
             )
+            print(self.ckp_dir)
             file = os.listdir(self.ckp_dir)[-1]
             if file == None:
                 raise FileNotFoundError
