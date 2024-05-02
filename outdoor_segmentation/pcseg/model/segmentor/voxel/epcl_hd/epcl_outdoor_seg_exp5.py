@@ -148,7 +148,9 @@ class HD_model():
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
-        self.random_projection = self.random_projection.to(*args)
+        self.random_projection_1 = self.random_projection_1.to(*args)
+        self.random_projection_2 = self.random_projection_2.to(*args)
+        self.random_projection_3 = self.random_projection_3.to(*args)
         #self.random_projection_global = self.random_projection_global.to(*args)
 
     def encode(self, input_x):
