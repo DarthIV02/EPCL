@@ -68,7 +68,7 @@ class SemantickittiDataset(data.Dataset):
 
         self._sample_idx = np.arange(len(self.annos))
 
-        self.samples_per_epoch = self.data_cfgs.get('SAMPLES_PER_EPOCH', 100)
+        self.samples_per_epoch = self.data_cfgs.get('SAMPLES_PER_EPOCH', -1)
         if self.samples_per_epoch == -1:# or not self.training:
             self.samples_per_epoch = len(self.annos)
 
