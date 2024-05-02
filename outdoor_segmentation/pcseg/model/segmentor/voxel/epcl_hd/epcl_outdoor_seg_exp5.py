@@ -140,25 +140,25 @@ class HD_model():
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
-        self.random_projection_1 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
-        self.random_projection_2 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
-        self.random_projection_3 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
+        self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
+        self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
+        self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
+        self.random_projection_0 = self.random_projection_0.to(*args)
         self.random_projection_1 = self.random_projection_1.to(*args)
         self.random_projection_2 = self.random_projection_2.to(*args)
-        self.random_projection_3 = self.random_projection_3.to(*args)
         #self.random_projection_global = self.random_projection_global.to(*args)
 
     def encode(self, input_x):
-        hv_1 = self.random_projection_1(input_x[0])
+        hv_0 = self.random_projection_0(input_x[0])
+        hv_1 = self.random_projection_1(input_x[1])
         hv_2 = self.random_projection_2(input_x[2])
-        hv_3 = self.random_projection_3(input_x[3])
 
-        hv_all = torch.bundle(torch.bundle(hv_1, hv_2),hv_3).sign()
+        hv_all = torch.bundle(torch.bundle(hv_0, hv_1),hv_2).sign()
 
         return hv_all
     
