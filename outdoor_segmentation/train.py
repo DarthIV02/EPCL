@@ -328,10 +328,11 @@ class Trainer:
         self.optimizer.load_state_dict(checkpoint['optimizer_state'])
         self.scaler.load_state_dict(checkpoint['scaler_state'])
         self.scheduler.load_state_dict(checkpoint['scheduler_state'])
-        file = os.listdir(self.ckp_dir)[-1]
-        checkpoint_hd = torch.load(file)
-        self.model.hd_model.classes_hv = torch.load(checkpoint_hd['class_hv'], strict=True)
-        self.model.hd_model.random_projection = torch.load(checkpoint_hd['projection_matrix'], strict=True)
+        if not self.args.train_hd:
+            file = os.listdir(self.ckp_dir)[-1]
+            checkpoint_hd = torch.load(file)
+            self.model.hd_model.classes_hv = torch.load(checkpoint_hd['class_hv'], strict=True)
+            self.model.hd_model.random_projection = torch.load(checkpoint_hd['projection_matrix'], strict=True)
         self.logger.info('==> Done')
         return
 
