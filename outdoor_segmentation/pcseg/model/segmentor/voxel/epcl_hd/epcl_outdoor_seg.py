@@ -454,7 +454,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, batch_dict, return_logit=False, return_tta=False):
-        print(self.model.training)
+        print(self.training)
         x = batch_dict['lidar']
         x.F = x.F[:, :self.in_feature_dim]
         z = PointTensor(x.F, x.C.float()) # dim=4
