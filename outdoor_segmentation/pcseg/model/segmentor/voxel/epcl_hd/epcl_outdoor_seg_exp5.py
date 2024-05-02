@@ -149,15 +149,15 @@ class HD_model():
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
-        self.random_projection_0 = self.random_projection[0].to(*args)
-        self.random_projection_1 = self.random_projection[1].to(*args)
-        self.random_projection_2 = self.random_projection[2].to(*args)
+        self.random_projection[0] = self.random_projection[0].to(*args)
+        self.random_projection[1] = self.random_projection[1].to(*args)
+        self.random_projection[2] = self.random_projection[2].to(*args)
         #self.random_projection_global = self.random_projection_global.to(*args)
 
     def encode(self, input_x):
-        hv_0 = self.random_projection_0(input_x[0])
-        hv_1 = self.random_projection_1(input_x[1])
-        hv_2 = self.random_projection_2(input_x[2])
+        hv_0 = self.random_projection[0](input_x[0])
+        hv_1 = self.random_projection[1](input_x[1])
+        hv_2 = self.random_projection[2](input_x[2])
 
         hv_all = torchhd.bundle(torchhd.bundle(hv_0, hv_1),hv_2).sign()
 
@@ -556,7 +556,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
-            hv, sim, pred_label = self.hd_model.forward(concat_feat)
+            hv, sim, pred_label = self.hd_model.forward(tuple_feat)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
