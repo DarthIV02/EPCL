@@ -333,6 +333,7 @@ class Trainer:
             checkpoint_hd = torch.load(file)
             self.model.hd_model.classes_hv = torch.load(checkpoint_hd['class_hv'], strict=True)
             self.model.hd_model.random_projection = torch.load(checkpoint_hd['projection_matrix'], strict=True)
+            print("Loaded HD")
         self.logger.info('==> Done')
         return
 
