@@ -438,6 +438,8 @@ class Trainer:
         metric = {}
         metric['hist_list'] = []
 
+        print(self.model.hd_model.classes_hv)
+
         for i, batch_dict in enumerate(dataloader):
             load_data_to_gpu(batch_dict)
 
