@@ -220,8 +220,7 @@ class Trainer:
                 device_ids=[cfgs.LOCAL_RANK % torch.cuda.device_count()],
             )"""
         self.model.train()
-        print(self.model.__name__)
-        
+        #print(self.model.__name__)
         
         logger.info(self.model)
         logger.info("Model parameters: {:.3f} M".format(get_n_params(self.model)/1e6))
