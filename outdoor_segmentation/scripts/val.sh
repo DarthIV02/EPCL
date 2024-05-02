@@ -5,7 +5,7 @@ NGPUS=1
 cfg_name=EPCL_HD
 cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
 extra_tag=val_${cfg_name}
-pretrained_model=${ROOT}/../EPCL/checkpoints/best_checkpoint.pth
+pretrained_model=${ROOT}/checkpoints/best_checkpoint.pth
 
 set -x
 
