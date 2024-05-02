@@ -315,6 +315,7 @@ class Trainer:
         print(f"Saved model hd iter {iter}")
 
     def resume(self, filename):
+        print("---------------------------   HERE   --------------------------------")
         if not os.path.isfile(filename):
             raise FileNotFoundError
         self.logger.info(f"==> Loading parameters from checkpoint {filename}")
