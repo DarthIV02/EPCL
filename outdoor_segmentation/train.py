@@ -198,6 +198,7 @@ class Trainer:
         self.start_epoch = start_epoch
         self.cur_epoch = start_epoch
         self.model = model
+        print(self.model.getClass())
 
         # -----------------------resume---------------------------
         if cfgs.LOCAL_RANK == 0:
@@ -220,7 +221,7 @@ class Trainer:
                 device_ids=[cfgs.LOCAL_RANK % torch.cuda.device_count()],
             )
         self.model.train()
-        
+        print(self.model.getClass())
         
         
         logger.info(self.model)
