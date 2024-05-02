@@ -7,10 +7,11 @@ from .segmentor import build_segmentor
 from torchsparse import SparseTensor
 
 
-def build_network(model_cfgs, num_class):
+def build_network(model_cfgs, num_class, exp=1):
     model = build_segmentor(
         model_cfgs=model_cfgs,
         num_class=num_class,
+        exp=exp
     )
     return model
 
