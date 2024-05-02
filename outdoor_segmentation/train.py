@@ -178,6 +178,13 @@ class Trainer:
                 to_cpu=if_dist_train,
                 logger=logger
             )
+            file = os.listdir(self.ckp_dir)[-1]
+            if file == None:
+                raise FileNotFoundError
+            checkpoint_hd = torch.load(file)
+            self.model.hd_model.classes_hv = checkpoint_hd['class_hv']
+            self.model.hd_model.random_projection = checkpoint_hd['projection_matrix']
+            print("Loaded HD")
 
         # set optimizer
         self.optimizer = build_optimizer(
@@ -203,7 +210,6 @@ class Trainer:
         if cfgs.LOCAL_RANK == 0:
             print('resuming...')
         if args.ckp is not None:
-            print("****************** HERE *********************")
             self.resume(args.ckp)
         else:
             ckp_list = glob.glob(str(ckp_dir / '*checkpoint_epoch_*.pth'))
@@ -330,13 +336,6 @@ class Trainer:
         self.optimizer.load_state_dict(checkpoint['optimizer_state'])
         self.scaler.load_state_dict(checkpoint['scaler_state'])
         self.scheduler.load_state_dict(checkpoint['scheduler_state'])
-        print("train HD?", not self.args.train_hd)
-        if not self.args.train_hd:
-            file = os.listdir(self.ckp_dir)[-1]
-            checkpoint_hd = torch.load(file)
-            self.model.hd_model.classes_hv = checkpoint_hd['class_hv']
-            self.model.hd_model.random_projection = checkpoint_hd['projection_matrix']
-            print("Loaded HD")
         self.logger.info('==> Done')
         return
 
