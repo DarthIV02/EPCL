@@ -530,14 +530,15 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("\nOut")
         #print(out.shape)
 
+        print(self.training)
         
         if self.training:
+            print("HD training done")
             target = batch_dict['targets'].F.long().cuda(non_blocking=True)
 
             coords_xyz = batch_dict['lidar'].C[:, :3].float()
             offset = batch_dict['offset']
             self.hd_model.train(z1.F, batch_dict['targets'].feats)
-            print("HD training done")
         else:
             invs = batch_dict['inverse_map']
             all_labels = batch_dict['targets_mapped']

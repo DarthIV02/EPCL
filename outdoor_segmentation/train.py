@@ -501,7 +501,7 @@ class Trainer:
         result_dir.mkdir(parents=True, exist_ok=True)
         #dataset = dataloader.dataset
 
-        self.logger.info(f"*************** TRAINED EPOCH {self.cur_epoch+1} {prefix} EVALUATION *****************")
+        self.logger.info(f"*************** TRAINED EPOCH {self.cur_epoch+1} {prefix} TRAINING HD *****************")
         if self.rank == 0:
             progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
         metric = {}
