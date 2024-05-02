@@ -38,7 +38,7 @@ __all__ = {
     # voxel
     'Cylinder_TS': Cylinder_TS,
     'EPCLOutdoorSeg': EPCLOutdoorSeg,
-    'EPCLHD': EPCLOutdoorSegHD,
+    'EPCLOutdoorSegHD': EPCLOutdoorSegHD,
 
     # multi-view fusion
     'SPVCNN': SPVCNN,
@@ -47,7 +47,7 @@ __all__ = {
 
 
 def build_segmentor(model_cfgs, num_class):
-    model = eval(EPCLOutdoorSegHD)( #model_cfgs.NAME
+    model = eval(model_cfgs.NAME)( #model_cfgs.NAME
         model_cfgs=model_cfgs,
         num_class=num_class,
     )
