@@ -178,7 +178,6 @@ class Trainer:
                 to_cpu=if_dist_train,
                 logger=logger
             )
-            print(self.ckp_dir)
             file = os.listdir(self.ckp_dir)[-1]
             if file == None:
                 raise FileNotFoundError
@@ -323,7 +322,6 @@ class Trainer:
         print(f"Saved model hd iter {iter}")
 
     def resume(self, filename):
-        print("---------------------------   HERE   --------------------------------")
         if not os.path.isfile(filename):
             raise FileNotFoundError
         self.logger.info(f"==> Loading parameters from checkpoint {filename}")

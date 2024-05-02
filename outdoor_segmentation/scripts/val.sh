@@ -4,7 +4,7 @@ cd ${ROOT}
 NGPUS=1
 cfg_name=EPCL_HD
 cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
-extra_tag=val_${cfg_name}
+extra_tag=val_${cfg_name}_x1
 pretrained_model=${ROOT}/checkpoints/best_checkpoint.pth
 
 set -x
