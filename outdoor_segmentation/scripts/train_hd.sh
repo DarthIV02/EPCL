@@ -4,7 +4,7 @@ cd ${ROOT}
 NGPUS=1
 cfg_name=EPCL_HD
 cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
-extra_tag=val_${cfg_name}_x3
+extra_tag=val_${cfg_name}_x4
 pretrained_model=${ROOT}/checkpoints/best_checkpoint.pth
 
 set -x
@@ -24,7 +24,7 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --train_hd \
 --ckp_save_interval 100 \
---exp 3 \
+--exp 4 \
 --eval \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
@@ -36,7 +36,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --eval \
---exp 3 \
+--exp 4 \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
