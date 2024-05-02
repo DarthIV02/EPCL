@@ -24,7 +24,7 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --train_hd \
 --ckp_save_interval 100 \
---exp 6 \
+--exp 5 \
 --eval \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
