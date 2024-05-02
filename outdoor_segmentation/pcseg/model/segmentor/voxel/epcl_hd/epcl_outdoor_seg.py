@@ -453,8 +453,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, batch_dict, return_logit=False, return_tta=False):
-        print(self.training)
+    def forward(self, batch_dict, return_logit=False, return_tta=False, train_hd=False):
         x = batch_dict['lidar']
         x.F = x.F[:, :self.in_feature_dim]
         z = PointTensor(x.F, x.C.float()) # dim=4
@@ -530,10 +529,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #out = self.classifier(concat_feat)
         #print("\nOut")
         #print(out.shape)
-
-        print(self.training)
         
-        if self.training:
+        if train_hd:
             print("HD training done")
             target = batch_dict['targets'].F.long().cuda(non_blocking=True)
 

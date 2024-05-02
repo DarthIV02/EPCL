@@ -506,15 +506,12 @@ class Trainer:
             progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
         metric = {}
         metric['hist_list'] = []
-        self.model.training = True
 
         for i, batch_dict in enumerate(dataloader):
             load_data_to_gpu(batch_dict)
-            print(self.model.training)
 
             with torch.no_grad():
-                print(self.model.training)
-                ret_dict = self.model(batch_dict)
+                ret_dict = self.model(batch_dict, train_hd=True)
             
             #point_predict = ret_dict['point_predict']
 
