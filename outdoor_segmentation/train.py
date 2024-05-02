@@ -86,6 +86,8 @@ def parse_config():
     # == evaluation configs ==
     parser.add_argument('--eval', action='store_true', default=False,
                         help='only perform evaluate')
+    parser.add_argument('--train_hd', action='store_true', default=False,
+                        help='only perform training on hd')
     parser.add_argument('--eval_interval', type=int, default=50,
                         help='number of training epochs')
     # == device configs ==
@@ -407,7 +409,7 @@ class Trainer:
             self.loader.dataset.point_cloud_dataset.resample()  
         if self.rank == 0:
             pbar.close()
-
+    
     def evaluate(self, dataloader, prefix):
         result_dir = self.log_dir / 'eval' / ('epoch_%s' % (self.cur_epoch+1))
         result_dir.mkdir(parents=True, exist_ok=True)
@@ -494,6 +496,31 @@ class Trainer:
 
         return {}
 
+    def train_hd(self, dataloader, prefix):
+        result_dir = self.log_dir / 'eval' / ('epoch_%s' % (self.cur_epoch+1))
+        result_dir.mkdir(parents=True, exist_ok=True)
+        #dataset = dataloader.dataset
+
+        self.logger.info(f"*************** TRAINED EPOCH {self.cur_epoch+1} {prefix} EVALUATION *****************")
+        if self.rank == 0:
+            progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
+        metric = {}
+        metric['hist_list'] = []
+        self.model.training = True
+
+        for i, batch_dict in enumerate(dataloader):
+            load_data_to_gpu(batch_dict)
+
+            with torch.no_grad():
+                ret_dict = self.model(batch_dict)
+            
+            #point_predict = ret_dict['point_predict']
+
+            if self.rank == 0:
+                progress_bar.update()
+        
+        if self.rank == 0:
+            progress_bar.close()
 
     def train(self):
 
@@ -549,7 +576,7 @@ class Trainer:
 def main():
     args, cfgs = parse_config()
     trainer = Trainer(args, cfgs)
-    if args.eval:
+    if args.eval and not args.train_hd:
         trainer.cur_epoch -= 1
         trainer.model.eval()
         data_config = copy.deepcopy(cfgs.DATA)
@@ -566,6 +593,22 @@ def main():
         trainer.evaluate(test_loader, "val")
         if trainer.if_dist_train:
             torch.distributed.barrier()
+        time.sleep(1)
+    elif args.train_hd:
+        trainer.cur_epoch -= 1
+        trainer.model.eval()
+        data_config = copy.deepcopy(cfgs.DATA)
+        _, train_loader, _ = build_dataloader(
+            data_cfgs=data_config,
+            modality=cfgs.MODALITY,
+            batch_size=1,#cfgs.OPTIM.BATCH_SIZE_PER_GPU,
+            dist=trainer.if_dist_train,
+            workers=args.workers,
+            logger=trainer.logger,
+            training=True,
+        )
+
+        trainer.evaluate(test_loader, "val")
         time.sleep(1)
     else:
         trainer.train()
