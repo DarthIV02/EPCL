@@ -331,8 +331,8 @@ class Trainer:
         if not self.args.train_hd:
             file = os.listdir(self.ckp_dir)[-1]
             checkpoint_hd = torch.load(file)
-            self.model.hd_model.classes_hv = torch.load(checkpoint_hd['class_hv'], strict=True)
-            self.model.hd_model.random_projection = torch.load(checkpoint_hd['projection_matrix'], strict=True)
+            self.model.hd_model.classes_hv = checkpoint_hd['class_hv']
+            self.model.hd_model.random_projection = checkpoint_hd['projection_matrix']
             print("Loaded HD")
         self.logger.info('==> Done')
         return
