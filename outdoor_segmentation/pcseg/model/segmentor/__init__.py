@@ -54,7 +54,9 @@ def build_segmentor(model_cfgs, num_class, exp=1):
     elif exp==3:
         from .voxel.epcl_hd.epcl_outdoor_seg_exp3 import EPCLOutdoorSegHD
     elif exp==4:
-        from .voxel.epcl_hd.epcl_outdoor_seg_exp4 import EPCLOutdoorSegHD  
+        from .voxel.epcl_hd.epcl_outdoor_seg_exp4 import EPCLOutdoorSegHD 
+    elif exp==5:
+        from .voxel.epcl_hd.epcl_outdoor_seg_exp5 import EPCLOutdoorSegHD  
 
     model = eval(model_cfgs.NAME)( #model_cfgs.NAME
         model_cfgs=model_cfgs,

@@ -133,14 +133,16 @@ class ResidualBlock(nn.Module):
         return out
 
 class HD_model():
-    def __init__(self, classes = 20, d = 1000, num_features=409, lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 1000, num_features=(409,204,153), lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
-        self.random_projection = torchhd.embeddings.Projection(num_features, self.d, device=kwargs['device'])
+        self.random_projection_1 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
+        self.random_projection_2 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
+        self.random_projection_3 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
@@ -150,8 +152,13 @@ class HD_model():
         #self.random_projection_global = self.random_projection_global.to(*args)
 
     def encode(self, input_x):
-        hv = self.random_projection(input_x).sign()
-        return hv
+        hv_1 = self.random_projection_1(input_x[0])
+        hv_2 = self.random_projection_2(input_x[2])
+        hv_3 = self.random_projection_3(input_x[3])
+
+        hv_all = torch.bundle(torch.bundle(hv_1, hv_2),hv_3).sign()
+
+        return hv_all
     
     def forward(self, input_h):
         hv = self.encode(input_h)
@@ -167,7 +174,7 @@ class HD_model():
     def train(self, input_points, classification, **kwargs):
         hv_all, sim_all, pred_labels = self.forward(input_points)
         classification = classification.type(torch.LongTensor).to(self.device)
-        for idx in torch.arange(input_points.shape[0]).chunk(self.div):
+        for idx in torch.arange(input_points[0].shape[0]).chunk(self.div):
             idx = idx.to(self.device)
             class_batch = classification[idx]
 
@@ -432,6 +439,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         self.hd_model = HD_model(device=device, div=2)
         self.hd_model.to(device)
 
+        print("--------------Loading experiment 4--------------")
+
     def _make_layer(self, block, out_channels, num_block, stride=1, if_dist=False):
         layers = []
         layers.append(
@@ -484,48 +493,48 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(x4.F.shape)
         #output_clip = x4.F # <----------------
         
-        #x4.F = self.dropout(x4.F)# <----------------
-        #y1 = self.up1[0](x4)# <----------------
+        x4.F = self.dropout(x4.F)# <----------------
+        y1 = self.up1[0](x4)# <----------------
         #print("y1")
         #print(y1.F.shape)
-        #y1 = torchsparse.cat([y1, x3])# <----------------
-        #y1 = self.up1[1](y1)# <----------------
+        y1 = torchsparse.cat([y1, x3])# <----------------
+        y1 = self.up1[1](y1)# <----------------
         #print("y1")
         #print(y1.F.shape)
 
-        #y2 = self.up2[0](y1)# <----------------
+        y2 = self.up2[0](y1)# <----------------
         #print("y2")
         #print(y2.F.shape)
-        #y2 = torchsparse.cat([y2, x2])# <----------------
-        #y2 = self.up2[1](y2)# <----------------
+        y2 = torchsparse.cat([y2, x2])# <----------------
+        y2 = self.up2[1](y2)# <----------------
         #print("y2")
         #print(y2.F.shape)
-        #z2 = voxel_to_point(y2, z1) # <----------------
+        z2 = voxel_to_point(y2, z1) # <----------------
         #print("z2")
         #print(z2.F.shape)
         #print(z2.C.shape)
 
-        #y2.F = self.dropout(y2.F)# <----------------
-        #y3 = self.up3[0](y2) # <----------------
+        y2.F = self.dropout(y2.F)# <----------------
+        y3 = self.up3[0](y2) # <----------------
         #print("y3")
         #print(y3.F.shape)
-        #y3 = torchsparse.cat([y3, x1]) # <----------------
-        #y3 = self.up3[1](y3) # <----------------
+        y3 = torchsparse.cat([y3, x1]) # <----------------
+        y3 = self.up3[1](y3) # <----------------
         #print("y3")
         #print(y3.F.shape)
  
-        #y4 = self.up4[0](y3)# <----------------
+        y4 = self.up4[0](y3)# <----------------
         #print("y4")
         #print(y4.F.shape)
-        #y4 = torchsparse.cat([y4, x0]) # <----------------
-        #y4 = self.up4[1](y4) # <----------------
+        y4 = torchsparse.cat([y4, x0]) # <----------------
+        y4 = self.up4[1](y4) # <----------------
         #print("y4")
         #print(y4.F.shape)
-        #z3 = voxel_to_point(y4, z2)# <----------------
+        z3 = voxel_to_point(y4, z2)# <----------------
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
-        #concat_feat = torch.cat([z1.F, z2.F, z3.F], dim=1)# <----------------
+        tuple_feat = (z1.F, z2.F, z3.F)# <----------------
         #out = self.classifier(concat_feat)
         #print("\nOut")
         #print(out.shape)
@@ -535,7 +544,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
             #coords_xyz = batch_dict['lidar'].C[:, :3].float()
             #offset = batch_dict['offset']
-            self.hd_model.train(z1.F, batch_dict['targets'].feats)
+            self.hd_model.train(tuple_feat, batch_dict['targets'].feats)
 
             return {}
         
@@ -544,7 +553,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
-            hv, sim, pred_label = self.hd_model.forward(z1.F)
+            hv, sim, pred_label = self.hd_model.forward(concat_feat)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
@@ -554,7 +563,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
 
-            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'z1':z1} #'output_CLIP': output_clip, 'concat_features':concat_feat
+            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'output': concat_feat} #'output_CLIP': output_clip, 'concat_features':concat_feat
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)
