@@ -546,7 +546,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
-            hv, sim, pred_label = self.hd_model.forward(concat_feat.F)
+            hv, sim, pred_label = self.hd_model.forward(concat_feat)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
