@@ -510,8 +510,10 @@ class Trainer:
 
         for i, batch_dict in enumerate(dataloader):
             load_data_to_gpu(batch_dict)
+            print(self.model.training)
 
             with torch.no_grad():
+                print(self.model.training)
                 ret_dict = self.model(batch_dict)
             
             #point_predict = ret_dict['point_predict']
