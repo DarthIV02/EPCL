@@ -203,6 +203,7 @@ class Trainer:
         if cfgs.LOCAL_RANK == 0:
             print('resuming...')
         if args.ckp is not None:
+            print("****************** HERE *********************")
             self.resume(args.ckp)
         else:
             ckp_list = glob.glob(str(ckp_dir / '*checkpoint_epoch_*.pth'))
