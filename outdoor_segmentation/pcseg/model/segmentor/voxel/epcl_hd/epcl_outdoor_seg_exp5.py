@@ -158,7 +158,7 @@ class HD_model():
         hv_1 = self.random_projection_1(input_x[1])
         hv_2 = self.random_projection_2(input_x[2])
 
-        hv_all = torch.bundle(torch.bundle(hv_0, hv_1),hv_2).sign()
+        hv_all = torchhd.bundle(torchhd.bundle(hv_0, hv_1),hv_2).sign()
 
         return hv_all
     
