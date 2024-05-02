@@ -608,7 +608,7 @@ def main():
             training=True,
         )
 
-        trainer.evaluate(test_loader, "val")
+        trainer.train_hd(train_loader, "train_hd")
         time.sleep(1)
     else:
         trainer.train()
