@@ -537,6 +537,9 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             coords_xyz = batch_dict['lidar'].C[:, :3].float()
             offset = batch_dict['offset']
             self.hd_model.train(z1.F, batch_dict['targets'].feats)
+
+            return {}
+        
         else:
             invs = batch_dict['inverse_map']
             all_labels = batch_dict['targets_mapped']
@@ -552,7 +555,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
 
-        return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'z1':z1} #'output_CLIP': output_clip, 'concat_features':concat_feat
+            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'z1':z1} #'output_CLIP': output_clip, 'concat_features':concat_feat
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)
