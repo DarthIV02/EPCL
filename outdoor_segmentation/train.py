@@ -312,7 +312,7 @@ class Trainer:
         checkpoint_state['projection_matrix'] = proj_matrix
 
         torch.save(checkpoint_state, f"{ckp_name}.pth")
-        print("Saved model hd")
+        print(f"Saved model hd iter {iter}")
 
     def resume(self, filename):
         if not os.path.isfile(filename):
@@ -328,6 +328,10 @@ class Trainer:
         self.optimizer.load_state_dict(checkpoint['optimizer_state'])
         self.scaler.load_state_dict(checkpoint['scaler_state'])
         self.scheduler.load_state_dict(checkpoint['scheduler_state'])
+        file = os.listdir(self.ckp_dir)[-1]
+        checkpoint_hd = torch.load(file)
+        self.model.hd_model.classes_hv = torch.load(checkpoint_hd['class_hv'], strict=True)
+        self.model.hd_model.random_projection = torch.load(checkpoint_hd['projection_matrix'], strict=True)
         self.logger.info('==> Done')
         return
 
@@ -522,7 +526,7 @@ class Trainer:
             with torch.no_grad():
                 ret_dict = self.model(batch_dict, train_hd=True)
             
-            if(i % self.ckp_save_interval == 0):
+            if(i % self.ckp_save_interval == self.ckp_save_interval - 1):
                 self.save_hd_model(i, self.model.hd_model.classes_hv, self.model.hd_model.random_projection)
 
             if self.rank == 0:
