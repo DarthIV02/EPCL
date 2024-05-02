@@ -198,7 +198,6 @@ class Trainer:
         self.start_epoch = start_epoch
         self.cur_epoch = start_epoch
         self.model = model
-        print(self.model.__name__)
 
         # -----------------------resume---------------------------
         if cfgs.LOCAL_RANK == 0:
