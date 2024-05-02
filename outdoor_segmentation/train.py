@@ -304,6 +304,16 @@ class Trainer:
         
 
         torch.save(checkpoint_state, f"{ckp_name}.pth")
+    
+    def save_hd_model(self, iter, class_hv, proj_matrix):
+        ckp_name = self.ckp_dir / ('checkpoint_hd_model_%d' % iter)
+        checkpoint_state = {}
+        checkpoint_state['iter'] = iter
+        checkpoint_state['class_hv'] = class_hv
+        checkpoint_state['projection_matrix'] = proj_matrix
+
+        torch.save(checkpoint_state, f"{ckp_name}.pth")
+        print("Saved model hd")
 
     def resume(self, filename):
         if not os.path.isfile(filename):
@@ -513,7 +523,8 @@ class Trainer:
             with torch.no_grad():
                 ret_dict = self.model(batch_dict, train_hd=True)
             
-            #point_predict = ret_dict['point_predict']
+            if(i % self.ckp_save_interval == 0):
+                self.save_hd_model(i, self.model.hd_model.classes_hv, self.model.hd_model.random_projection)
 
             if self.rank == 0:
                 progress_bar.update()

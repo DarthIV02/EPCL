@@ -141,13 +141,13 @@ class HD_model():
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
         self.random_projection = torchhd.embeddings.Projection(num_features, self.d, device=kwargs['device'])
-        self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
+        #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
         self.random_projection = self.random_projection.to(*args)
-        self.random_projection_global = self.random_projection_global.to(*args)
+        #self.random_projection_global = self.random_projection_global.to(*args)
 
     def encode(self, input_x):
         hv = self.random_projection(input_x).sign()
@@ -531,11 +531,10 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(out.shape)
         
         if train_hd:
-            print("HD training done")
-            target = batch_dict['targets'].F.long().cuda(non_blocking=True)
+            #target = batch_dict['targets'].F.long().cuda(non_blocking=True)
 
-            coords_xyz = batch_dict['lidar'].C[:, :3].float()
-            offset = batch_dict['offset']
+            #coords_xyz = batch_dict['lidar'].C[:, :3].float()
+            #offset = batch_dict['offset']
             self.hd_model.train(z1.F, batch_dict['targets'].feats)
 
             return {}

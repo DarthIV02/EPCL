@@ -23,6 +23,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --train_hd \
+--ckp_save_interval 100 \
 --eval \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
