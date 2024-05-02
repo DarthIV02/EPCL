@@ -432,6 +432,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         self.hd_model = HD_model(device=device, div=2)
         self.hd_model.to(device)
 
+        print("--------------Loading experiment 2--------------")
+
     def _make_layer(self, block, out_channels, num_block, stride=1, if_dist=False):
         layers = []
         layers.append(
