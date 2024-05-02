@@ -38,7 +38,7 @@ __all__ = {
     # voxel
     'Cylinder_TS': Cylinder_TS,
     'EPCLOutdoorSeg': EPCLOutdoorSeg,
-    'EPCL_HD': EPCLOutdoorSegHD,
+    'EPCLHD': EPCLOutdoorSegHD,
 
     # multi-view fusion
     'SPVCNN': SPVCNN,
