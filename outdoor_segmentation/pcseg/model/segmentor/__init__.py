@@ -47,7 +47,7 @@ __all__ = {
 
 
 def build_segmentor(model_cfgs, num_class):
-    model = eval(model_cfgs.NAME)(
+    model = eval('SPVCNN')(
         model_cfgs=model_cfgs,
         num_class=num_class,
     )
