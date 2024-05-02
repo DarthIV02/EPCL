@@ -47,7 +47,7 @@ __all__ = {
 
 
 def build_segmentor(model_cfgs, num_class):
-    model = eval('EPCLHD')( #model_cfgs.NAME
+    model = eval(EPCLOutdoorSegHD)( #model_cfgs.NAME
         model_cfgs=model_cfgs,
         num_class=num_class,
     )
