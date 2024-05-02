@@ -14,7 +14,7 @@ from .range.cenet.model.semantic.cenet import CENet
 from .voxel.cylinder3d import Cylinder_TS
 from .voxel.cylinder3d.cylinder_ts import Cylinder_TS
 from .voxel.epcl.epcl_outdoor_seg import EPCLOutdoorSeg
-from .voxel.epcl_hd.epcl_outdoor_seg import EPCLOutdoorSegHD
+#from .voxel.epcl_hd.epcl_outdoor_seg_exp1 import EPCLOutdoorSegHD
 
 # multi-view fusion
 from .fusion.spvcnn.spvcnn import SPVCNN #, MinkUNet
@@ -38,7 +38,7 @@ __all__ = {
     # voxel
     'Cylinder_TS': Cylinder_TS,
     'EPCLOutdoorSeg': EPCLOutdoorSeg,
-    'EPCLOutdoorSegHD': EPCLOutdoorSegHD,
+    #'EPCLOutdoorSegHD': EPCLOutdoorSegHD,
 
     # multi-view fusion
     'SPVCNN': SPVCNN,
@@ -46,7 +46,16 @@ __all__ = {
 }
 
 
-def build_segmentor(model_cfgs, num_class):
+def build_segmentor(model_cfgs, num_class, exp=1):
+    if exp==1:
+        from .voxel.epcl_hd.epcl_outdoor_seg_exp1 import EPCLOutdoorSegHD
+    elif exp==2:
+        from .voxel.epcl_hd.epcl_outdoor_seg_exp2 import EPCLOutdoorSegHD
+    elif exp==3:
+        from .voxel.epcl_hd.epcl_outdoor_seg_exp3 import EPCLOutdoorSegHD
+    elif exp==3:
+        from .voxel.epcl_hd.epcl_outdoor_seg_exp4 import EPCLOutdoorSegHD  
+
     model = eval(model_cfgs.NAME)( #model_cfgs.NAME
         model_cfgs=model_cfgs,
         num_class=num_class,

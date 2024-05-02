@@ -1,1 +1,1 @@
-from .epcl_outdoor_seg import EPCLOutdoorSegHD
+from .epcl_outdoor_seg_exp1 import EPCLOutdoorSegHD
