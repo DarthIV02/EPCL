@@ -23,7 +23,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --eval \
---exp 4
+--exp 4 \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
