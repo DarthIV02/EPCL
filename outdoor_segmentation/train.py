@@ -214,11 +214,11 @@ class Trainer:
                     print('loading ckpt:', ckp_list[-1])
                 self.resume(ckp_list[-1])
 
-        if if_dist_train:
+        """if if_dist_train:
             self.model = nn.parallel.DistributedDataParallel(
                 self.model,
                 device_ids=[cfgs.LOCAL_RANK % torch.cuda.device_count()],
-            )
+            )"""
         self.model.train()
         print(self.model.__name__)
         
