@@ -72,12 +72,13 @@ class SemantickittiDataset(data.Dataset):
         if self.samples_per_epoch == -1 or not self.training:
             self.samples_per_epoch = len(self.annos)
 
-        self.resample()
+        print("epoch samples", self.samples_per_epoch)
         
-        #if self.training:
-        #    self.resample()
-        #else:
-        #    self.sample_idx = self._sample_idx
+        if self.training:
+            self.resample()
+        else:
+            #self.sample_idx = self._sample_idx
+            self.resample()
 
     def __len__(self):
         return len(self.sample_idx)
