@@ -1,0 +1,698 @@
+2024-05-02 17:42:58,591   INFO  **********************Start logging**********************
+2024-05-02 17:42:58,592   INFO  CUDA_VISIBLE_DEVICES=ALL
+2024-05-02 17:42:58,592   INFO  total_batch_size: 1
+2024-05-02 17:42:58,592   INFO  total_lr: 0.020000
+2024-05-02 17:42:58,592   INFO  cfg_file         tools/cfgs/voxel/semantic_kitti/EPCL_HD.yaml
+2024-05-02 17:42:58,592   INFO  extra_tag        val_EPCL_HD_x3
+2024-05-02 17:42:58,592   INFO  set_cfgs         None
+2024-05-02 17:42:58,592   INFO  fix_random_seed  True
+2024-05-02 17:42:58,592   INFO  exp              3
+2024-05-02 17:42:58,592   INFO  batch_size       1
+2024-05-02 17:42:58,592   INFO  epochs           48
+2024-05-02 17:42:58,592   INFO  sync_bn          False
+2024-05-02 17:42:58,592   INFO  ckp              None
+2024-05-02 17:42:58,592   INFO  pretrained_model .//checkpoints/best_checkpoint.pth
+2024-05-02 17:42:58,592   INFO  amp              False
+2024-05-02 17:42:58,592   INFO  ckp_save_interval 1
+2024-05-02 17:42:58,592   INFO  max_ckp_save_num 30
+2024-05-02 17:42:58,592   INFO  merge_all_iters_to_one_epoch False
+2024-05-02 17:42:58,592   INFO  eval             True
+2024-05-02 17:42:58,592   INFO  train_hd         False
+2024-05-02 17:42:58,592   INFO  eval_interval    50
+2024-05-02 17:42:58,592   INFO  workers          1
+2024-05-02 17:42:58,592   INFO  local_rank       0
+2024-05-02 17:42:58,592   INFO  launcher         pytorch
+2024-05-02 17:42:58,592   INFO  tcp_port         18888
+2024-05-02 17:42:58,592   INFO  cfg.ROOT_DIR: /home/EPCL/outdoor_segmentation
+2024-05-02 17:42:58,592   INFO  cfg.LOCAL_RANK: 0
+2024-05-02 17:42:58,592   INFO  cfg.MODALITY: voxel
+2024-05-02 17:42:58,592   INFO  
+cfg.DATA = edict()
+2024-05-02 17:42:58,592   INFO  cfg.DATA.DATASET: semantickitti
+2024-05-02 17:42:58,592   INFO  cfg.DATA.PETRELOSS_CONFIG: None
+2024-05-02 17:42:58,592   INFO  cfg.DATA.DATA_PATH: ../../../../root/dataset-kitti/dataset/sequences/
+2024-05-02 17:42:58,592   INFO  cfg.DATA.VOXEL_SIZE: 0.05
+2024-05-02 17:42:58,592   INFO  cfg.DATA.AUGMENT: GlobalAugment_LP
+2024-05-02 17:42:58,592   INFO  cfg.DATA.NUM_POINTS: 1000000
+2024-05-02 17:42:58,592   INFO  cfg.DATA.TRAINVAL: False
+2024-05-02 17:42:58,592   INFO  cfg.DATA.TTA: False
+2024-05-02 17:42:58,592   INFO  cfg.DATA.SAMPLES_PER_EPOCH: 19130
+2024-05-02 17:42:58,592   INFO  
+cfg.MODEL = edict()
+2024-05-02 17:42:58,592   INFO  cfg.MODEL.NAME: EPCLOutdoorSegHD
+2024-05-02 17:42:58,592   INFO  cfg.MODEL.IGNORE_LABEL: 0
+2024-05-02 17:42:58,592   INFO  cfg.MODEL.IN_FEATURE_DIM: 4
+2024-05-02 17:42:58,592   INFO  cfg.MODEL.BLOCK: ResBlock
+2024-05-02 17:42:58,592   INFO  cfg.MODEL.NUM_LAYER: [2, 3, 4, 6, 2, 2, 2, 2]
+2024-05-02 17:42:58,592   INFO  cfg.MODEL.PLANES: [32, 32, 64, 128, 256, 256, 128, 96, 96]
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.cr: 1.6
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.DROPOUT_P: 0.0
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.LABEL_SMOOTHING: 0.0
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.IF_DIST: False
+2024-05-02 17:42:58,593   INFO  
+cfg.MODEL.EPCL = edict()
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.EPCL.ENC_DIM: 768
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.EPCL.TOKENIZER_DIM: 409
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.EPCL.NUM_GROUP: 512
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.EPCL.GROUP_SIZE: 16
+2024-05-02 17:42:58,593   INFO  cfg.MODEL.EPCL.VOXEL_SIZE: 0.05
+2024-05-02 17:42:58,593   INFO  
+cfg.OPTIM = edict()
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.BATCH_SIZE_PER_GPU: 1
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.NUM_EPOCHS: 48
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.OPTIMIZER: sgd
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.LR_PER_SAMPLE: 0.02
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.WEIGHT_DECAY: 0.0001
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.MOMENTUM: 0.9
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.NESTEROV: True
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.GRAD_NORM_CLIP: 10
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.SCHEDULER: linear_warmup_with_cosdecay
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.WARMUP_EPOCH: 1
+2024-05-02 17:42:58,593   INFO  cfg.OPTIM.LR: 0.02
+2024-05-02 17:42:58,593   INFO  cfg.TAG: EPCL_HD
+2024-05-02 17:42:58,593   INFO  cfg.EXP_GROUP_PATH: voxel/semantic_kitti
+2024-05-02 17:43:59,660   INFO  ==> Loading parameters from checkpoint .//checkpoints/best_checkpoint.pth to CPU
+2024-05-02 17:44:01,216   INFO  ==> Done <All keys matched successfully>
+2024-05-02 17:44:01,237   INFO  EPCLOutdoorSegHD(
+  (stem): Sequential(
+    (0): Conv3d(4, 51, kernel_size=(3, 3, 3), bias=False)
+    (1): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU(inplace=True)
+    (3): Conv3d(51, 51, kernel_size=(3, 3, 3), bias=False)
+    (4): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (5): ReLU(inplace=True)
+  )
+  (stage1): Sequential(
+    (0): BasicConvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(51, 51, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False)
+        (1): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(51, 51, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(51, 51, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (2): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(51, 51, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(51, 51, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+  )
+  (stage2): Sequential(
+    (0): BasicConvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(51, 51, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False)
+        (1): BatchNorm(51, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(51, 102, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(102, 102, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Sequential(
+        (0): Conv3d(51, 102, kernel_size=(1, 1, 1), bias=False)
+        (1): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (relu): ReLU(inplace=True)
+    )
+    (2): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(102, 102, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(102, 102, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (3): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(102, 102, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(102, 102, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+  )
+  (stage3): Sequential(
+    (0): BasicConvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(102, 102, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False)
+        (1): BatchNorm(102, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(102, 204, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Sequential(
+        (0): Conv3d(102, 204, kernel_size=(1, 1, 1), bias=False)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (relu): ReLU(inplace=True)
+    )
+    (2): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (3): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (4): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+  )
+  (stage4): Sequential(
+    (0): BasicConvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(204, 204, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(204, 409, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Sequential(
+        (0): Conv3d(204, 409, kernel_size=(1, 1, 1), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (relu): ReLU(inplace=True)
+    )
+    (2): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (3): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (4): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (5): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+    (6): ResidualBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+        (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+        (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+      (downsample): Identity()
+      (relu): ReLU(inplace=True)
+    )
+  )
+  (up1): ModuleList(
+    (0): BasicDeconvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 409, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False, transposed=True)
+        (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): Sequential(
+      (0): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(613, 409, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Sequential(
+          (0): Conv3d(613, 409, kernel_size=(1, 1, 1), bias=False)
+          (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (relu): ReLU(inplace=True)
+      )
+      (1): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(409, 409, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Identity()
+        (relu): ReLU(inplace=True)
+      )
+    )
+  )
+  (up2): ModuleList(
+    (0): BasicDeconvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(409, 204, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False, transposed=True)
+        (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): Sequential(
+      (0): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(306, 204, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Sequential(
+          (0): Conv3d(306, 204, kernel_size=(1, 1, 1), bias=False)
+          (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (relu): ReLU(inplace=True)
+      )
+      (1): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(204, 204, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(204, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Identity()
+        (relu): ReLU(inplace=True)
+      )
+    )
+  )
+  (up3): ModuleList(
+    (0): BasicDeconvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(204, 153, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False, transposed=True)
+        (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): Sequential(
+      (0): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(204, 153, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(153, 153, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Sequential(
+          (0): Conv3d(204, 153, kernel_size=(1, 1, 1), bias=False)
+          (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (relu): ReLU(inplace=True)
+      )
+      (1): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(153, 153, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(153, 153, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Identity()
+        (relu): ReLU(inplace=True)
+      )
+    )
+  )
+  (up4): ModuleList(
+    (0): BasicDeconvolutionBlock(
+      (net): Sequential(
+        (0): Conv3d(153, 153, kernel_size=(2, 2, 2), stride=(2, 2, 2), bias=False, transposed=True)
+        (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        (2): ReLU(inplace=True)
+      )
+    )
+    (1): Sequential(
+      (0): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(204, 153, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(153, 153, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Sequential(
+          (0): Conv3d(204, 153, kernel_size=(1, 1, 1), bias=False)
+          (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (relu): ReLU(inplace=True)
+      )
+      (1): ResidualBlock(
+        (net): Sequential(
+          (0): Conv3d(153, 153, kernel_size=(3, 3, 3), bias=False)
+          (1): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv3d(153, 153, kernel_size=(3, 3, 3), bias=False)
+          (4): BatchNorm(153, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+        )
+        (downsample): Identity()
+        (relu): ReLU(inplace=True)
+      )
+    )
+  )
+  (classifier): Sequential(
+    (0): Linear(in_features=766, out_features=20, bias=True)
+  )
+  (dropout): Dropout(p=0.0, inplace=True)
+  (criterion_losses): Losses(
+    (ell_loss): ELLLoss()
+    (dice_loss_v0): DiceLossV0()
+    (dice_loss_v1): DiceLossV1()
+    (wce_loss): WeightedCrossEntropyLoss()
+    (ce_loss): CrossEntropyLoss()
+    (focalloss): FocalLoss()
+    (eqlv2): EQLv2()
+    (groupsoftmax): GroupSoftmax()
+    (groupsoftmax_fgbg): GroupSoftmax_fgbg_2()
+  )
+  (epcl_encoder): EPCLEncoder(
+    (tokenizer): EPCLPreEncoder(
+      (group_divider): SparseGroup()
+      (encoder): EmbeddingEncoder(
+        (first_conv): Sequential(
+          (0): Conv1d(409, 128, kernel_size=(1,), stride=(1,))
+          (1): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv1d(128, 256, kernel_size=(1,), stride=(1,))
+        )
+        (second_conv): Sequential(
+          (0): Conv1d(512, 512, kernel_size=(1,), stride=(1,))
+          (1): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+          (2): ReLU(inplace=True)
+          (3): Conv1d(512, 768, kernel_size=(1,), stride=(1,))
+        )
+      )
+    )
+    (encoder): ClipTransformer(
+      (pos_embed): Sequential(
+        (0): Linear(in_features=3, out_features=128, bias=True)
+        (1): GELU(approximate='none')
+        (2): Linear(in_features=128, out_features=768, bias=True)
+      )
+      (te_encoder): TaskEmbEncoder(
+        (embedding): Embedding(20, 768)
+        (trans): Sequential(
+          (0): Linear(in_features=768, out_features=768, bias=True)
+          (1): GELU(approximate='none')
+          (2): Linear(in_features=768, out_features=768, bias=True)
+        )
+      )
+      (blocks): Transformer(
+        (resblocks): Sequential(
+          (0): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (1): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (2): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (3): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (4): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (5): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (6): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (7): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (8): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (9): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (10): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+          (11): ResidualAttentionBlock(
+            (attn): MultiheadAttention(
+              (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+            )
+            (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+            (mlp): Sequential(
+              (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+              (gelu): QuickGELU()
+              (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+            )
+            (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          )
+        )
+      )
+    )
+    (upsamping): PointNetFeaturePropagation(
+      (mlp_convs): ModuleList(
+        (0): Conv1d(768, 409, kernel_size=(1,), stride=(1,))
+      )
+      (mlp_bns): ModuleList(
+        (0): BatchNorm1d(409, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+  )
+)
+2024-05-02 17:44:01,241   INFO  Model parameters: 183.956 M
+2024-05-02 17:44:01,379   INFO  *************** TRAINED EPOCH 0 val EVALUATION *****************
+2024-05-02 17:57:58,894   INFO  Validation per class iou: 
+2024-05-02 17:57:58,895   INFO  +-------------------------+
+|      Validation iou     |
++---------------+---------+
+| Classes       | IoU     |
++---------------+---------+
+| All           | 46.3064 |
+| car           | 88.8646 |
+| bicycle       | 30.3224 |
+| motorcycle    | 36.8874 |
+| truck         | 11.1106 |
+| other-vehicle | 22.7972 |
+| person        | 42.148  |
+| bicyclist     | 35.8728 |
+| motorcyclist  | 2.2694  |
+| road          | 92.0066 |
+| parking       | 26.6793 |
+| sidewalk      | 71.327  |
+| other-ground  | 0.342   |
+| building      | 68.7949 |
+| fence         | 47.5251 |
+| vegetation    | 79.7001 |
+| trunk         | 61.5559 |
+| terrain       | 66.079  |
+| pole          | 60.7006 |
+| traffic-sign  | 34.8394 |
++---------------+---------+
+2024-05-02 17:57:58,901   INFO  +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                                                                                    Confusion matrix                                                                                                                    |
++---------------+---------+---------+------------+---------+---------------+---------+-----------+--------------+---------+---------+----------+--------------+----------+---------+------------+---------+---------+---------+--------------+-----------+
+| Classes       | car     | bicycle | motorcycle | truck   | other-vehicle | person  | bicyclist | motorcyclist | road    | parking | sidewalk | other-ground | building | fence   | vegetation | trunk   | terrain | pole    | traffic-sign | Points    |
++---------------+---------+---------+------------+---------+---------------+---------+-----------+--------------+---------+---------+----------+--------------+----------+---------+------------+---------+---------+---------+--------------+-----------+
+| car           | 95.8462 | 0.0318  | 0.0451     | 0.6434  | 0.65          | 0.0133  | 0.0096    | 0.0011       | 2.1482  | 0.1089  | 0.1099   | 0.0079       | 0.1827   | 0.0131  | 0.0849     | 0.0031  | 0.0404  | 0.0145  | 0.046        | 30757857  |
+| bicycle       | 3.376   | 53.5123 | 8.9216     | 3.4368  | 1.2215        | 6.2226  | 6.2449    | 1.5114       | 0.1057  | 0.3163  | 1.3948   | 0.2064       | 0.3935   | 2.1977  | 6.0389     | 0.0629  | 4.754   | 0.0671  | 0.0155       | 238388    |
+| motorcycle    | 10.7366 | 4.8865  | 53.866     | 13.168  | 12.8402       | 0.3581  | 0.9578    | 0.0522       | 0.4197  | 0.0187  | 0.1269   | 0.033        | 0.0898   | 0.5005  | 0.8137     | 0.0038  | 0.751   | 0.2768  | 0.1009       | 342884    |
+| truck         | 7.7397  | 0.6606  | 4.4837     | 49.1223 | 25.6109       | 0.2768  | 0.2246    | 0.0235       | 0.657   | 0.0124  | 0.0849   | 0.01         | 4.0927   | 4.0471  | 1.0169     | 0.0807  | 0.2565  | 0.0267  | 1.5729       | 498183    |
+| other-vehicle | 10.5149 | 0.5547  | 2.6898     | 34.5335 | 34.5498       | 0.2136  | 0.142     | 0.0096       | 6.6824  | 0.095   | 0.2724   | 0.0304       | 3.4344   | 4.0798  | 0.9045     | 0.0627  | 0.6262  | 0.069   | 0.5352       | 2176657   |
+| person        | 1.3218  | 3.8974  | 0.5609     | 0.708   | 0.3938        | 67.3211 | 14.8529   | 1.3889       | 0.4867  | 0.0761  | 0.5865   | 0.2087       | 0.7999   | 0.1373  | 6.0067     | 0.3528  | 0.646   | 0.242   | 0.0126       | 469061    |
+| bicyclist     | 1.8806  | 2.7677  | 1.9024     | 0.4482  | 1.5148        | 29.6176 | 52.8961   | 1.4183       | 2.2276  | 0.0043  | 0.0596   | 0.0122       | 0.0135   | 0.027   | 0.1038     | 0.6446  | 0.3127  | 4.1181  | 0.031        | 303465    |
+| motorcyclist  | 2.5223  | 16.5227 | 14.366     | 3.7971  | 1.1606        | 29.3123 | 19.8081   | 5.104        | 0.0274  | 0.0366  | 2.0242   | 0.0777       | 0.1234   | 0.0731  | 4.4094     | 0.3381  | 0.2833  | 0.0137  | 0.0          | 21885     |
+| road          | 0.1431  | 0.0045  | 0.0051     | 0.0077  | 0.0027        | 0.0027  | 0.0055    | 0.0023       | 96.3076 | 0.3987  | 2.7846   | 0.0347       | 0.0125   | 0.0078  | 0.002      | 0.0019  | 0.2724  | 0.0042  | 0.0          | 87816583  |
+| parking       | 0.4678  | 0.018   | 0.0172     | 0.0519  | 0.0122        | 0.0031  | 0.0007    | 0.0007       | 8.5993  | 51.7443 | 34.6727  | 0.6958       | 0.0719   | 0.025   | 0.0793     | 0.008   | 3.4864  | 0.0454  | 0.0001       | 5930877   |
+| sidewalk      | 0.0566  | 0.0251  | 0.0036     | 0.0117  | 0.0045        | 0.0117  | 0.003     | 0.0028       | 2.9549  | 7.7803  | 82.4069  | 0.8725       | 0.1511   | 0.5068  | 0.1273     | 0.0027  | 5.0491  | 0.0294  | 0.0          | 60091904  |
+| other-ground  | 0.0794  | 0.0123  | 0.0077     | 0.0743  | 0.0413        | 0.0809  | 0.0013    | 0.0007       | 16.826  | 1.4168  | 33.4626  | 1.2763       | 1.4722   | 1.2767  | 14.7654    | 0.0026  | 29.2027 | 0.0007  | 0.0          | 454684    |
+| building      | 0.619   | 0.033   | 0.0138     | 0.739   | 0.7873        | 0.0374  | 0.0067    | 0.0033       | 0.0472  | 0.0256  | 0.3284   | 0.0522       | 76.1023  | 11.3317 | 6.7302     | 1.0913  | 1.8978  | 0.0713  | 0.0825       | 55227359  |
+| fence         | 0.1348  | 0.0172  | 0.0085     | 0.3764  | 0.5405        | 0.0088  | 0.0018    | 0.0014       | 0.3976  | 0.0383  | 0.7363   | 0.0358       | 8.1125   | 81.2352 | 5.1464     | 0.0562  | 3.024   | 0.1155  | 0.0127       | 12326336  |
+| vegetation    | 1.0736  | 0.0408  | 0.0077     | 0.0927  | 0.1407        | 0.0692  | 0.0149    | 0.002        | 0.3244  | 0.079   | 0.4463   | 0.055        | 3.0492   | 1.1193  | 86.46      | 0.3868  | 6.4799  | 0.1466  | 0.0119       | 139853634 |
+| trunk         | 0.0819  | 0.0224  | 0.0035     | 0.0311  | 0.0398        | 0.2084  | 0.1637    | 0.012        | 0.0273  | 0.0031  | 0.0392   | 0.048        | 4.5005   | 0.4029  | 14.5025    | 77.0871 | 1.6709  | 1.112   | 0.0437       | 5380208   |
+| terrain       | 0.054   | 0.0149  | 0.0019     | 0.1092  | 0.0303        | 0.0142  | 0.0033    | 0.0013       | 0.6181  | 0.583   | 5.8774   | 0.8319       | 0.0564   | 0.6769  | 10.0285    | 0.1394  | 80.929  | 0.0303  | 0.0001       | 63438022  |
+| pole          | 0.2217  | 0.0818  | 0.0162     | 0.147   | 0.1298        | 0.214   | 0.0648    | 0.0587       | 0.0196  | 0.2379  | 0.3951   | 0.0615       | 2.2318   | 1.5495  | 6.5617     | 6.2024  | 1.5131  | 78.9812 | 1.3122       | 1646581   |
+| traffic-sign  | 0.4424  | 0.1796  | 0.3813     | 5.7041  | 3.5615        | 1.4715  | 0.3215    | 0.288        | 0.0201  | 0.0032  | 0.0043   | 0.0029       | 4.8493   | 0.98    | 3.4677     | 1.6238  | 0.0719  | 30.3841 | 46.2427      | 372958    |
++---------------+---------+---------+------------+---------+---------------+---------+-----------+--------------+---------+---------+----------+--------------+----------+---------+------------+---------+---------+---------+--------------+-----------+
