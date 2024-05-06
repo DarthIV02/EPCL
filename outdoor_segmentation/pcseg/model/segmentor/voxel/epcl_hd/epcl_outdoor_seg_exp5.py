@@ -131,6 +131,46 @@ class ResidualBlock(nn.Module):
     def forward(self, x):
         out = self.relu(self.net(x) + self.downsample(x))
         return out
+    
+class BatchProjection(nn.Module):
+    __constants__ = ["num_projections", "in_features", "out_features", "vsa"]
+    in_features: int
+    out_features: int
+    vsa: VSAOptions
+    weight: torch.Tensor
+
+    def __init__(
+        self,
+        num_projections,
+        in_features,
+        out_features,
+        vsa: VSAOptions = "MAP",
+        requires_grad=False,
+        device=None,
+        dtype=None,
+    ):
+        factory_kwargs = {"device": device, "dtype": dtype}
+        super(BatchProjection, self).__init__()
+        self.num_projections = num_projections
+        self.in_features = in_features
+        self.out_features = out_features
+        self.vsa = vsa
+
+        if vsa not in {"MAP", "HRR", "VTB"}:
+            raise ValueError(
+                f"Projection embedding supports MAP, HRR, VTB but provided: {vsa}"
+            )
+
+        self.weight = nn.parameter.Parameter(
+            torch.empty((out_features, in_features), **factory_kwargs),
+            requires_grad=requires_grad,
+        )
+        self.reset_parameters()
+
+    def reset_parameters(self) -> None:
+        nn.init.normal_(self.weight, 0, 1)
+        self.weight.data.copy_(F.normalize(self.weight.data))
+
 
 class HD_model():
     def __init__(self, classes = 20, d = 1000, num_features=(409,204,153), lr = 0.01, **kwargs):
@@ -155,14 +195,14 @@ class HD_model():
         #self.random_projection_global = self.random_projection_global.to(*args)
 
     def encode(self, input_x):
+        print(input_x.shape)
         hv_0 = self.random_projection[0](input_x[0])
         hv_1 = self.random_projection[1](input_x[1])
         hv_2 = self.random_projection[2](input_x[2])
         hv_012 = torch.stack((hv_0, hv_1, hv_2))
-        #print(hv_012.shape)
         hv_all = torch.sum(hv_012, dim=0).sign()
-        #print(hv_all.shape)
-        #x = input()
+
+        x = input("Enter")
 
         return hv_all
     
@@ -540,7 +580,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
-        tuple_feat = (z1.F, z2.F, z3.F)# <----------------
+        tuple_feat = torch.stack((z1.F, z2.F, z3.F))# <----------------
         #out = self.classifier(concat_feat)
         #print("\nOut")
         #print(out.shape)
