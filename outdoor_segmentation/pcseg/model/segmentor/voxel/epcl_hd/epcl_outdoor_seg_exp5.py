@@ -196,10 +196,10 @@ class HD_model():
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
-        self.random_projection[0] = self.random_projection[0].to(*args)
-        self.random_projection[1] = self.random_projection[1].to(*args)
-        self.random_projection[2] = self.random_projection[2].to(*args)
-        #self.random_projection_global = self.random_projection_global.to(*args)
+        #self.random_projection[0] = self.random_projection[0].to(*args)
+        #self.random_projection[1] = self.random_projection[1].to(*args)
+        #self.random_projection[2] = self.random_projection[2].to(*args)
+        self.random_projection = self.random_projection.to(*args)
 
     def encode(self, input_x):
         print(input_x.shape)
