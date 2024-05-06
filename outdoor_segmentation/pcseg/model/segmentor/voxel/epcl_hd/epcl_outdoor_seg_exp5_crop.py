@@ -580,7 +580,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(sim.shape)
         sim_arg = torch.argmax(sim, dim=1)
         sim = torch.max(sim, dim=1).values
-        mask_sim = sim < 0.075
+        mask_sim = sim < 0.070
         print("Skipped: ", torch.sum(~mask_sim))
         print("max y_2: ", torch.max(sim))
         print("mean y_2: ", torch.mean(sim))
