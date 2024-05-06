@@ -581,7 +581,13 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
-        tuple_feat = torch.stack((z1.F, z2.F, z3.F))# <----------------
+
+        tuple_feat = torch.zeros((3,z1.F.shape[0], z1.F.shape[1]))
+        tuple_feat[0] = z1.F
+        tuple_feat[1, :, :z2.F.shape[1]] = z2.F
+        tuple_feat[1, :, :z3.F.shape[1]] = z3.F
+        #torch.stack((z1.F, z2.F, z3.F))# <----------------
+        # tuple_feat = (z1.F, z2.F, z3.F) <----- BEFORE
         #out = self.classifier(concat_feat)
         #print("\nOut")
         #print(out.shape)
