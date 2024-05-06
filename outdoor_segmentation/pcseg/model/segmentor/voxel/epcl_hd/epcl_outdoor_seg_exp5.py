@@ -182,7 +182,7 @@ class BatchProjection(nn.Module):
 
 
 class HD_model():
-    def __init__(self, classes = 20, d = 1000, num_features=409, lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 1000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
