@@ -156,10 +156,14 @@ class HD_model():
 
     def encode(self, input_x):
         hv_0 = self.random_projection[0](input_x[0])
+        print(hv_0.shape)
         hv_1 = self.random_projection[1](input_x[1])
+        print(hv_1.shape)
         hv_2 = self.random_projection[2](input_x[2])
+        print(hv_2.shape)
 
-        hv_all = torchhd.bundle(torchhd.bundle(hv_0, hv_1),hv_2).sign()
+        hv_all = torchhd.sum(torchhd.sum(hv_0, hv_1, axis=0),hv_2, axis=0).sign()
+        x = input()
 
         return hv_all
     
