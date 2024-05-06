@@ -182,7 +182,7 @@ class BatchProjection(nn.Module):
 
 
 class HD_model():
-    def __init__(self, classes = 20, d = 5000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 2500, num_features=(409, 204, 153), lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
@@ -622,7 +622,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("max z_3: ", torch.max(sim))
         #print("mean z_3: ", torch.mean(sim))
 
-        
+
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
