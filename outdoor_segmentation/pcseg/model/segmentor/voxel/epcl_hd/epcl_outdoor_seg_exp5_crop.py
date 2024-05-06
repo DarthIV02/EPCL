@@ -574,16 +574,17 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(y2.F.shape)
         y2 = torchsparse.cat([y2, x2])# <----------------
         y2 = self.up2[1](y2)# <----------------
+
+        encode_y2 = self.hd_model.random_projection_1(y2.F).sign()
+        sim = self.hd_model.similarity(encode_y2)
+        print(sim.shape)
+        sim = torch.max(sim, dim=1).values
+        print("max y_2: ", torch.max(sim))
+        print("mean y_2: ", torch.mean(sim))
+
         #print("y2")
         #print(y2.F.shape)
         z2 = voxel_to_point(y2, z1) # <----------------
-
-        encode_z2 = self.hd_model.random_projection_1(z2.F).sign()
-        sim = self.hd_model.similarity(encode_z2)
-        print(sim.shape)
-        sim = torch.max(sim, dim=1).values
-        print("max z_2: ", torch.max(sim))
-        print("mean z_2: ", torch.mean(sim))
         #print("z2")
         #print(z2.F.shape)
         #print(z2.C.shape)
