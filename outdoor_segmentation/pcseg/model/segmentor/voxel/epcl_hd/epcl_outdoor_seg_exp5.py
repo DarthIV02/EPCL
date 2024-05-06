@@ -176,6 +176,8 @@ class BatchProjection(nn.Module):
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
         vsa_tensor = functional.get_vsa_tensor_class(self.vsa)
+        print(input.get_device)
+        print(self.weight.get_device)
         return torch.bmm(input, self.weight).as_subclass(vsa_tensor)
 
 
@@ -202,7 +204,7 @@ class HD_model():
         self.random_projection = self.random_projection.to(*args)
 
     def encode(self, input_x):
-        #print(input_x.shape)
+        print(input_x.get_device)
         hv_0 = self.random_projection(input_x)
         #print(hv_0.shape) # (3,#,d)
         #hv_1 = self.random_projection[1](input_x[1])
@@ -210,7 +212,7 @@ class HD_model():
         #hv_012 = torch.stack((hv_0, hv_1, hv_2))
         hv_all = torch.sum(hv_0, dim=0).sign()
 
-        #x = input("Enter")
+        x = input("Enter")
 
         return hv_all
     
