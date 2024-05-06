@@ -539,7 +539,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         x3 = self.stage3(x2)
         x4 = self.stage4(x3) 
         z1 = voxel_to_point(x4, z0)
-        encode_z1 = self.hd_model.random_projection_0(z1.F)
+        encode_z1 = self.hd_model.random_projection_0(z1.F).sign()
         sim = self.hd_model.similarity(encode_z1)
         print(sim.shape)
         sim = torch.max(sim, dim=1).values
@@ -578,7 +578,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(y2.F.shape)
         z2 = voxel_to_point(y2, z1) # <----------------
 
-        encode_z2 = self.hd_model.random_projection_1(z2.F)
+        encode_z2 = self.hd_model.random_projection_1(z2.F).sign()
         sim = self.hd_model.similarity(encode_z2)
         print(sim.shape)
         sim = torch.max(sim, dim=1).values
@@ -588,12 +588,12 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(z2.F.shape)
         #print(z2.C.shape)
         
-        encode_z12 = torch.sum(torch.stack((encode_z1, encode_z2)), dim=0)
-        sim = self.hd_model.similarity(encode_z12)
-        print(sim.shape)
-        sim = torch.max(sim, dim=1).values
-        print("max z_12: ", torch.max(sim))
-        print("mean z_12: ", torch.mean(sim))
+        #encode_z12 = torch.sum(torch.stack((encode_z1, encode_z2)), dim=0)
+        #sim = self.hd_model.similarity(encode_z12)
+        #print(sim.shape)
+        #sim = torch.max(sim, dim=1).values
+        #print("max z_12: ", torch.max(sim))
+        #print("mean z_12: ", torch.mean(sim))
         
 
         y2.F = self.dropout(y2.F)# <----------------
@@ -615,12 +615,12 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         z3 = voxel_to_point(y4, z2)# <----------------
 
         # -------------------TEST Z3 Encoding alone ---------------------------
-        #encode_z3 = self.hd_model.random_projection_2(z3.F)
-        #sim = self.hd_model.similarity(encode_z3)
-        #print(sim.shape)
-        #sim = torch.max(sim, dim=1).values
-        #print("max z_3: ", torch.max(sim))
-        #print("mean z_3: ", torch.mean(sim))
+        encode_z3 = self.hd_model.random_projection_2(z3.F).sign()
+        sim = self.hd_model.similarity(encode_z3)
+        print(sim.shape)
+        sim = torch.max(sim, dim=1).values
+        print("max z_3: ", torch.max(sim))
+        print("mean z_3: ", torch.mean(sim))
 
 
         #print("z3")
