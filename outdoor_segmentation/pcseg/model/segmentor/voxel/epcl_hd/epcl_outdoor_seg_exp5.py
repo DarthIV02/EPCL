@@ -192,7 +192,8 @@ class HD_model():
         self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
         self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
         self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
-        self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
+        #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
+        self.random_projection = (self.random_projection_0, self.random_projection_1, self.random_projection_2)
         #self.random_projection = BatchProjection(3, num_features, self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
@@ -599,7 +600,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #tuple_feat[0] = z1.F
         #tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         #tuple_feat[1, :, :z3.F.shape[1]] = z3.F
-        tuple_feat = {0:z1.F, 1:z2.F, 2:z3.F} #<----- BEFORE
+        #tuple_feat = {0:z1.F, 1:z2.F, 2:z3.F} #<----- BEFORE
+        tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
         #out = self.classifier(concat_feat)
         #print("\nOut")
