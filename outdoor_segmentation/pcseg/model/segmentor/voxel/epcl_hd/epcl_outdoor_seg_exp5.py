@@ -165,7 +165,7 @@ class BatchProjection(nn.Module):
             )
 
         self.weight = nn.parameter.Parameter(
-            torch.empty((num_projections, out_features, in_features), **factory_kwargs),
+            torch.empty((num_projections, in_features, out_features), **factory_kwargs),
             requires_grad=requires_grad,
         )
         self.reset_parameters()
