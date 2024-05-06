@@ -21,6 +21,8 @@ import torchhd
 import torch.nn as nn
 from tqdm import tqdm
 from torchhd.types import VSAOptions
+import torch.nn.functional as F
+import torchhd.functional as functional
 
 __all__ = ['EPCLOutdoorSeg']
 
@@ -163,7 +165,7 @@ class BatchProjection(nn.Module):
             )
 
         self.weight = nn.parameter.Parameter(
-            torch.empty((out_features, in_features), **factory_kwargs),
+            torch.empty((num_projections, out_features, in_features), **factory_kwargs),
             requires_grad=requires_grad,
         )
         self.reset_parameters()
@@ -172,19 +174,23 @@ class BatchProjection(nn.Module):
         nn.init.normal_(self.weight, 0, 1)
         self.weight.data.copy_(F.normalize(self.weight.data))
 
+    def forward(self, input: torch.Tensor) -> torch.Tensor:
+        vsa_tensor = functional.get_vsa_tensor_class(self.vsa)
+        return torch.bmm(input, self.weight).as_subclass(vsa_tensor)
+
 
 class HD_model():
-    def __init__(self, classes = 20, d = 1000, num_features=(409,204,153), lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 1000, num_features=409, lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
-        self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
-        self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
-        self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
-        self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
+        #self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
+        #self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
+        #self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
+        self.random_projection = BatchProjection(3, num_features, self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
@@ -197,11 +203,12 @@ class HD_model():
 
     def encode(self, input_x):
         print(input_x.shape)
-        hv_0 = self.random_projection[0](input_x[0])
-        hv_1 = self.random_projection[1](input_x[1])
-        hv_2 = self.random_projection[2](input_x[2])
-        hv_012 = torch.stack((hv_0, hv_1, hv_2))
-        hv_all = torch.sum(hv_012, dim=0).sign()
+        hv_0 = self.random_projection(input_x)
+        print(hv_0.shape) # (3,#,d)
+        #hv_1 = self.random_projection[1](input_x[1])
+        #hv_2 = self.random_projection[2](input_x[2])
+        #hv_012 = torch.stack((hv_0, hv_1, hv_2))
+        hv_all = torch.sum(hv_0, dim=0).sign()
 
         x = input("Enter")
 
@@ -509,7 +516,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
-    def forward(self, batch_dict, return_logit=False, return_tta=False, train_hd=False):
+    def forward(self, batch_dict, return_logit=False, return_tta=False, train_hd=False, **kwargs):
         x = batch_dict['lidar']
         x.F = x.F[:, :self.in_feature_dim]
         z = PointTensor(x.F, x.C.float()) # dim=4
@@ -581,8 +588,9 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
-
         tuple_feat = torch.zeros((3,z1.F.shape[0], z1.F.shape[1]))
+        if kwargs['device']:
+            tuple_feat = tuple_feat.to(kwargs['device'])
         tuple_feat[0] = z1.F
         tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         tuple_feat[1, :, :z3.F.shape[1]] = z3.F
