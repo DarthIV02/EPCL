@@ -541,7 +541,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         x4 = self.stage4(x3) 
         z1 = voxel_to_point(x4, z0)
         encode_z1 = self.hd_model.random_projection_small(z1.F)
-        sim = torch.max(torchhd.cosine_similarity(encode_z1, self.hd_model.classes_hv), dim=1)
+        sim = torch.max(torchhd.cosine_similarity(encode_z1, self.hd_model.classes_hv), dim=1).values
         print("max: ", torch.max(sim))
         print("mean: ", torch.mean(sim))
 
