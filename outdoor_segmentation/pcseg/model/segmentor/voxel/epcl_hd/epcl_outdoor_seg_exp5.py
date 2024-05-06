@@ -605,9 +605,9 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
         samples = z2.F.shape[0]
         dim_max = z1.F.shape[1]
-        padder = torch.zeros(samples,dim_max-z2.F.shape[1])
+        padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
         z2.F = torch.cat([z2.F,padder], dim = 1)
-        padder = torch.zeros(samples,dim_max-z3.F.shape[1])
+        padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
         z2.F = torch.cat([z3.F,padder], dim = 1)
         tuple_feat = torch.stack(z1.F, z2.F, z3.F)
 
