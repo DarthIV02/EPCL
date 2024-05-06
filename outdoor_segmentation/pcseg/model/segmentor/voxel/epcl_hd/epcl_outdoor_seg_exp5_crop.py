@@ -195,7 +195,6 @@ class HD_model():
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = (self.random_projection_0, self.random_projection_1, self.random_projection_2)
         #self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
-        self.random_projection_small = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
@@ -206,7 +205,6 @@ class HD_model():
         self.random_projection_2 = self.random_projection_2.to(*args)
         self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
         #self.random_projection = self.random_projection.to(*args)
-        self.random_projection_small = self.random_projection_small.to(*args)
 
     def encode(self, input_x):
         #print(input_x.get_device())
@@ -540,7 +538,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         x3 = self.stage3(x2)
         x4 = self.stage4(x3) 
         z1 = voxel_to_point(x4, z0)
-        encode_z1 = self.hd_model.random_projection_small(z1.F)
+        encode_z1 = self.hd_model.random_projection_0(z1.F)
         sim = self.hd_model.similarity(encode_z1)
         print(sim.shape)
         sim = torch.max(sim, dim=1).values
