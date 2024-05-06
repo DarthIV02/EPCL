@@ -162,7 +162,8 @@ class HD_model():
         hv_2 = self.random_projection[2](input_x[2])
         print(hv_2.shape)
 
-        hv_all = torch.sum((torch.sum((hv_0, hv_1), axis=1), hv_2), axis=1).sign()
+        hv_all = torch.sum((torch.sum((hv_0, hv_1), dim=1), hv_2), dim=1).sign()
+        print(hv_all.shape)
         x = input()
 
         return hv_all
