@@ -585,7 +585,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("max y_2: ", torch.max(sim))
         #print("mean y_2: ", torch.mean(sim))
 
-        temp = torch.zeros((y2.F.shape[0]))
+        temp = torch.zeros((y2.F.shape[0]), device=self.device)
 
         print(y2.F.shape)
         y2.F = y2.F[mask_sim, :]
