@@ -159,10 +159,10 @@ class HD_model():
         hv_1 = self.random_projection[1](input_x[1])
         hv_2 = self.random_projection[2](input_x[2])
         hv_012 = torch.stack((hv_0, hv_1, hv_2))
-        print(hv_012.shape)
+        #print(hv_012.shape)
         hv_all = torch.sum(hv_012, dim=0).sign()
-        print(hv_all.shape)
-        x = input()
+        #print(hv_all.shape)
+        #x = input()
 
         return hv_all
     
