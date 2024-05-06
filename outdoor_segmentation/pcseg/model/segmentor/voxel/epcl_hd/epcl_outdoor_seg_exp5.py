@@ -203,7 +203,7 @@ class HD_model():
         self.random_projection_0 = self.random_projection_0.to(*args)
         self.random_projection_1 = self.random_projection_1.to(*args)
         self.random_projection_2 = self.random_projection_2.to(*args)
-        self.random_projection = (self.random_projection_0, self.random_projection_1, self.random_projection_2)
+        self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
         #self.random_projection = self.random_projection.to(*args)
 
     def encode(self, input_x):
@@ -601,8 +601,11 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #tuple_feat[0] = z1.F
         #tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         #tuple_feat[1, :, :z3.F.shape[1]] = z3.F
-        #tuple_feat = {0:z1.F, 1:z2.F, 2:z3.F} #<----- BEFORE
-        tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
+        # ------------------------------------BATCH MUL with pad ----------------------------------
+        z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
+        z3.F = F.pad(z3.F, (z1.F.shape[1]-z3.F.shape[1]), "constant", 0)
+        tuple_feat = torch.stack(z1.F, z2.F, z3.F)
+        #tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
         #out = self.classifier(concat_feat)
         #print("\nOut")
