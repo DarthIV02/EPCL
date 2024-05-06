@@ -542,8 +542,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         sim = self.hd_model.similarity(encode_z1)
         print(sim.shape)
         sim = torch.max(sim, dim=1).values
-        print("max: ", torch.max(sim))
-        print("mean: ", torch.mean(sim))
+        print("max z_1: ", torch.max(sim))
+        print("mean z_1: ", torch.mean(sim))
 
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
@@ -576,6 +576,13 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("y2")
         #print(y2.F.shape)
         z2 = voxel_to_point(y2, z1) # <----------------
+
+        encode_z2 = self.hd_model.random_projection_1(z2.F)
+        sim = self.hd_model.similarity(encode_z2)
+        print(sim.shape)
+        sim = torch.max(sim, dim=1).values
+        print("max z_2: ", torch.max(sim))
+        print("mean z_2: ", torch.mean(sim))
         #print("z2")
         #print(z2.F.shape)
         #print(z2.C.shape)
@@ -597,6 +604,12 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("y4")
         #print(y4.F.shape)
         z3 = voxel_to_point(y4, z2)# <----------------
+        encode_z3 = self.hd_model.random_projection_1(z3.F)
+        sim = self.hd_model.similarity(encode_z3)
+        print(sim.shape)
+        sim = torch.max(sim, dim=1).values
+        print("max z_3: ", torch.max(sim))
+        print("mean z_3: ", torch.mean(sim))
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
