@@ -590,7 +590,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         print(y2.F.shape)
         y2.F = y2.F[mask_sim, :]
         print(y2.F.shape)
-        temp[~mask_sim] = sim_arg[~mask_sim].long()
+        temp[~mask_sim] = sim_arg[~mask_sim].float()
         print(torch.sum(temp != 0))
 
         #print("y2")
