@@ -189,31 +189,31 @@ class HD_model():
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
-        self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
-        self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
-        self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
+        #self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
+        #self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
+        #self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
-        #self.random_projection = BatchProjection(3, num_features, self.d, device=kwargs['device'])
+        self.random_projection = BatchProjection(3, num_features, self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
-        self.random_projection_0 = self.random_projection_0.to(*args)
-        self.random_projection_1 = self.random_projection_1.to(*args)
-        self.random_projection_2 = self.random_projection_2.to(*args)
-        self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
-        #self.random_projection = self.random_projection.to(*args)
+        #self.random_projection_0 = self.random_projection_0.to(*args)
+        #self.random_projection_1 = self.random_projection_1.to(*args)
+        #self.random_projection_2 = self.random_projection_2.to(*args)
+        #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
+        self.random_projection = self.random_projection.to(*args)
 
     def encode(self, input_x):
         #print(input_x.get_device())
-        #hv_0 = self.random_projection(input_x) # <-- BATCH
+        hv_0 = self.random_projection(input_x) # <-- BATCH
         #print(hv_0.shape) # (3,#,d)
-        hv_0 = self.random_projection[0](input_x[0])
-        hv_1 = self.random_projection[1](input_x[1])
-        hv_2 = self.random_projection[2](input_x[2])
-        hv_all = torch.stack((hv_0, hv_1, hv_2))
+        #hv_0 = self.random_projection[0](input_x[0])
+        #hv_1 = self.random_projection[1](input_x[1])
+        #hv_2 = self.random_projection[2](input_x[2])
+        #hv_all = torch.stack((hv_0, hv_1, hv_2))
         hv_all = torch.sum(hv_all, dim=0).sign()
 
         #x = input("Enter")
