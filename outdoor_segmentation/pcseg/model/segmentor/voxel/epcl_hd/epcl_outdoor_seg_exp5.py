@@ -20,7 +20,7 @@ from .transformer import EPCLEncoder
 import torchhd
 import torch.nn as nn
 from tqdm import tqdm
-from torchhd.tensors.base import VSATensor
+from torchhd.types import VSAOptions
 
 __all__ = ['EPCLOutdoorSeg']
 
