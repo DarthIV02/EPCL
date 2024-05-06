@@ -489,7 +489,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         self.epcl_encoder = EPCLEncoder(model_cfgs.EPCL)
 
         #HD Initialization
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.hd_model = HD_model(device=device, div=2)
         self.hd_model.to(device)
 
@@ -589,8 +589,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(z3.F.shape)
         #print(z3.C.shape)
         tuple_feat = torch.zeros((3,z1.F.shape[0], z1.F.shape[1]))
-        if kwargs['device']:
-            tuple_feat = tuple_feat.to(kwargs['device'])
+        if self.device != "cpu":
+            tuple_feat = tuple_feat.to(self.device)
         tuple_feat[0] = z1.F
         tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         tuple_feat[1, :, :z3.F.shape[1]] = z3.F
