@@ -182,7 +182,7 @@ class BatchProjection(nn.Module):
 
 
 class HD_model():
-    def __init__(self, classes = 20, d = 1000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 5000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
@@ -587,6 +587,14 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("z2")
         #print(z2.F.shape)
         #print(z2.C.shape)
+        
+        encode_z12 = torch.sum(torch.stack((encode_z1, encode_z2)), dim=0)
+        sim = self.hd_model.similarity(encode_z12)
+        print(sim.shape)
+        sim = torch.max(sim, dim=1).values
+        print("max z_12: ", torch.max(sim))
+        print("mean z_12: ", torch.mean(sim))
+        
 
         y2.F = self.dropout(y2.F)# <----------------
         y3 = self.up3[0](y2) # <----------------
