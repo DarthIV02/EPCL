@@ -3,9 +3,9 @@ cd <ROOT>/EPCL/outdoor_segmeantation
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 NGPUS=4
-cfg_name=EPCL
+cfg_name=EPCL_HD
 extra_tag=train_${cfg_name}
-cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
+cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
 
 set -x
 
@@ -23,6 +23,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} \
 --rdzv_endpoint=localhost:${PORT} \
 train.py \
+--exp 5
 --launcher pytorch \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
