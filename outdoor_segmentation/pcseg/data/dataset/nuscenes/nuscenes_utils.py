@@ -68,38 +68,38 @@ color_map = {
 }
 
 LEARNING_MAP = {
-    0: 0,  # "unlabeled"
-    1: 1,  # "outlier" mapped to "unlabeled" --------------------------mapped
-    2: 2,  # "car"
-    3: 3,  # "bicycle"
-    4: 4,  # "bus" mapped to "other-vehicle" --------------------------mapped
-    5: 5,  # "motorcycle"
-    6: 6,  # "on-rails" mapped to "other-vehicle" ---------------------mapped
-    7: 7,  # "truck"
-    8: 8,  # "other-vehicle"
-    9: 9,  # "person"
-    10: 10,  # "bicyclist"
-    11: 11,  # "motorcyclist"
-    12: 12,  # "road"
-    13: 13,  # "parking"
-    14: 14,  # "sidewalk"
-    15: 15,  # "other-ground"
-    16: 16,  # "building"
-    17: 17,  # "fence"
-    18: 18,  # "other-structure" mapped to "unlabeled" ------------------mapped
-    19: 19,  # "lane-marking" to "road" ---------------------------------mapped
-    20: 20,  # "vegetation"
-    21: 21,  # "trunk"
-    22: 22,  # "terrain"
-    23: 23,  # "pole"
-    24: 24,  # "traffic-sign"
-    25: 25,  # "other-object" to "unlabeled" ----------------------------mapped
-    26: 26,  # "moving-car" to "car" ------------------------------------mapped
-    27: 27,  # "moving-bicyclist" to "bicyclist" ------------------------mapped
-    28: 28,  # "moving-person" to "person" ------------------------------mapped
-    29: 29,  # "moving-motorcyclist" to "motorcyclist" ------------------mapped
-    30: 30,  # "moving-on-rails" mapped to "other-vehicle" --------------mapped
-    31: 31,  # "moving-bus" mapped to "other-vehicle" -------------------mapped
+    1: 0, #noise
+    5: 0, #noise
+    7: 0, #noise
+    8: 0, #noise
+    10: 0, #noise
+    11: 0, #noise
+    13: 0, #noise
+    19: 0, #noise
+    20: 0, #noise
+    0: 0, #noise
+    29: 0, #noise
+    31: 0, #noise
+    9: 1, #barrier
+    14: 2, #bicycle
+    15: 3, #bus
+    16: 3, #bus
+    17: 4, #car
+    18: 5, #construction vehicle
+    21: 6, #motorcycle
+    2: 7, #pedestrian
+    3: 7, #pedestrian
+    4: 7, #pedestrian
+    6: 7, #pedestrian
+    12: 8, #trafic cone
+    22: 9, #trailer
+    23: 10, #truck
+    24: 11, #driveble surface
+    25: 12, #other_flat
+    26: 13, #sidewalk
+    27: 14, #terrain
+    28: 15, #manmade
+    30: 16, #vegetation
 }
 
 LEARNING_MAP_INV = {  # inverse of previous map
@@ -154,7 +154,4 @@ LEARNING_IGNORE = {  # Ignore classes
     14: False,  # "fence"
     15: False,  # "vegetation"
     16: False,  # "trunk"
-    17: False,  # "terrain"
-    18: False,  # "pole"
-    19: False,  # "traffic-sign"
 }
