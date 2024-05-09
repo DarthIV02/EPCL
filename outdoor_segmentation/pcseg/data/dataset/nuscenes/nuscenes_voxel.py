@@ -26,15 +26,9 @@ class NuscVoxelDataset(data.Dataset):
         self.data_cfgs = data_cfgs
         self.training = training
         self.class_names = [
-            'noise', 
-            'animal', 'human.pedestrian.adult', 'human.pedestrian.child', 'human.pedestrian.construction_worker',
-            'human.pedestrian.personal_mobility', 'human.pedestrian.police_officer', 'human.pedestrian.stroller',
-            'human.pedestrian.wheelchair', 'movable_object.barrier', 'movable_object.debris',
-            'movable_object.pushable_pullable', 'movable_object.trafficcone', 'static_object.bicycle_rack',
-            'vehicle.bicycle', 'vehicle.bus.bendy', 'vehicle.bus.rigid', 'vehicle.car', 'vehicle.construction',
-            'vehicle.emergency.ambulance', 'vehicle.emergency.police', 'vehicle.motorcycle', 'vehicle.trailer',
-            'vehicle.truck', 'flat.driveable_surface', 'flat.other', 'flat.sidewalk', 'flat.terrain',
-            'static.manmade', 'static.other', 'static.vegetation', 'vehicle.ego'
+            'noise', 'barrier', 'bicycle', 'bus', 'car', 'construction vehicle', 'motorcycle', 
+            'pedestrian', 'trafic cone', 'trailer', 'truck', 'driveble surface', 'other_flat',
+            'sidewalk', 'terrain', 'manmade', 'vegetation'
         ]
         self.root_path = root_path if root_path is not None else self.data_cfgs.DATA_PATH
         self.logger = logger
