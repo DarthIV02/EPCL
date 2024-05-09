@@ -13,7 +13,7 @@ from .range.cenet.model.semantic.cenet import CENet
 # voxel
 from .voxel.cylinder3d import Cylinder_TS
 from .voxel.cylinder3d.cylinder_ts import Cylinder_TS
-from .voxel.epcl.epcl_outdoor_seg import EPCLOutdoorSeg
+#from .voxel.epcl.epcl_outdoor_seg import EPCLOutdoorSeg
 #from .voxel.epcl_hd.epcl_outdoor_seg_exp1 import EPCLOutdoorSegHD
 
 # multi-view fusion
