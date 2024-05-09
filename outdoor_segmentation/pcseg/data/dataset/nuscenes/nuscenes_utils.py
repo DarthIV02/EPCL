@@ -1,135 +1,140 @@
 LABEL_NAME_MAPPING = {
-    0: 'unlabeled',
-    1: 'outlier',
-    10: 'car',
-    11: 'bicycle',
-    13: 'bus',
-    15: 'motorcycle',
-    16: 'on-rails',
-    18: 'truck',
-    20: 'other-vehicle',
-    30: 'person',
-    31: 'bicyclist',
-    32: 'motorcyclist',
-    40: 'road',
-    44: 'parking',
-    48: 'sidewalk',
-    49: 'other-ground',
-    50: 'building',
-    51: 'fence',
-    52: 'other-structure',
-    60: 'lane-marking',
-    70: 'vegetation',
-    71: 'trunk',
-    72: 'terrain',
-    80: 'pole',
-    81: 'traffic-sign',
-    99: 'other-object',
-    252: 'moving-car',
-    253: 'moving-bicyclist',
-    254: 'moving-person',
-    255: 'moving-motorcyclist',
-    256: 'moving-on-rails',
-    257: 'moving-bus',
-    258: 'moving-truck',
-    259: 'moving-other-vehicle'
-}
+    0: 'noise',
+    1: 'animal',
+    2: 'human.pedestrian.adult',
+    3: 'human.pedestrian.child',
+    4: 'human.pedestrian.construction_worker',
+    5: 'human.pedestrian.personal_mobility',
+    6: 'human.pedestrian.police_officer',
+    7: 'human.pedestrian.stroller',
+    8: 'human.pedestrian.wheelchair',
+    9: 'movable_object.barrier',
+    10: 'movable_object.debris',
+    11: 'movable_object.pushable_pullable',
+    12: 'movable_object.trafficcone',
+    13: 'static_object.bicycle_rack',
+    14: 'vehicle.bicycle',
+    15: 'vehicle.bus.bendy',
+    16: 'vehicle.bus.rigid',
+    17: 'vehicle.car',
+    18: 'vehicle.construction',
+    19: 'vehicle.emergency.ambulance',
+    20: 'vehicle.emergency.police',
+    21: 'vehicle.motorcycle',
+    22: 'vehicle.trailer',
+    23: 'vehicle.truck',
+    24: 'flat.driveable_surface',
+    25: 'flat.other',
+    26: 'flat.sidewalk',
+    27: 'flat.terrain',
+    28: 'static.manmade',
+    29: 'static.other',
+    30: 'static.vegetation',
+    31: 'vehicle.ego'}
 
 color_map = {
   0 : [0, 0, 0],
   1 : [0, 0, 255],
-  10: [245, 150, 100],
-  11: [245, 230, 100],
-  13: [250, 80, 100],
-  15: [150, 60, 30],
-  16: [255, 0, 0],
-  18: [180, 30, 80],
-  20: [255, 0, 0],
-  30: [30, 30, 255],
-  31: [200, 40, 255],
-  32: [90, 30, 150],
-  40: [255, 0, 255],
-  44: [255, 150, 255],
-  48: [75, 0, 75],
-  49: [75, 0, 175],
-  50: [0, 200, 255],
-  51: [50, 120, 255],
-  52: [0, 150, 255],
-  60: [170, 255, 150],
-  70: [0, 175, 0],
-  71: [0, 60, 135],
-  72: [80, 240, 150],
-  80: [150, 240, 255],
-  81: [0, 0, 255],
-  99: [255, 255, 50],
-  252: [245, 150, 100],
-  256: [255, 0, 0],
-  253: [200, 40, 255],
-  254: [30, 30, 255],
-  255: [90, 30, 150],
-  257: [250, 80, 100],
-  258: [180, 30, 80],
-  259: [255, 0, 0],
+  2: [245, 150, 100],
+  3: [245, 230, 100],
+  4: [250, 80, 100],
+  5: [150, 60, 30],
+  6: [255, 0, 0],
+  7: [180, 30, 80],
+  8: [255, 0, 0],
+  9: [30, 30, 255],
+  10: [200, 40, 255],
+  11: [90, 30, 150],
+  12: [255, 0, 255],
+  13: [255, 150, 255],
+  14: [75, 0, 75],
+  15: [75, 0, 175],
+  16: [0, 200, 255],
+  17: [50, 120, 255],
+  18: [0, 150, 255],
+  19: [170, 255, 150],
+  20: [0, 175, 0],
+  21: [0, 60, 135],
+  22: [80, 240, 150],
+  23: [150, 240, 255],
+  24: [0, 0, 255],
+  25: [255, 255, 50],
+  26: [245, 150, 100],
+  27: [255, 0, 0],
+  28: [200, 40, 255],
+  29: [30, 30, 255],
+  30: [90, 30, 150],
+  31: [250, 80, 100],
 }
 
 LEARNING_MAP = {
     0: 0,  # "unlabeled"
-    1: 0,  # "outlier" mapped to "unlabeled" --------------------------mapped
-    10: 1,  # "car"
-    11: 2,  # "bicycle"
-    13: 5,  # "bus" mapped to "other-vehicle" --------------------------mapped
-    15: 3,  # "motorcycle"
-    16: 5,  # "on-rails" mapped to "other-vehicle" ---------------------mapped
-    18: 4,  # "truck"
-    20: 5,  # "other-vehicle"
-    30: 6,  # "person"
-    31: 7,  # "bicyclist"
-    32: 8,  # "motorcyclist"
-    40: 9,  # "road"
-    44: 10,  # "parking"
-    48: 11,  # "sidewalk"
-    49: 12,  # "other-ground"
-    50: 13,  # "building"
-    51: 14,  # "fence"
-    52: 0,  # "other-structure" mapped to "unlabeled" ------------------mapped
-    60: 9,  # "lane-marking" to "road" ---------------------------------mapped
-    70: 15,  # "vegetation"
-    71: 16,  # "trunk"
-    72: 17,  # "terrain"
-    80: 18,  # "pole"
-    81: 19,  # "traffic-sign"
-    99: 0,  # "other-object" to "unlabeled" ----------------------------mapped
-    252: 1,  # "moving-car" to "car" ------------------------------------mapped
-    253: 7,  # "moving-bicyclist" to "bicyclist" ------------------------mapped
-    254: 6,  # "moving-person" to "person" ------------------------------mapped
-    255: 8,  # "moving-motorcyclist" to "motorcyclist" ------------------mapped
-    256: 5,  # "moving-on-rails" mapped to "other-vehicle" --------------mapped
-    257: 5,  # "moving-bus" mapped to "other-vehicle" -------------------mapped
-    258: 4,  # "moving-truck" to "truck" --------------------------------mapped
-    259: 5,  # "moving-other"-vehicle to "other-vehicle" ----------------mapped
+    1: 1,  # "outlier" mapped to "unlabeled" --------------------------mapped
+    2: 2,  # "car"
+    3: 3,  # "bicycle"
+    4: 4,  # "bus" mapped to "other-vehicle" --------------------------mapped
+    5: 5,  # "motorcycle"
+    6: 6,  # "on-rails" mapped to "other-vehicle" ---------------------mapped
+    7: 7,  # "truck"
+    8: 8,  # "other-vehicle"
+    9: 9,  # "person"
+    10: 10,  # "bicyclist"
+    11: 11,  # "motorcyclist"
+    12: 12,  # "road"
+    13: 13,  # "parking"
+    14: 14,  # "sidewalk"
+    15: 15,  # "other-ground"
+    16: 16,  # "building"
+    17: 17,  # "fence"
+    18: 18,  # "other-structure" mapped to "unlabeled" ------------------mapped
+    19: 19,  # "lane-marking" to "road" ---------------------------------mapped
+    20: 20,  # "vegetation"
+    21: 21,  # "trunk"
+    22: 22,  # "terrain"
+    23: 23,  # "pole"
+    24: 24,  # "traffic-sign"
+    25: 25,  # "other-object" to "unlabeled" ----------------------------mapped
+    26: 26,  # "moving-car" to "car" ------------------------------------mapped
+    27: 27,  # "moving-bicyclist" to "bicyclist" ------------------------mapped
+    28: 28,  # "moving-person" to "person" ------------------------------mapped
+    29: 29,  # "moving-motorcyclist" to "motorcyclist" ------------------mapped
+    30: 30,  # "moving-on-rails" mapped to "other-vehicle" --------------mapped
+    31: 31,  # "moving-bus" mapped to "other-vehicle" -------------------mapped
 }
 
 LEARNING_MAP_INV = {  # inverse of previous map
-    0: 0,  # "unlabeled", and others ignored
-    1: 10,  # "car"
-    2: 11,  # "bicycle"
-    3: 15,  # "motorcycle"
-    4: 18,  # "truck"
-    5: 20,  # "other-vehicle"
-    6: 30,  # "person"
-    7: 31,  # "bicyclist"
-    8: 32,  # "motorcyclist"
-    9: 40,  # "road"
-    10: 44,  # "parking"
-    11: 48,  # "sidewalk"
-    12: 49,  # "other-ground"
-    13: 50,  # "building"
-    14: 51,  # "fence"
-    15: 70,  # "vegetation"
-    16: 71,  # "trunk"
-    17: 72,  # "terrain"
-    18: 80,  # "pole"
-    19: 81,  # "traffic-sign"
+    0: 0,  # "unlabeled"
+    1: 1,  # "outlier" mapped to "unlabeled" --------------------------mapped
+    2: 2,  # "car"
+    3: 3,  # "bicycle"
+    4: 4,  # "bus" mapped to "other-vehicle" --------------------------mapped
+    5: 5,  # "motorcycle"
+    6: 6,  # "on-rails" mapped to "other-vehicle" ---------------------mapped
+    7: 7,  # "truck"
+    8: 8,  # "other-vehicle"
+    9: 9,  # "person"
+    10: 10,  # "bicyclist"
+    11: 11,  # "motorcyclist"
+    12: 12,  # "road"
+    13: 13,  # "parking"
+    14: 14,  # "sidewalk"
+    15: 15,  # "other-ground"
+    16: 16,  # "building"
+    17: 17,  # "fence"
+    18: 18,  # "other-structure" mapped to "unlabeled" ------------------mapped
+    19: 19,  # "lane-marking" to "road" ---------------------------------mapped
+    20: 20,  # "vegetation"
+    21: 21,  # "trunk"
+    22: 22,  # "terrain"
+    23: 23,  # "pole"
+    24: 24,  # "traffic-sign"
+    25: 25,  # "other-object" to "unlabeled" ----------------------------mapped
+    26: 26,  # "moving-car" to "car" ------------------------------------mapped
+    27: 27,  # "moving-bicyclist" to "bicyclist" ------------------------mapped
+    28: 28,  # "moving-person" to "person" ------------------------------mapped
+    29: 29,  # "moving-motorcyclist" to "motorcyclist" ------------------mapped
+    30: 30,  # "moving-on-rails" mapped to "other-vehicle" --------------mapped
+    31: 31,  # "moving-bus" mapped to "other-vehicle" -------------------mapped
 }
 LEARNING_IGNORE = {  # Ignore classes
     0: True,  # "unlabeled", and others ignored
