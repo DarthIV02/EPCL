@@ -3,8 +3,8 @@ cd ${ROOT}
 
 NGPUS=1
 cfg_name=EPCL_HD
-cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
-extra_tag=val_${cfg_name}_x4
+cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
+extra_tag=val_${cfg_name}_nuscenes
 pretrained_model=${ROOT}/checkpoints/best_checkpoint.pth
 
 set -x
@@ -23,7 +23,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --eval \
---exp 4 \
+--exp 5 \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
