@@ -165,6 +165,8 @@ class Trainer:
             num_class = 20
         elif cfgs.DATA.DATASET == 'waymo':
             num_class = 23
+        elif cfgs.DATA.DATASET == 'tls':
+            num_class = 5
         
         # set model
         model = build_network(
