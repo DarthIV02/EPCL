@@ -5,7 +5,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 NGPUS=4
 cfg_name=EPCL_HD
 extra_tag=train_${cfg_name}
-cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
+cfg_file=tools/cfgs/voxel/tls/${cfg_name}.yaml
 
 set -x
 

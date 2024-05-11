@@ -6,6 +6,7 @@ from tools.utils.common import common_utils
 from .dataset.semantickitti import SemkittiRangeViewDataset, SemkittiVoxelDataset, SemkittiCylinderDataset, SemkittiFusionDataset
 from .dataset.waymo import WaymoVoxelDataset, WaymoCylinderDataset, WaymoFusionDataset
 from .dataset.nuscenes import NuscVoxelDataset
+from .dataset.tls import TlsVoxelDataset
 
 __all__ = {
     # SemanticKITTI
@@ -21,6 +22,9 @@ __all__ = {
 
     # Nuscenes
     'NuscVoxelDataset':NuscVoxelDataset,
+
+    # TLS
+    'TLSVoxelDataset':TlsVoxelDataset
 }
 
 
@@ -69,6 +73,8 @@ def build_dataloader(
     elif modality == 'voxel':
         if data_cfgs.DATASET == 'nuscenes':
             db = 'NuscVoxelDataset'
+        elif data_cfgs.DATASET == 'tls':
+            db = 'TlsVoxelDataset'
         elif data_cfgs.DATASET == 'semantickitti' or data_cfgs.DATASET == 'scribblekitti':
             db = 'SemkittiVoxelDataset'
         elif data_cfgs.DATASET == 'waymo':
