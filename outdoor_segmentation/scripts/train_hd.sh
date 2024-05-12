@@ -5,7 +5,7 @@ NGPUS=1
 cfg_name=EPCL_HD
 cfg_file=tools/cfgs/voxel/tls/${cfg_name}.yaml
 extra_tag=val_${cfg_name}_tls
-pretrained_model=${ROOT}/checkpoints/best_checkpoint.pth
+pretrained_model=${ROOT}/../root/main/EPCL_setup/checkpoints/best_checkpoint.pth
 
 set -x
 
