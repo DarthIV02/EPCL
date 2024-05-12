@@ -232,13 +232,17 @@ class HD_model():
         return sim
     
     def train(self, input_points, classification, **kwargs):
+        print(input_points.shape)
+        hv_all, sim_all, pred_labels = self.forward(input_points)
+        #classification = classification
         for idx in torch.arange(input_points[0].shape[0]).chunk(self.div):
+            print(idx)
+            print(idx.shape)
             idx = idx.to(self.device)
-            hv_all, sim_all, pred_labels = self.forward(input_points[idx])
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
 
-            novelty = 1 - sim_all[:, class_batch]
-            updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr)
+            novelty = 1 - sim_all[idx, class_batch]
+            updates = hv_all[idx].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = updates.transpose(0,1)
             
             # Update all of the classes with the actual label
@@ -249,16 +253,16 @@ class HD_model():
             #if (pred_labels != c):
             #    self.classes_hv[pred_labels] += -1*hv_all*self.lr*(1-sim_all[pred_labels])
             
-            mask_dif = class_batch != pred_labels
+            mask_dif = class_batch != pred_labels[idx]
             
-            novelty = 1 - sim_all[idx[mask_dif], pred_labels[mask_dif]] # only the ones updated
-            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            novelty = 1 - sim_all[idx[mask_dif], pred_labels[idx][mask_dif]] # only the ones updated
+            updates = hv_all[idx][mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
             updates_2[mask_dif] = updates # update vectors for the ones that changed
 
-            self.classes_hv.index_add_(0, pred_labels, updates_2)
+            self.classes_hv.index_add_(0, pred_labels[idx], updates_2)
 
 class Bottleneck(nn.Module):
     expansion = 4
