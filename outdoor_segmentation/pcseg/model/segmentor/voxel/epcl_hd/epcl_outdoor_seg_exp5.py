@@ -240,7 +240,8 @@ class HD_model():
             print(idx.shape)
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-
+            
+            print(sim_all[:, class_batch].shape)
             novelty = 1 - sim_all[:, class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr)
             updates = updates.transpose(0,1)
@@ -500,7 +501,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         #HD Initialization
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.hd_model = HD_model(device=self.device, div=4)
+        self.hd_model = HD_model(device=self.device, div=8)
         self.hd_model.to(self.device)
 
         print("--------------Loading experiment 5--------------")
