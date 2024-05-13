@@ -232,20 +232,12 @@ class HD_model():
         return sim
     
     def train(self, input_points, classification, **kwargs):
-        print(input_points.shape)
         #classification = classification
         for idx in torch.arange(input_points[0].shape[0]).chunk(self.div):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
-            print(idx)
-            print(idx.shape)
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-            print("Class ", class_batch.shape)
-            print(class_batch)
-            print("Sim all ", sim_all.shape)
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
-            print("Hvs ", hv_all.shape)
-            print("Novelty", novelty.shape)
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr)
             updates = updates.transpose(0,1)
             
@@ -256,9 +248,7 @@ class HD_model():
             
             #if (pred_labels != c):
             #    self.classes_hv[pred_labels] += -1*hv_all*self.lr*(1-sim_all[pred_labels])
-            print(pred_labels.shape)
             mask_dif = class_batch != pred_labels
-            print(mask_dif.shape)
             
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
