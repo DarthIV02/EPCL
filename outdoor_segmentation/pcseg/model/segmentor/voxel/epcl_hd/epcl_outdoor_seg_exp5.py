@@ -241,7 +241,7 @@ class HD_model():
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
 
-            novelty = 1 - sim_all[idx, class_batch]
+            novelty = 1 - sim_all[:, class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr)
             updates = updates.transpose(0,1)
             
@@ -256,7 +256,7 @@ class HD_model():
             mask_dif = class_batch != pred_labels
             print(mask_dif.shape)
             
-            novelty = 1 - sim_all[idx[mask_dif], pred_labels[mask_dif]] # only the ones updated
+            novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
