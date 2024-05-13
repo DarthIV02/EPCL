@@ -3,8 +3,8 @@ cd ${ROOT}
 
 NGPUS=1
 cfg_name=EPCL_HD
-cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
-extra_tag=val_${cfg_name}_x5
+cfg_file=tools/cfgs/voxel/tls/${cfg_name}.yaml
+extra_tag=val_${cfg_name}_tls_x5
 pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
 
 set -x
@@ -23,7 +23,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --train_hd \
---ckp_save_interval 100 \
+--ckp_save_interval 5 \
 --exp 5 \
 --eval \
 --pretrained_model ${pretrained_model} \
