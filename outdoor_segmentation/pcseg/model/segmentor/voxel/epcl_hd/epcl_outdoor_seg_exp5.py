@@ -252,8 +252,9 @@ class HD_model():
             
             #if (pred_labels != c):
             #    self.classes_hv[pred_labels] += -1*hv_all*self.lr*(1-sim_all[pred_labels])
-            
+            print(pred_labels.shape)
             mask_dif = class_batch != pred_labels
+            print(mask_dif.shape)
             
             novelty = 1 - sim_all[idx[mask_dif], pred_labels[mask_dif]] # only the ones updated
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
