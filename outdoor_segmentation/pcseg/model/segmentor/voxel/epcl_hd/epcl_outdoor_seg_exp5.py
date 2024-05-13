@@ -240,10 +240,10 @@ class HD_model():
             print(idx.shape)
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-            
-            #print(sim_all[:, class_batch].shape)
+            print("Class ", class_batch.shape)
+            print(sim_all.shape)
             novelty = 1 - sim_all[:, class_batch]
-            print(hv_all.shape)
+            print("Hvs ", hv_all.shape)
             print("Novelty", novelty.shape)
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr)
             updates = updates.transpose(0,1)
