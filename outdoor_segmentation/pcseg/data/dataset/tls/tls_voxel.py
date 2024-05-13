@@ -26,9 +26,7 @@ class TlsVoxelDataset(data.Dataset):
         self.data_cfgs = data_cfgs
         self.training = training
         self.class_names = [
-            'noise', 'barrier', 'bicycle', 'bus', 'car', 'construction vehicle', 'motorcycle', 
-            'pedestrian', 'trafic cone', 'trailer', 'truck', 'driveble surface', 'other_flat',
-            'sidewalk', 'terrain', 'manmade', 'vegetation'
+            'unlabeled', 'alive', '1h', '10h', '100h', '1000h'
         ]
         self.root_path = root_path if root_path is not None else self.data_cfgs.DATA_PATH
         self.logger = logger
