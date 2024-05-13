@@ -243,7 +243,7 @@ class HD_model():
             print("Class ", class_batch.shape)
             print(class_batch)
             print("Sim all ", sim_all.shape)
-            novelty = 1 - sim_all[:, class_batch]
+            novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             print("Hvs ", hv_all.shape)
             print("Novelty", novelty.shape)
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr)
