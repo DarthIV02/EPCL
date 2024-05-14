@@ -663,7 +663,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         #tuple_feat[1, :, :z3.F.shape[1]] = z3.F
         # ------------------------------------BATCH MUL with pad ----------------------------------
-        z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
         samples = z2.F.shape[0]
         dim_max = z1.F.shape[1]
         padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
