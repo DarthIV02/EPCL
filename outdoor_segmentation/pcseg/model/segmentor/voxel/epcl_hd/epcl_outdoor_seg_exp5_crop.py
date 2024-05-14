@@ -188,7 +188,7 @@ class HD_model():
         self.device = kwargs['device']
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
-        self.softmax = torch.nn.Softmax(dim=1)
+        self.softmax = torch.nn.Softmax(dim=2)
         self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
         self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
         self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
