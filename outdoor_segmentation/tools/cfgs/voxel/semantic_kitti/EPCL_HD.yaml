@@ -3,7 +3,7 @@ MODALITY: 'voxel'
 DATA:
     DATASET: 'semantickitti'  # choices: ['nuscenes', 'semantickitti', 'scribblekitti']
     PETRELOSS_CONFIG: None
-    DATA_PATH: '../../../../root/dataset-kitti/dataset/sequences/'  # hint: customize your data path
+    DATA_PATH: '/root/dataset-kitti-2/dataset/sequences/'  # hint: customize your data path
     VOXEL_SIZE: 0.05
     AUGMENT: 'GlobalAugment_LP'  # choices: ['GlobalAugment', 'GlobalAugment_LP']
     NUM_POINTS: 1000000
@@ -21,7 +21,7 @@ MODEL:
     cr: 1.6
     DROPOUT_P: 0.0
     LABEL_SMOOTHING: 0.0
-    IF_DIST: False  # True: multi-gpus, False: single gpu
+    IF_DIST: True  # True: multi-gpus, False: single gpu
     EPCL:
         ENC_DIM: 768
         TOKENIZER_DIM: 409
@@ -30,7 +30,7 @@ MODEL:
         VOXEL_SIZE: 0.05
 
 OPTIM:
-    BATCH_SIZE_PER_GPU: 1 
+    BATCH_SIZE_PER_GPU: 2 
     NUM_EPOCHS: 48
     OPTIMIZER: sgd
     LR_PER_SAMPLE: 0.02
