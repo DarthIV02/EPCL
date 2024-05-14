@@ -524,6 +524,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 nn.init.constant_(m.bias, 0)
 
     def forward(self, batch_dict, return_logit=False, return_tta=False, train_hd=False, **kwargs):
+        print("Objectives: ", batch_dict['targets'].feats)
+        
         x = batch_dict['lidar']
         x.F = x.F[:, :self.in_feature_dim]
         z = PointTensor(x.F, x.C.float()) # dim=4
@@ -539,12 +541,14 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         x3 = self.stage3(x2)
         x4 = self.stage4(x3) 
         z1 = voxel_to_point(x4, z0)
-        #encode_z1 = self.hd_model.random_projection_0(z1.F).sign()
-        #sim = self.hd_model.similarity(encode_z1)
+        encode_z1 = self.hd_model.random_projection_0(z1.F).sign()
+        sim = self.hd_model.similarity(encode_z1)
         #print(sim.shape)
         #sim = torch.max(sim, dim=1).values
+        sim = torch.argmax(sim, dim=1)
         #print("max z_1: ", torch.max(sim))
         #print("mean z_1: ", torch.mean(sim))
+        print("z1: ", sim)
 
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
@@ -579,25 +583,26 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         sim = self.hd_model.similarity(encode_y2)
         #print(sim.shape)
         sim_arg = torch.argmax(sim, dim=1)
-        sim = torch.max(sim, dim=1).values
-        mask_sim = sim < 0.070
-        print("Skipped: ", torch.sum(~mask_sim))
-        print("max y_2: ", torch.max(sim))
-        print("mean y_2: ", torch.mean(sim))
+        #sim = torch.max(sim, dim=1).values
+        #mask_sim = sim < 0.070
+        #print("Skipped: ", torch.sum(~mask_sim))
+        #print("max y_2: ", torch.max(sim))
+        #print("mean y_2: ", torch.mean(sim))
+        print("z2: ", sim_arg)
 
-        temp = torch.zeros((y2.F.shape[0]), device=self.device)
+        #temp = torch.zeros((y2.F.shape[0]), device=self.device)
 
-        print(y2.F.shape)
-        y2.F = y2.F[mask_sim, :]
-        print(y2.F.shape)
-        temp[~mask_sim] = sim_arg[~mask_sim].float()
-        print(torch.sum(temp != 0))
+        #print(y2.F.shape)
+        #y2.F = y2.F[mask_sim, :]
+        #print(y2.F.shape)
+        #temp[~mask_sim] = sim_arg[~mask_sim].float()
+        #print(torch.sum(temp != 0))
 
         #print("y2")
         #print(y2.F.shape)
         z2 = voxel_to_point(y2, z1) # <----------------
         #print("z2")
-        print(z2.F.shape)
+        #print(z2.F.shape)
         #print(z2.C.shape)
         
         #encode_z12 = torch.sum(torch.stack((encode_z1, encode_z2)), dim=0)
@@ -627,12 +632,14 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         z3 = voxel_to_point(y4, z2)# <----------------
 
         # -------------------TEST Z3 Encoding alone ---------------------------
-        #encode_z3 = self.hd_model.random_projection_2(z3.F).sign()
-        #sim = self.hd_model.similarity(encode_z3)
+        encode_z3 = self.hd_model.random_projection_2(z3.F).sign()
+        sim = self.hd_model.similarity(encode_z3)
         #print(sim.shape)
         #sim = torch.max(sim, dim=1).values
         #print("max z_3: ", torch.max(sim))
         #print("mean z_3: ", torch.mean(sim))
+        sim_arg = torch.argmax(sim, dim=1)
+        print("z3: ", sim_arg)
 
 
         #print("z3")
