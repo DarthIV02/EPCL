@@ -496,6 +496,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         #HD Initialization
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        print("DEVICE: ", self.device)
         self.hd_model = HD_model(device=self.device, div=2)
         self.hd_model.to(self.device)
 
