@@ -6,7 +6,7 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 NGPUS=1
 cfg_name=EPCL_HD
 cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
-extra_tag=val_${cfg_name}_nuscenes_x5
+extra_tag=val_${cfg_name}_nuscenes
 pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
 
 set -x
