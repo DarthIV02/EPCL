@@ -223,7 +223,7 @@ class HD_model():
     def forward(self, input_h):
         hv = self.encode(input_h)
         sim = self.similarity(hv)
-        print("ALL ", torch.max(sim))
+        print("ALL ", torch.argmax(sim, dim=1))
         pred_label = torch.argmax(sim, dim=1)
         return hv, sim, pred_label
         
