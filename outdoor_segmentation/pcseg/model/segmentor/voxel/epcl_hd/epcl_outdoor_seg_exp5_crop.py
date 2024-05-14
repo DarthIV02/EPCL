@@ -223,9 +223,14 @@ class HD_model():
     def forward(self, input_h):
         hv = self.encode(input_h)
         sim = self.similarity(hv)
-        print(sim.shape)
-        print("ALL ", torch.argmax(sim, dim=1).shape)
-        pred_label = torch.argmax(sim, dim=1)
+        best_ind = torch.argmax(sim, dim=2)
+        print(best_ind.shape)
+        best_sim = torch.max(sim, dim=2).values
+        print(best_sim.shape)
+        best_sim = torch.argmax(best_sim, dim=0)
+        print(best_sim.shape)
+        print("ALL ", best_ind[best_sim, torch.arange(best_ind.shape[1])])
+        pred_label = torch.argmax(sim, dim=2)
         return hv, sim, pred_label
         
     def similarity(self, point):
