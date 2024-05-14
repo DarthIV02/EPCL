@@ -3,7 +3,7 @@ cd ${ROOT}
 
 NGPUS=1
 cfg_name=EPCL_HD
-cfg_file=tools/cfgs/voxel/tls/${cfg_name}.yaml
+cfg_file=tools/cfgs/semantic_kitti/tls/${cfg_name}.yaml
 extra_tag=val_${cfg_name}_tls_x5
 pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
 
