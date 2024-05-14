@@ -40,6 +40,7 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --eval \
 --exp 5 \
+--crop \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
