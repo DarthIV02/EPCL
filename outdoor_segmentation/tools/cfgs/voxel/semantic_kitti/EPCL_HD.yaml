@@ -3,7 +3,7 @@ MODALITY: 'voxel'
 DATA:
     DATASET: 'semantickitti'  # choices: ['nuscenes', 'semantickitti', 'scribblekitti']
     PETRELOSS_CONFIG: None
-    DATA_PATH: '../../../../root/dataset-kitti-2/dataset/sequences/'  # hint: customize your data path
+    DATA_PATH: '../../../../root/dataset-kitti/dataset/sequences/'  # hint: customize your data path
     VOXEL_SIZE: 0.05
     AUGMENT: 'GlobalAugment_LP'  # choices: ['GlobalAugment', 'GlobalAugment_LP']
     NUM_POINTS: 1000000
