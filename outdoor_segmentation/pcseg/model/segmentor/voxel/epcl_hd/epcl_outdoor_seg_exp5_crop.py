@@ -549,7 +549,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("max z_1: ", torch.max(sim))
         #print("mean z_1: ", torch.mean(sim))
         print("z1: ", sim_arg)
-        print("z1: ", sim[sim_arg], sim[sim_arg].shape)
+        print("z1: ", sim[torch.arange(sim_arg.shape[0]),sim_arg], sim[torch.arange(sim_arg.shape[0]),sim_arg].shape)
 
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
