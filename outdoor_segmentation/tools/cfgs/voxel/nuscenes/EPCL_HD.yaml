@@ -9,7 +9,7 @@ DATA:
     NUM_POINTS: 1000000
     TRAINVAL: False           # train set: train + val
     TTA: False
-    SAMPLES_PER_EPOCH: 284
+    SAMPLES_PER_EPOCH: 2000
 
 MODEL:
     NAME: EPCLOutdoorSegHD
