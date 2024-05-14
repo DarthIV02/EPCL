@@ -244,7 +244,7 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         print(input_points.shape)
-        for idx in torch.arange(input_points[1]).chunk(self.div):
+        for idx in torch.arange(input_points.shape[1]).chunk(self.div):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
