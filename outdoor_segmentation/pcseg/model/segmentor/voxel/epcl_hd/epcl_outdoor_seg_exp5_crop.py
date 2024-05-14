@@ -188,7 +188,8 @@ class HD_model():
         self.device = kwargs['device']
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
-        self.softmax = torch.nn.Softmax(dim=2)
+        self.softmax = torch.nn.Softmax(dim=1)
+        self.softmax_2 = torch.nn.Softmax(dim=2)
         self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
         self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
         self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
@@ -228,7 +229,7 @@ class HD_model():
         input_h = (input_h[0], input_h[1,:,:self.num_features[1]], input_h[2,:,:self.num_features[2]])
         hv = self.encode(input_h)
         #hv = torch.sum(hv, dim=0).sign()
-        sim = self.similarity(hv)
+        sim = self.similarity(hv, True)
         best_ind = torch.argmax(sim, dim=2)
         print(best_ind.shape)
         best_sim = torch.max(sim, dim=2).values
@@ -242,9 +243,13 @@ class HD_model():
         print("sim: ", torch.max(best_sim, dim=0).values)
         return hv, torch.max(best_sim, dim=0).values, pred_label
         
-    def similarity(self, point):
+    def similarity(self, point, group=False):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
-        sim = self.softmax(sim)
+        if group:
+            sim = self.softmax_2(sim)
+        else:
+            sim = self.softmax(sim)
+
         return sim
     
     def train(self, input_points, classification, **kwargs):
