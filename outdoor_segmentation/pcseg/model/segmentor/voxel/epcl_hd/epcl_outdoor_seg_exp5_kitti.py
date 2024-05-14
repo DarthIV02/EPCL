@@ -189,31 +189,32 @@ class HD_model():
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
-        self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
-        self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
-        self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
+        #self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
+        #self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
+        #self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
-        self.random_projection = (self.random_projection_0, self.random_projection_1, self.random_projection_2)
-        #self.random_projection = BatchProjection(3, num_features, self.d, device=kwargs['device'])
+        #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
+        self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
-        self.random_projection[0] = self.random_projection[0].to(*args)
-        self.random_projection[1] = self.random_projection[1].to(*args)
-        self.random_projection[2] = self.random_projection[2].to(*args)
-        #self.random_projection = self.random_projection.to(*args)
+        #self.random_projection_0 = self.random_projection_0.to(*args)
+        #self.random_projection_1 = self.random_projection_1.to(*args)
+        #self.random_projection_2 = self.random_projection_2.to(*args)
+        #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
+        self.random_projection = self.random_projection.to(*args)
 
     def encode(self, input_x):
         #print(input_x.get_device())
-        #hv_0 = self.random_projection(input_x) # <-- BATCH
+        hv_0 = self.random_projection(input_x) # <-- BATCH
         #print(hv_0.shape) # (3,#,d)
-        hv_0 = self.random_projection[0](input_x[0])
-        hv_1 = self.random_projection[1](input_x[1])
-        hv_2 = self.random_projection[2](input_x[2])
-        hv_all = torch.stack((hv_0, hv_1, hv_2))
-        hv_all = torch.sum(hv_all, dim=0).sign()
+        #hv_0 = self.random_projection[0](input_x[0])
+        #hv_1 = self.random_projection[1](input_x[1])
+        #hv_2 = self.random_projection[2](input_x[2])
+        #hv_all = torch.stack((hv_0, hv_1, hv_2))
+        hv_all = torch.sum(hv_0, dim=0).sign()
 
         #x = input("Enter")
 
@@ -495,7 +496,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         #HD Initialization
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        print("DEVICE", self.device)
         self.hd_model = HD_model(device=self.device, div=2)
         self.hd_model.to(self.device)
 
@@ -601,8 +601,19 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #tuple_feat[0] = z1.F
         #tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         #tuple_feat[1, :, :z3.F.shape[1]] = z3.F
-        #tuple_feat = {0:z1.F, 1:z2.F, 2:z3.F} #<----- BEFORE
-        tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
+        # ------------------------------------BATCH MUL with pad ----------------------------------
+        #z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
+        samples = z2.F.shape[0]
+        dim_max = z1.F.shape[1]
+        padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
+        #print(padder.shape)
+        z2.F = torch.cat([z2.F,padder], dim = 1)
+        #print(z2.F.shape)
+        padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
+        z3.F = torch.cat([z3.F,padder], dim = 1)
+        tuple_feat = torch.stack((z1.F, z2.F, z3.F))
+
+        #tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
         #out = self.classifier(concat_feat)
         #print("\nOut")
