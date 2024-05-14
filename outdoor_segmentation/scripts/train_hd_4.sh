@@ -21,7 +21,7 @@ set -x
 #done
 #echo $PORT
 
-python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --train_hd \
@@ -34,7 +34,7 @@ python -m torch.distributed.launch \
 
 echo 'dist_train finished!'
 
-python -m torch.distributed.launch \
+CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --eval \

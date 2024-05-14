@@ -33,3 +33,14 @@ python -m torch.distributed.launch \
 --extra_tag ${extra_tag} \
 
 echo 'dist_train finished!'
+
+python -m torch.distributed.launch \
+--nproc_per_node=${NGPUS} train.py \
+--launcher pytorch \
+--eval \
+--exp 5 \
+--pretrained_model ${pretrained_model} \
+--cfg_file ${cfg_file} \
+--extra_tag ${extra_tag} \
+
+echo 'val finished!'

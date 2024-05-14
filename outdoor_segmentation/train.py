@@ -122,6 +122,7 @@ class Trainer:
         # set init
         log_dir, ckp_dir, logger, logger_tb, if_dist_train, total_gpus, cfgs = \
             self.init(args, cfgs)
+        print("IF DIST: ", if_dist_train)
         self.args = args
         self.cfgs = cfgs
 
