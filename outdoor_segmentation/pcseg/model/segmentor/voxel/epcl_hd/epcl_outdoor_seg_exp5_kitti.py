@@ -186,6 +186,7 @@ class HD_model():
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
+        print(self.device)
         self.classes_hv = torch.zeros((classes, self.d))
         self.flatten = nn.Flatten(0,1)
         self.softmax = torch.nn.Softmax(dim=1)
