@@ -700,7 +700,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             #offset = batch_dict['offset']
             self.hd_model.train(tuple_feat, batch_dict['targets'].feats)
 
-            x = input("Enter")
+            #x = input("Enter")
 
             return {}
         
@@ -710,7 +710,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             point_predict = []
             point_labels = []
             hv, sim, pred_label = self.hd_model.forward(tuple_feat)
-            temp[mask_sim] = pred_label
+            #temp[mask_sim] = pred_label
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
