@@ -223,8 +223,8 @@ class HD_model():
     
     def forward(self, input_h):
         print(input_h.shape)
-        print(input_h[1,:self.num_features[1]].shape)
-        input_h = (input_h[0], input_h[1,:self.num_features[1]], input_h[2,:self.num_features[2]])
+        print(input_h[1][:self.num_features[1]].shape)
+        input_h = (input_h[0], input_h[1][:self.num_features[1]], input_h[2][:self.num_features[2]])
         hv = self.encode(input_h)
         sim = self.similarity(hv)
         best_ind = torch.argmax(sim, dim=2)
