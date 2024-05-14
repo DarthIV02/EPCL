@@ -207,7 +207,7 @@ class HD_model():
         self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
         #self.random_projection = self.random_projection.to(*args)
 
-    def encode(self, input_x):
+    def encode(self, input_x, infer=False):
         #print(input_x.get_device())
         #hv_0 = self.random_projection(input_x) # <-- BATCH
         #print(hv_0.shape) # (3,#,d)
@@ -215,7 +215,8 @@ class HD_model():
         hv_1 = self.random_projection[1](input_x[1]).sign()
         hv_2 = self.random_projection[2](input_x[2]).sign()
         hv_all = torch.stack((hv_0, hv_1, hv_2))
-        #hv_all = torch.sum(hv_all, dim=0).sign()
+        if infer:
+            hv_all = torch.sum(hv_all, dim=0).sign()
 
         #x = input("Enter")
 
@@ -226,6 +227,7 @@ class HD_model():
         print(input_h[1,:,:self.num_features[1]].shape)
         input_h = (input_h[0], input_h[1,:,:self.num_features[1]], input_h[2,:,:self.num_features[2]])
         hv = self.encode(input_h)
+        #hv = torch.sum(hv, dim=0).sign()
         sim = self.similarity(hv)
         best_ind = torch.argmax(sim, dim=2)
         print(best_ind.shape)
@@ -235,6 +237,8 @@ class HD_model():
         print(best_sim.shape)
         pred_label = best_ind[best_sim, torch.arange(best_ind.shape[1])]
         print("ALL ", pred_label.shape)
+        hv = hv[best_sim, torch.arange(pred_label.shape[0])]
+        print("hv", hv.shape)
         return hv, sim, pred_label
         
     def similarity(self, point):
