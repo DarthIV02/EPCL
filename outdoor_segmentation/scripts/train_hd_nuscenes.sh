@@ -1,6 +1,8 @@
 ROOT='./'
 cd ${ROOT}
 
+export CUDA_VISIBLE_DEVICES=0
+
 NGPUS=1
 cfg_name=EPCL_HD
 cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
