@@ -222,6 +222,7 @@ class HD_model():
         return hv_all
     
     def forward(self, input_h):
+        print(input_h.shape)
         print(input_h[1,:self.num_features[1]].shape)
         input_h = (input_h[0], input_h[1,:self.num_features[1]], input_h[2,:self.num_features[2]])
         hv = self.encode(input_h)
@@ -243,7 +244,7 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         print(input_points.shape)
-        for idx in torch.arange(input_points[0].shape[0]).chunk(self.div):
+        for idx in torch.arange(input_points[1]).chunk(self.div):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
