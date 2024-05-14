@@ -1,7 +1,7 @@
 ROOT='./'
 cd ${ROOT}
 
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 NGPUS=1
 cfg_name=EPCL_HD
