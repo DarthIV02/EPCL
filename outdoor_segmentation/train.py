@@ -66,6 +66,8 @@ def parse_config():
                         help='whether to fix random seed.')
     parser.add_argument('--exp', type=int, default=1,
                         help='Choose encoding')
+    parser.add_argument('--crop', action='store_true', default=False,
+                        help='Choose encoding')
     # == training configs ==
     parser.add_argument('--batch_size', type=int, default=None, required=False,
                         help='batch size for model training.')
@@ -172,7 +174,8 @@ class Trainer:
         model = build_network(
             model_cfgs=cfgs.MODEL,
             num_class=num_class,
-            exp=self.args.exp
+            exp=self.args.exp,
+            crop=self.args.crop
         )
         if args.sync_bn:
             model = nn.SyncBatchNorm.convert_sync_batchnorm(model)

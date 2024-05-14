@@ -46,7 +46,7 @@ __all__ = {
 }
 
 
-def build_segmentor(model_cfgs, num_class, exp=1):
+def build_segmentor(model_cfgs, num_class, exp=1, crop=False):
     print("EXP", exp)
     print("model", model_cfgs.NAME)
     if exp==1:
@@ -58,7 +58,10 @@ def build_segmentor(model_cfgs, num_class, exp=1):
     elif exp==4:
         from .voxel.epcl_hd.epcl_outdoor_seg_exp4 import EPCLOutdoorSegHD 
     elif exp==5:
-        from .voxel.epcl_hd.epcl_outdoor_seg_exp5 import EPCLOutdoorSegHD
+        if crop:
+            from .voxel.epcl_hd.epcl_outdoor_seg_exp5_crop import EPCLOutdoorSegHD
+        else:
+            from .voxel.epcl_hd.epcl_outdoor_seg_exp5 import EPCLOutdoorSegHD
     elif exp==6:
         from .voxel.epcl_hd.epcl_outdoor_seg_exp6 import EPCLOutdoorSegHD  
 
