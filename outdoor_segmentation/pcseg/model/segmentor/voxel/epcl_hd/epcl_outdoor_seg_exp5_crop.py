@@ -224,24 +224,24 @@ class HD_model():
         return hv_all
     
     def forward(self, input_h):
-        print(input_h.shape)
-        print(input_h[1,:,:self.num_features[1]].shape)
+        #print(input_h.shape)
+        #print(input_h[1,:,:self.num_features[1]].shape)
         input_h = (input_h[0], input_h[1,:,:self.num_features[1]], input_h[2,:,:self.num_features[2]])
         hv = self.encode(input_h)
         #hv = torch.sum(hv, dim=0).sign()
         sim = self.similarity(hv, True)
-        print("sim: ", sim.shape)
+        #print("sim: ", sim.shape)
         best_ind = torch.argmax(sim, dim=2)
-        print(best_ind.shape)
+        #print(best_ind.shape)
         best_sim = torch.max(sim, dim=2).values
-        print(best_sim.shape)
+        #print(best_sim.shape)
         best_sim_2 = torch.argmax(best_sim, dim=0)
-        print(best_sim_2.shape)
+        #print(best_sim_2.shape)
         pred_label = best_ind[best_sim_2, torch.arange(best_ind.shape[1])]
-        print("ALL ", pred_label.shape)
+        print("ALL ", pred_label)
         hv = hv[best_sim_2, torch.arange(pred_label.shape[0])]
-        print("hv", hv.shape)
-        print("sim: ", sim[best_sim_2, torch.arange(sim.shape[1])].shape)
+        #print("hv", hv.shape)
+        #print("sim: ", sim[best_sim_2, torch.arange(sim.shape[1])].shape)
         return hv, sim[best_sim_2, torch.arange(sim.shape[1])], pred_label
         
     def similarity(self, point, group=False):
