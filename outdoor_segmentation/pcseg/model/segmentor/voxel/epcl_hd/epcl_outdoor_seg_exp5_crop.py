@@ -230,6 +230,7 @@ class HD_model():
         hv = self.encode(input_h)
         #hv = torch.sum(hv, dim=0).sign()
         sim = self.similarity(hv, True)
+        print("sim: ", sim.shape)
         best_ind = torch.argmax(sim, dim=2)
         print(best_ind.shape)
         best_sim = torch.max(sim, dim=2).values
@@ -240,8 +241,8 @@ class HD_model():
         print("ALL ", pred_label.shape)
         hv = hv[best_sim_2, torch.arange(pred_label.shape[0])]
         print("hv", hv.shape)
-        print("sim: ", torch.max(best_sim, dim=0).values)
-        return hv, torch.max(best_sim, dim=0).values, pred_label
+        print("sim: ", sim[best_sim_2, torch.arange(sim.shape[1])])
+        return hv, sim[best_sim_2, torch.arange(sim.shape[1])], pred_label
         
     def similarity(self, point, group=False):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
