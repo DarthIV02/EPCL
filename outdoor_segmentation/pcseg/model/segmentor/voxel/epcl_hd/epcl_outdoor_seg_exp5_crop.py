@@ -236,6 +236,7 @@ class HD_model():
         best_sim = torch.max(sim, dim=2).values
         #print(best_sim.shape)
         best_sim_2 = torch.argmax(best_sim, dim=0)
+        print(torch.bincount(best_sim_2))
         #print(best_sim_2.shape)
         pred_label = best_ind[best_sim_2, torch.arange(best_ind.shape[1])]
         print("ALL ", pred_label)
