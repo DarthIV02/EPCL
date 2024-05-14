@@ -239,7 +239,7 @@ class HD_model():
         #print(best_sim_2.shape)
         pred_label = best_ind[best_sim_2, torch.arange(best_ind.shape[1])]
         print("ALL ", pred_label)
-        hv = hv[best_sim_2, torch.arange(pred_label.shape[0])]
+        hv = torch.sum(hv, dim=0).sign() # hv = hv[best_sim_2, torch.arange(pred_label.shape[0])] <- Best just gets 0
         #print("hv", hv.shape)
         #print("sim: ", sim[best_sim_2, torch.arange(sim.shape[1])].shape)
         return hv, sim[best_sim_2, torch.arange(sim.shape[1])], pred_label
