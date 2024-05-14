@@ -21,7 +21,7 @@ MODEL:
     cr: 1.6
     DROPOUT_P: 0.0
     LABEL_SMOOTHING: 0.0
-    IF_DIST: False  # True: multi-gpus, False: single gpu
+    IF_DIST: True  # True: multi-gpus, False: single gpu
     EPCL:
         ENC_DIM: 768
         TOKENIZER_DIM: 409
@@ -30,7 +30,7 @@ MODEL:
         VOXEL_SIZE: 0.05
 
 OPTIM:
-    BATCH_SIZE_PER_GPU: 2 
+    BATCH_SIZE_PER_GPU: 1 
     NUM_EPOCHS: 48
     OPTIMIZER: sgd
     LR_PER_SAMPLE: 0.02
