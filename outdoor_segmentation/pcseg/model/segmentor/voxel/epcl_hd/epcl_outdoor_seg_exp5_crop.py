@@ -545,10 +545,11 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         sim = self.hd_model.similarity(encode_z1)
         #print(sim.shape)
         #sim = torch.max(sim, dim=1).values
-        sim = torch.argmax(sim, dim=1)
+        sim_arg = torch.argmax(sim, dim=1)
         #print("max z_1: ", torch.max(sim))
         #print("mean z_1: ", torch.mean(sim))
-        print("z1: ", sim)
+        print("z1: ", sim_arg)
+        print("z1: ", sim[sim_arg], sim[sim_arg].shape)
 
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
