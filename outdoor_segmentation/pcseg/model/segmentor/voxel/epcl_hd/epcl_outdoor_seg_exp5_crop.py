@@ -677,6 +677,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             #offset = batch_dict['offset']
             self.hd_model.train(tuple_feat, batch_dict['targets'].feats)
 
+            x = input("Enter")
+
             return {}
         
         else:
