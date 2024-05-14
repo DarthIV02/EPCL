@@ -3,7 +3,7 @@ MODALITY: 'voxel'
 DATA:
     DATASET: 'nuscenes'  # choices: ['nuscenes', 'semantickitti', 'scribblekitti']
     PETRELOSS_CONFIG: None
-    DATA_PATH: '../../../root/dataset-nuscenes/nuscenes-passed/'  # hint: customize your data path
+    DATA_PATH: '/root/main/dataset-nuscenes/nuscenes-passed/'  # hint: customize your data path
     VOXEL_SIZE: 0.05
     AUGMENT: 'GlobalAugment_LP'  # choices: ['GlobalAugment', 'GlobalAugment_LP']
     NUM_POINTS: 1000000
