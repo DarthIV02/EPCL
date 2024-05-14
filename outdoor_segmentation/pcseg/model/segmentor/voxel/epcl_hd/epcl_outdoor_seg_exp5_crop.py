@@ -210,11 +210,11 @@ class HD_model():
         #print(input_x.get_device())
         #hv_0 = self.random_projection(input_x) # <-- BATCH
         #print(hv_0.shape) # (3,#,d)
-        hv_0 = self.random_projection[0](input_x[0])
-        hv_1 = self.random_projection[1](input_x[1])
-        hv_2 = self.random_projection[2](input_x[2])
+        hv_0 = self.random_projection[0](input_x[0]).sign()
+        hv_1 = self.random_projection[1](input_x[1]).sign()
+        hv_2 = self.random_projection[2](input_x[2]).sign()
         hv_all = torch.stack((hv_0, hv_1, hv_2))
-        hv_all = torch.sum(hv_all, dim=0).sign()
+        #hv_all = torch.sum(hv_all, dim=0).sign()
 
         #x = input("Enter")
 
@@ -223,7 +223,8 @@ class HD_model():
     def forward(self, input_h):
         hv = self.encode(input_h)
         sim = self.similarity(hv)
-        print("ALL ", torch.argmax(sim, dim=1))
+        print(sim.shape)
+        print("ALL ", torch.argmax(sim, dim=1).shape)
         pred_label = torch.argmax(sim, dim=1)
         return hv, sim, pred_label
         
