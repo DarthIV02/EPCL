@@ -261,7 +261,6 @@ class HD_model():
 
             self.classes_hv.index_add_(0, pred_labels[idx], updates_2)
 
-
 class Bottleneck(nn.Module):
     expansion = 4
 
@@ -497,7 +496,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         #HD Initialization
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        print("DEVICE: ", self.device)
         self.hd_model = HD_model(device=self.device, div=2)
         self.hd_model.to(self.device)
 
@@ -540,12 +538,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         x3 = self.stage3(x2)
         x4 = self.stage4(x3) 
         z1 = voxel_to_point(x4, z0)
-        #encode_z1 = self.hd_model.random_projection_0(z1.F).sign()
-        #sim = self.hd_model.similarity(encode_z1)
-        #print(sim.shape)
-        #sim = torch.max(sim, dim=1).values
-        #print("max z_1: ", torch.max(sim))
-        #print("mean z_1: ", torch.mean(sim))
 
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
@@ -575,39 +567,12 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(y2.F.shape)
         y2 = torchsparse.cat([y2, x2])# <----------------
         y2 = self.up2[1](y2)# <----------------
-
-        encode_y2 = self.hd_model.random_projection_1(y2.F).sign()
-        sim = self.hd_model.similarity(encode_y2)
-        #print(sim.shape)
-        sim_arg = torch.argmax(sim, dim=1)
-        sim = torch.max(sim, dim=1).values
-        mask_sim = sim < 0.070
-        print("Skipped: ", torch.sum(~mask_sim))
-        print("max y_2: ", torch.max(sim))
-        print("mean y_2: ", torch.mean(sim))
-
-        temp = torch.zeros((y2.F.shape[0]), device=self.device)
-
-        print(y2.F.shape)
-        y2.F = y2.F[mask_sim, :]
-        print(y2.F.shape)
-        temp[~mask_sim] = sim_arg[~mask_sim].float()
-        print(torch.sum(temp != 0))
-
         #print("y2")
         #print(y2.F.shape)
         z2 = voxel_to_point(y2, z1) # <----------------
         #print("z2")
-        print(z2.F.shape)
+        #print(z2.F.shape)
         #print(z2.C.shape)
-        
-        #encode_z12 = torch.sum(torch.stack((encode_z1, encode_z2)), dim=0)
-        #sim = self.hd_model.similarity(encode_z12)
-        #print(sim.shape)
-        #sim = torch.max(sim, dim=1).values
-        #print("max z_12: ", torch.max(sim))
-        #print("mean z_12: ", torch.mean(sim))
-        
 
         y2.F = self.dropout(y2.F)# <----------------
         y3 = self.up3[0](y2) # <----------------
@@ -626,16 +591,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("y4")
         #print(y4.F.shape)
         z3 = voxel_to_point(y4, z2)# <----------------
-
-        # -------------------TEST Z3 Encoding alone ---------------------------
-        #encode_z3 = self.hd_model.random_projection_2(z3.F).sign()
-        #sim = self.hd_model.similarity(encode_z3)
-        #print(sim.shape)
-        #sim = torch.max(sim, dim=1).values
-        #print("max z_3: ", torch.max(sim))
-        #print("mean z_3: ", torch.mean(sim))
-
-
         #print("z3")
         #print(z3.F.shape)
         #print(z3.C.shape)
@@ -648,17 +603,17 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #tuple_feat[1, :, :z3.F.shape[1]] = z3.F
         # ------------------------------------BATCH MUL with pad ----------------------------------
         #z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
-        #samples = z2.F.shape[0]
-        #dim_max = z1.F.shape[1]
-        #padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
+        samples = z2.F.shape[0]
+        dim_max = z1.F.shape[1]
+        padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
         #print(padder.shape)
-        #z2.F = torch.cat([z2.F,padder], dim = 1)
+        z2.F = torch.cat([z2.F,padder], dim = 1)
         #print(z2.F.shape)
-        #padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
-        #z3.F = torch.cat([z3.F,padder], dim = 1)
-        #tuple_feat = torch.stack((z1.F, z2.F, z3.F))
+        padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
+        z3.F = torch.cat([z3.F,padder], dim = 1)
+        tuple_feat = torch.stack((z1.F, z2.F, z3.F))
 
-        tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
+        #tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
         #out = self.classifier(concat_feat)
         #print("\nOut")
@@ -679,7 +634,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             point_predict = []
             point_labels = []
             hv, sim, pred_label = self.hd_model.forward(tuple_feat)
-            temp[mask_sim] = pred_label
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
@@ -690,7 +644,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
 
             return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'output': tuple_feat} #'output_CLIP': output_clip, 'concat_features':concat_feat
-
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)
