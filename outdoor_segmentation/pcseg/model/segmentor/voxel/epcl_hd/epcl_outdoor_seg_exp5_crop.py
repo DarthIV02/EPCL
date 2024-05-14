@@ -233,13 +233,13 @@ class HD_model():
         print(best_ind.shape)
         best_sim = torch.max(sim, dim=2).values
         print(best_sim.shape)
-        best_sim = torch.argmax(best_sim, dim=0)
-        print(best_sim.shape)
-        pred_label = best_ind[best_sim, torch.arange(best_ind.shape[1])]
+        best_sim_2 = torch.argmax(best_sim, dim=0)
+        print(best_sim_2.shape)
+        pred_label = best_ind[best_sim_2, torch.arange(best_ind.shape[1])]
         print("ALL ", pred_label.shape)
-        hv = hv[best_sim, torch.arange(pred_label.shape[0])]
+        hv = hv[best_sim_2, torch.arange(pred_label.shape[0])]
         print("hv", hv.shape)
-        return hv, sim, pred_label
+        return hv, torch.max(best_sim, dim=0).values, pred_label
         
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
