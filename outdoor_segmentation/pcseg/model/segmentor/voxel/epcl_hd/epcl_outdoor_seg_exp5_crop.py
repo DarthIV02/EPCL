@@ -549,7 +549,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("max z_1: ", torch.max(sim))
         #print("mean z_1: ", torch.mean(sim))
         print("z1: ", sim_arg)
-        print("z1: ", sim[torch.arange(sim_arg.shape[0]),sim_arg], sim[torch.arange(sim_arg.shape[0]),sim_arg].shape)
+        print("z1: ", sim[torch.arange(sim_arg.shape[0]),sim_arg])
 
         # epcl encoder
         #xyz, feats = x4.C, x4.F # <----------------
@@ -590,6 +590,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("max y_2: ", torch.max(sim))
         #print("mean y_2: ", torch.mean(sim))
         print("z2: ", sim_arg)
+        print("z2: ", sim[torch.arange(sim_arg.shape[0]),sim_arg])
 
         #temp = torch.zeros((y2.F.shape[0]), device=self.device)
 
@@ -641,6 +642,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print("mean z_3: ", torch.mean(sim))
         sim_arg = torch.argmax(sim, dim=1)
         print("z3: ", sim_arg)
+        print("z3: ", sim[torch.arange(sim_arg.shape[0]),sim_arg])
 
 
         #print("z3")
