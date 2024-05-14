@@ -197,6 +197,7 @@ class HD_model():
         #self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
+        self.num_features = num_features
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
@@ -221,6 +222,7 @@ class HD_model():
         return hv_all
     
     def forward(self, input_h):
+        input_h = (input_h[0], input_h[1,:self.num_features[1]], input_h[2,:self.num_features[2]])
         hv = self.encode(input_h)
         sim = self.similarity(hv)
         best_ind = torch.argmax(sim, dim=2)
@@ -661,18 +663,18 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #tuple_feat[1, :, :z2.F.shape[1]] = z2.F
         #tuple_feat[1, :, :z3.F.shape[1]] = z3.F
         # ------------------------------------BATCH MUL with pad ----------------------------------
-        #z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
-        #samples = z2.F.shape[0]
-        #dim_max = z1.F.shape[1]
-        #padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
+        z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
+        samples = z2.F.shape[0]
+        dim_max = z1.F.shape[1]
+        padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
         #print(padder.shape)
-        #z2.F = torch.cat([z2.F,padder], dim = 1)
+        z2.F = torch.cat([z2.F,padder], dim = 1)
         #print(z2.F.shape)
-        #padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
-        #z3.F = torch.cat([z3.F,padder], dim = 1)
-        #tuple_feat = torch.stack((z1.F, z2.F, z3.F))
+        padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
+        z3.F = torch.cat([z3.F,padder], dim = 1)
+        tuple_feat = torch.stack((z1.F, z2.F, z3.F))
 
-        tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
+        #tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
         #out = self.classifier(concat_feat)
         #print("\nOut")
