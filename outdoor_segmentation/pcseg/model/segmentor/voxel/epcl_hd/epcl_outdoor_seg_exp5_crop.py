@@ -233,14 +233,12 @@ class HD_model():
         return sim
     
     def train(self, input_points, classification, **kwargs):
-        hv_all, sim_all, pred_labels = self.forward(input_points)
-        classification = classification.type(torch.LongTensor).to(self.device)
         for idx in torch.arange(input_points[0].shape[0]).chunk(self.div):
+            hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
             idx = idx.to(self.device)
-            class_batch = classification[idx]
-
-            novelty = 1 - sim_all[idx, class_batch]
-            updates = hv_all[idx].transpose(0,1)*torch.mul(novelty, self.lr)
+            class_batch = classification[idx].type(torch.LongTensor).to(self.device)
+            novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
+            updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
             updates = updates.transpose(0,1)
             
             # Update all of the classes with the actual label
@@ -251,16 +249,17 @@ class HD_model():
             #if (pred_labels != c):
             #    self.classes_hv[pred_labels] += -1*hv_all*self.lr*(1-sim_all[pred_labels])
             
-            mask_dif = class_batch != pred_labels[idx]
             
-            novelty = 1 - sim_all[idx[mask_dif], pred_labels[idx][mask_dif]] # only the ones updated
-            updates = hv_all[idx][mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            # ONLINEHD
+            mask_dif = class_batch != pred_labels
+            novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
+            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
             updates_2[mask_dif] = updates # update vectors for the ones that changed
 
-            self.classes_hv.index_add_(0, pred_labels[idx], updates_2)
+            self.classes_hv.index_add_(0, pred_labels, updates_2)
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -575,29 +574,29 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         y2 = torchsparse.cat([y2, x2])# <----------------
         y2 = self.up2[1](y2)# <----------------
 
-        encode_y2 = self.hd_model.random_projection_1(y2.F).sign()
-        sim = self.hd_model.similarity(encode_y2)
+        #encode_y2 = self.hd_model.random_projection_1(y2.F).sign()
+        #sim = self.hd_model.similarity(encode_y2)
         #print(sim.shape)
-        sim_arg = torch.argmax(sim, dim=1)
-        sim = torch.max(sim, dim=1).values
-        mask_sim = sim < 0.070
-        print("Skipped: ", torch.sum(~mask_sim))
-        print("max y_2: ", torch.max(sim))
-        print("mean y_2: ", torch.mean(sim))
+        #sim_arg = torch.argmax(sim, dim=1)
+        #sim = torch.max(sim, dim=1).values
+        #mask_sim = sim < 0.070
+        #print("Skipped: ", torch.sum(~mask_sim))
+        #print("max y_2: ", torch.max(sim))
+        #print("mean y_2: ", torch.mean(sim))
 
-        temp = torch.zeros((y2.F.shape[0]), device=self.device)
+        #temp = torch.zeros((y2.F.shape[0]), device=self.device)
 
-        print(y2.F.shape)
-        y2.F = y2.F[mask_sim, :]
-        print(y2.F.shape)
-        temp[~mask_sim] = sim_arg[~mask_sim].float()
-        print(torch.sum(temp != 0))
+        #print(y2.F.shape)
+        #y2.F = y2.F[mask_sim, :]
+        #print(y2.F.shape)
+        #temp[~mask_sim] = sim_arg[~mask_sim].float()
+        #print(torch.sum(temp != 0))
 
         #print("y2")
         #print(y2.F.shape)
         z2 = voxel_to_point(y2, z1) # <----------------
         #print("z2")
-        print(z2.F.shape)
+        #print(z2.F.shape)
         #print(z2.C.shape)
         
         #encode_z12 = torch.sum(torch.stack((encode_z1, encode_z2)), dim=0)
@@ -678,7 +677,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             point_predict = []
             point_labels = []
             hv, sim, pred_label = self.hd_model.forward(tuple_feat)
-            temp[mask_sim] = pred_label
+            #temp[mask_sim] = pred_label
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
