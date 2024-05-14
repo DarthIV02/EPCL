@@ -239,6 +239,7 @@ class HD_model():
         print("ALL ", pred_label.shape)
         hv = hv[best_sim_2, torch.arange(pred_label.shape[0])]
         print("hv", hv.shape)
+        print("sim: ", torch.max(best_sim, dim=0).values)
         return hv, torch.max(best_sim, dim=0).values, pred_label
         
     def similarity(self, point):
