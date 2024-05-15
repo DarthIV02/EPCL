@@ -87,6 +87,9 @@ def parse_config():
                         help='max number of saved checkpoint')
     parser.add_argument('--merge_all_iters_to_one_epoch', action='store_true', default=False,
                         help='')
+    # == hd configs ==
+    parser.add_argument('--lr', type=float, default=0.01, required=False,
+                        help='Learning rate for HD.')
     # == evaluation configs ==
     parser.add_argument('--eval', action='store_true', default=False,
                         help='only perform evaluate')
@@ -176,7 +179,8 @@ class Trainer:
             model_cfgs=cfgs.MODEL,
             num_class=num_class,
             exp=self.args.exp,
-            crop=self.args.crop
+            crop=self.args.crop,
+            lr=self.args.lr
         )
         if args.sync_bn:
             model = nn.SyncBatchNorm.convert_sync_batchnorm(model)

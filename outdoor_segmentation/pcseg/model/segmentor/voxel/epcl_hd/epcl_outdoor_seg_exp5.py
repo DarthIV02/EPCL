@@ -319,6 +319,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         self,
         model_cfgs,
         num_class: int,
+        lr: float
     ):
         super().__init__(model_cfgs, num_class)
         self.in_feature_dim = model_cfgs.IN_FEATURE_DIM
@@ -496,7 +497,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         #HD Initialization
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.hd_model = HD_model(device=self.device, div=2)
+        self.hd_model = HD_model(device=self.device, div=2, lr=lr)
         self.hd_model.to(self.device)
 
         print("--------------Loading experiment 5--------------")

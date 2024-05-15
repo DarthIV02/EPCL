@@ -46,9 +46,10 @@ __all__ = {
 }
 
 
-def build_segmentor(model_cfgs, num_class, exp=1, crop=False):
+def build_segmentor(model_cfgs, num_class, exp=1, crop=False, lr = 0.01):
     print("EXP", exp)
     print("model", model_cfgs.NAME)
+    print("ls", lr)
     if exp==1:
         from .voxel.epcl_hd.epcl_outdoor_seg_exp1 import EPCLOutdoorSegHD
     elif exp==2:
@@ -68,6 +69,7 @@ def build_segmentor(model_cfgs, num_class, exp=1, crop=False):
     model = eval(model_cfgs.NAME)( #model_cfgs.NAME
         model_cfgs=model_cfgs,
         num_class=num_class,
+        lr = lr
     )
 
     return model
