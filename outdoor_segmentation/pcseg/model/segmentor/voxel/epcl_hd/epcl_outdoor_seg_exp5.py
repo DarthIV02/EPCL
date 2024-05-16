@@ -221,9 +221,9 @@ class HD_model():
         #hv_2 = self.random_projection[2](input_x[2])
         #hv_all = torch.stack((hv_0, hv_1, hv_2))
         hv_0 = torchhd.bind(hv_0, repeated)
-        print(hv_0)
+        print(hv_0.shape)
 
-        hv_all = torch.sum(hv_0, dim=0)
+        hv_all = torch.sum(hv_0, dim=1)
 
         #x = input("Enter")
 
