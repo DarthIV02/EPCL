@@ -10,7 +10,7 @@ DATA:
     TRAINVAL: False           # train set: train + val
     TTA: False
     SAMPLES_PER_EPOCH: 250 # 2000 all
-d
+
 MODEL:
     NAME: EPCLOutdoorSegHD
     IGNORE_LABEL: 0
