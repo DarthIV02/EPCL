@@ -210,8 +210,10 @@ class HD_model():
     def encode(self, input_x):
         #print(input_x.get_device())
         hv_0 = self.random_projection(input_x).sign() # <-- BATCH
+        repeated = self.stages.repeat(1, hv_0.shape[1])
         print(hv_0.shape)
-        print(self.stages)
+        print(repeated.shape)
+        print(repeated)
         #print(hv_0.shape) # (3,#,d)
         #hv_0 = self.random_projection[0](input_x[0])
         #hv_1 = self.random_projection[1](input_x[1])
