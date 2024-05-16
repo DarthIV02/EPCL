@@ -537,7 +537,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         x0 = self.stem(x0)
         z0 = voxel_to_point(x0, z, nearest=False)
-        print(z0.F.shape)
 
         x1 = self.stage1(x0) 
         x2 = self.stage2(x1)
@@ -611,6 +610,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #z2.F = F.pad(z2.F, (z1.F.shape[1]-z2.F.shape[1]), "constant", 0)
         samples = z2.F.shape[0]
         dim_max = z1.F.shape[1]
+        padder = torch.zeros(samples,dim_max-z0.F.shape[1], device=self.device)
+        z0.F = torch.cat([z0.F,padder], dim = 1)
         padder = torch.zeros(samples,dim_max-z2.F.shape[1], device=self.device)
         #print(padder.shape)
         z2.F = torch.cat([z2.F,padder], dim = 1)
