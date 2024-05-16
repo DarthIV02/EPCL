@@ -195,6 +195,7 @@ class HD_model():
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
         self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
+        self.stages = torchhd.random(3, d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
 
@@ -208,13 +209,15 @@ class HD_model():
 
     def encode(self, input_x):
         #print(input_x.get_device())
-        hv_0 = self.random_projection(input_x) # <-- BATCH
+        hv_0 = self.random_projection(input_x).sign() # <-- BATCH
         #print(hv_0.shape) # (3,#,d)
         #hv_0 = self.random_projection[0](input_x[0])
         #hv_1 = self.random_projection[1](input_x[1])
         #hv_2 = self.random_projection[2](input_x[2])
         #hv_all = torch.stack((hv_0, hv_1, hv_2))
-        hv_all = torch.sum(hv_0, dim=0).sign()
+        hv_0 = torchhd.bind(hv_0, self.stages)
+
+        hv_all = torch.sum(hv_0, dim=0)
 
         #x = input("Enter")
 
