@@ -195,10 +195,11 @@ class HD_model():
         #self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
-        self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
-        self.stages = torchhd.random(3, d, device=kwargs['device'])
+        self.random_projection = BatchProjection(4, num_features[0], self.d, device=kwargs['device'])
+        self.stages = torchhd.random(4, d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
+        self.bicycle = None
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
@@ -501,7 +502,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         #HD Initialization
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.hd_model = HD_model(device=self.device, div=2, lr=lr)
+        self.hd_model = HD_model(device=self.device, div=2, lr=lr, classes=num_class)
         self.hd_model.to(self.device)
 
         print("--------------Loading experiment 5--------------")
@@ -536,7 +537,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
         x0 = self.stem(x0)
         z0 = voxel_to_point(x0, z, nearest=False)
-
+        print(z0.F.shape)
 
         x1 = self.stage1(x0) 
         x2 = self.stage2(x1)
@@ -616,7 +617,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(z2.F.shape)
         padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
         z3.F = torch.cat([z3.F,padder], dim = 1)
-        tuple_feat = torch.stack((z1.F, z2.F, z3.F))
+        tuple_feat = torch.stack((z0.F, z1.F, z2.F, z3.F))
 
         #tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
