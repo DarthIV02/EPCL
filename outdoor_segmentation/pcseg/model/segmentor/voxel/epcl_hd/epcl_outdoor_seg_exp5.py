@@ -211,16 +211,17 @@ class HD_model():
         #print(input_x.get_device())
         print(input_x.shape)
         hv_0 = self.random_projection(input_x).sign() # <-- BATCH
-        repeated = self.stages.repeat(1, input_x.shape[0], 1)
+        hv_0 = hv_0.transpose(0,1)
+        repeated = self.stages.repeat(input_x.shape[1], 1, 1)
         print(hv_0.shape)
         print(repeated.shape)
-        print(repeated)
         #print(hv_0.shape) # (3,#,d)
         #hv_0 = self.random_projection[0](input_x[0])
         #hv_1 = self.random_projection[1](input_x[1])
         #hv_2 = self.random_projection[2](input_x[2])
         #hv_all = torch.stack((hv_0, hv_1, hv_2))
-        hv_0 = torchhd.bind(hv_0, self.stages)
+        hv_0 = torchhd.bind(hv_0, repeated)
+        print(hv_0)
 
         hv_all = torch.sum(hv_0, dim=0)
 
