@@ -23,6 +23,7 @@ from tqdm import tqdm
 from torchhd.types import VSAOptions
 import torch.nn.functional as F
 import torchhd.functional as functional
+import math
 
 __all__ = ['EPCLOutdoorSeg']
 
@@ -194,6 +195,8 @@ class HD_model():
         #self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
+        self.bias = nn.parameter.Parameter(torch.empty(3, self.d), requires_grad=False)
+        self.bias.data.uniform_(0, 2 * math.pi) # bias
         self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
         self.stages = torchhd.random(3, d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
@@ -206,17 +209,16 @@ class HD_model():
         #self.random_projection_2 = self.random_projection_2.to(*args)
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
         self.random_projection = self.random_projection.to(*args)
+        self.bias = nn.parameter.Parameter(torch.empty(3, self.d), requires_grad=False)
 
     def encode(self, input_x):
         #print(input_x.get_device())
-        hv_0 = self.random_projection(input_x).sign() # <-- BATCH
+        hv_0 = self.random_projection(input_x)
         hv_0 = hv_0.transpose(0,1)
+        repeated = self.bias.repeat(input_x.shape[1], 1, 1)
+        hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
+        hv_0 = hv_0.sign() # <-- BATCH
         repeated = self.stages.repeat(input_x.shape[1], 1, 1)
-        #print(hv_0.shape) # (3,#,d)
-        #hv_0 = self.random_projection[0](input_x[0])
-        #hv_1 = self.random_projection[1](input_x[1])
-        #hv_2 = self.random_projection[2](input_x[2])
-        #hv_all = torch.stack((hv_0, hv_1, hv_2))
         hv_0 = torchhd.bind(hv_0, repeated)
 
         hv_all = torch.sum(hv_0, dim=1)
