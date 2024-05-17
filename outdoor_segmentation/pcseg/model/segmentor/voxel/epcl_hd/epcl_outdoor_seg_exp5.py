@@ -241,10 +241,11 @@ class HD_model():
         #classification = classification
         for i, idx in enumerate(torch.arange(input_points[0].shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
-            if not os.path.exists(f"hvs_{i}"):
-                torch.save(hv_all, f"hvs_{i}.pth")
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
+            if not os.path.exists(f"hvs_{i}"):
+                torch.save(hv_all, f"hvs_{i}.pth")
+                torch.save(class_batch, f"class_{i}.pth")
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
             updates = updates.transpose(0,1)
