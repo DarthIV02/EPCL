@@ -212,8 +212,8 @@ class HD_model():
 
     def encode(self, input_x):
         #print(input_x.get_device())
+        print(input_x.shape)
         hv_0 = self.random_projection(input_x)
-        hv_0 = hv_0.transpose(0,1)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
         hv_0 = hv_0.sign() # <-- BATCH
@@ -240,13 +240,14 @@ class HD_model():
     def train(self, input_points, classification, **kwargs):
         #classification = classification
         true_val = classification != 0
-        input_points = input_points[torch.arange(input_points.shape[0]), true_val, torch.arange(input_points.shape[2])]
+        input_points = input_points.transpose(0,1)
+        input_points = input_points[true_val]
         classification = classification[true_val]
-        #print(input_points.shape)
+        print(input_points.shape)
         #print(classification.shape)
 
         for i, idx in enumerate(torch.arange(input_points[0].shape[0]).chunk(self.div)):
-            hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
+            hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
