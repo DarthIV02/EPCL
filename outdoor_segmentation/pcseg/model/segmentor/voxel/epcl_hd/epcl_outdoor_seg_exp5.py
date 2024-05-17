@@ -239,9 +239,12 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
+        true_val = classification != 0
+        input_points = input_points[:, true_val, :]
+        classification = classification[true_val]
         print(input_points.shape)
         print(classification.shape)
-        
+
         for i, idx in enumerate(torch.arange(input_points[0].shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
             idx = idx.to(self.device)
