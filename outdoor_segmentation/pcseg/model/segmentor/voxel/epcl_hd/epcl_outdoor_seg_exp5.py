@@ -240,7 +240,7 @@ class HD_model():
     def train(self, input_points, classification, **kwargs):
         #classification = classification
         true_val = classification != 0
-        input_points = input_points[:, true_val, :]
+        input_points = input_points[torch.arange(input_points.shape[0]), true_val, torch.arange(input_points.shape[2])]
         classification = classification[true_val]
         #print(input_points.shape)
         #print(classification.shape)
