@@ -24,6 +24,7 @@ from torchhd.types import VSAOptions
 import torch.nn.functional as F
 import torchhd.functional as functional
 import math
+import os
 
 __all__ = ['EPCLOutdoorSeg']
 
@@ -238,8 +239,10 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
-        for idx in torch.arange(input_points[0].shape[0]).chunk(self.div):
+        for i, idx in enumerate(torch.arange(input_points[0].shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
+            if not os.path.exist(f"hvs_{i}"):
+                torch.save(hv_all, f"hvs_{i}.pth")
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
