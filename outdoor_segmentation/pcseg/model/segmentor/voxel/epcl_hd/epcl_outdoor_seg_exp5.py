@@ -246,7 +246,7 @@ class HD_model():
         print(input_points.shape)
         #print(classification.shape)
 
-        for i, idx in enumerate(torch.arange(input_points[0].shape[0]).chunk(self.div)):
+        for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
