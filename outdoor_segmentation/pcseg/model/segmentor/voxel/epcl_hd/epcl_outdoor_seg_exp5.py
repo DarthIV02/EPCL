@@ -241,7 +241,7 @@ class HD_model():
         #classification = classification
         for i, idx in enumerate(torch.arange(input_points[0].shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
-            if not os.path.exist(f"hvs_{i}"):
+            if not os.path.exists(f"hvs_{i}"):
                 torch.save(hv_all, f"hvs_{i}.pth")
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
