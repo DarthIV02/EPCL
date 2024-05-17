@@ -213,7 +213,7 @@ class HD_model():
     def encode(self, input_x):
         #print(input_x.get_device())
         print(input_x.shape)
-        hv_0 = hv_0.transpose(0,1)
+        input_x = input_x.transpose(0,1)
         print(input_x.shape)
         hv_0 = self.random_projection(input_x)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
