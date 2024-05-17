@@ -216,6 +216,7 @@ class HD_model():
         input_x = input_x.transpose(0,1)
         print(input_x.shape)
         hv_0 = self.random_projection(input_x)
+        hv_0 = hv_0.transpose(0,1)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
         hv_0 = hv_0.sign() # <-- BATCH
