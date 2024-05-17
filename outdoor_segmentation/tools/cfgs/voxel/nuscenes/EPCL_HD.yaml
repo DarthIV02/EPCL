@@ -4,7 +4,7 @@ DATA:
     DATASET: 'nuscenes'  # choices: ['nuscenes', 'semantickitti', 'scribblekitti']
     PETRELOSS_CONFIG: None
     DATA_PATH: '/root/main/dataset-nuscenes/nuscenes-passed/'  # hint: customize your data path
-    VOXEL_SIZE: 0.005
+    VOXEL_SIZE: 0.05
     AUGMENT: 'GlobalAugment_LP'  # choices: ['GlobalAugment', 'GlobalAugment_LP']
     NUM_POINTS: 1000000
     TRAINVAL: False           # train set: train + val
@@ -27,7 +27,7 @@ MODEL:
         TOKENIZER_DIM: 409
         NUM_GROUP: 512
         GROUP_SIZE: 16
-        VOXEL_SIZE: 0.005
+        VOXEL_SIZE: 0.05
 
 OPTIM:
     BATCH_SIZE_PER_GPU: 1
