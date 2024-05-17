@@ -213,6 +213,8 @@ class HD_model():
     def encode(self, input_x):
         #print(input_x.get_device())
         print(input_x.shape)
+        hv_0 = hv_0.transpose(0,1)
+        print(input_x.shape)
         hv_0 = self.random_projection(input_x)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
@@ -239,8 +241,9 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
+        print(input_points.shape)
         true_val = classification != 0
-        input_points = input_points.transpose(0,1)
+        #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
         print(input_points.shape)
@@ -629,7 +632,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         #print(z2.F.shape)
         padder = torch.zeros(samples,dim_max-z3.F.shape[1], device=self.device)
         z3.F = torch.cat([z3.F,padder], dim = 1)
-        tuple_feat = torch.stack(( z1.F, z2.F, z3.F)) #, 
+        tuple_feat = torch.stack(( z1.F, z2.F, z3.F), dim=1) #, 
 
         #tuple_feat = (z1.F, z2.F, z3.F) #<----- BEFORE
 
