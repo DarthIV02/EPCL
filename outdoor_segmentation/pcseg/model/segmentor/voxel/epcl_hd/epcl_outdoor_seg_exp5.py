@@ -212,9 +212,7 @@ class HD_model():
 
     def encode(self, input_x):
         #print(input_x.get_device())
-        print(input_x.shape)
         input_x = input_x.transpose(0,1)
-        print(input_x.shape)
         hv_0 = self.random_projection(input_x)
         hv_0 = hv_0.transpose(0,1)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
@@ -242,12 +240,10 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
-        print(input_points.shape)
         true_val = classification != 0
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        print(input_points.shape)
         #print(classification.shape)
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
