@@ -661,7 +661,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
 
-            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'output': tuple_feat} #'output_CLIP': output_clip, 'concat_features':concat_feat
+            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'lidar':batch_dict['lidar'], 'output': tuple_feat} #'output_CLIP': output_clip, 'concat_features':concat_feat
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)
