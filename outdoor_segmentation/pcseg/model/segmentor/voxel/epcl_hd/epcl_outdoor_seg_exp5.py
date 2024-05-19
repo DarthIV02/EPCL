@@ -211,26 +211,32 @@ class HD_model():
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
         self.random_projection = self.random_projection.to(*args)
 
-    def encode(self, input_x):
+    def encode(self, input_x, coords):
         #print(input_x.get_device())
+        print(input_x.shape)
+        coords = self.xyz(coords[:,2])
+        print(coords.shape)
         input_x = input_x.transpose(0,1)
         hv_0 = self.random_projection(input_x)
         hv_0 = hv_0.transpose(0,1)
+        print(hv_0.shape)
+        hv_0 = torch.stack((hv_0, coords))
+        print(hv_0.shape)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
         hv_0 = hv_0.sign() # <-- BATCH
-        repeated = self.stages[:3].repeat(input_x.shape[1], 1, 1)
+        repeated = self.stages.repeat(input_x.shape[1], 1, 1)
         hv_0 = torchhd.bind(hv_0, repeated)
 
         hv_all = torch.sum(hv_0, dim=1).sign()
 
-        #x = input("Enter")
+        x = input("Enter")
 
         return hv_all
     
     def forward(self, input_h, **kwargs):
         #print(input_h.shape)
-        hv = self.encode(input_h)
+        hv = self.encode(input_h, kwargs['coords'])
         sim = self.similarity(hv)
         pred_label = torch.argmax(sim, dim=1)
         return hv, sim, pred_label
@@ -240,6 +246,31 @@ class HD_model():
         sim = self.softmax(sim)
         return sim
     
+    def clean_z(self, xyz, features=None, classification=None, **kwargs):
+        
+        zs = xyz[:,2]
+        not_outlier = [zs != 0]
+        xyz = xyz[not_outlier]
+        
+        #print(min(zs))
+        zs = zs - min(zs)
+        #print(max(zs))
+        zs = zs / max(zs)
+        xyz[:, 2] = zs
+        #print(classification.shape)
+        
+        if features != None:
+            features = features[not_outlier]
+        if classification != None:
+            classification = classification[not_outlier]
+
+        if classification != None:
+            return xyz, features, classification
+        elif features != None:
+            return xyz, features
+        else:
+            return xyz
+    
     def train(self, input_points, classification, **kwargs):
         #classification = classification
         true_val = classification != 0
@@ -247,17 +278,8 @@ class HD_model():
         input_points = input_points[true_val]
         classification = classification[true_val]
         coords = kwargs['batch_dict']['lidar'].C[true_val]
-        
-        #outlier = [coords[] != 0]
-        #coords = coords
-        #classification = classification[coords != 0]
-        #input_points = input_points[coords != 0]
 
-        #print(min(zs))
-        #zs = zs - min(zs)
-        #print(max(zs))
-        #zs = zs / max(zs)`
-        #print(classification.shape)
+        coords, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords)
@@ -665,7 +687,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
-            hv, sim, pred_label = self.hd_model.forward(tuple_feat)
+            coords, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
+            hv, sim, pred_label = self.hd_model.forward(tuple_feat, coords)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
