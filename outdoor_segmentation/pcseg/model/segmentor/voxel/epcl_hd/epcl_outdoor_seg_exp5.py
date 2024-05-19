@@ -184,7 +184,7 @@ class BatchProjection(nn.Module):
 
 
 class HD_model():
-    def __init__(self, classes = 20, d = 1000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 2000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
@@ -198,6 +198,7 @@ class HD_model():
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
         self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
         self.stages = torchhd.random(4, d, device=kwargs['device'])
+        #self.xyz = torchhd.level(, d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
         self.bicycle = None
@@ -227,7 +228,7 @@ class HD_model():
 
         return hv_all
     
-    def forward(self, input_h):
+    def forward(self, input_h, **kwargs):
         print(input_h.shape)
         hv = self.encode(input_h)
         sim = self.similarity(hv)
@@ -245,11 +246,11 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        #coords = kwargs['batch_dict']['targets_mapped'].C[true_val]
+        coords = kwargs['batch_dict']['lidar'].C[true_val]
         #print(classification.shape)
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
-            hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :])
+            hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords)
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
