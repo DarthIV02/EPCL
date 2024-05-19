@@ -228,6 +228,7 @@ class HD_model():
         return hv_all
     
     def forward(self, input_h):
+        print(input_h.shape)
         hv = self.encode(input_h)
         sim = self.similarity(hv)
         pred_label = torch.argmax(sim, dim=1)
@@ -240,7 +241,6 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
-        print(input_points.shape)
         true_val = classification != 0
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
