@@ -690,10 +690,10 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             point_labels = []
             coords, not_outlier, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
             hv, sim, pred_label = self.hd_model.forward(tuple_feat, coords = coords)
-            print(pred_label.shape)
+            #print(pred_label.shape)
             pred_label_z = torch.zeros((batch_dict['lidar'].C.shape[0]), dtype=torch.int64, device=self.device)
             pred_label_z[not_outlier] = pred_label
-            print(pred_label_z.shape)
+            #print(pred_label_z.shape)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
