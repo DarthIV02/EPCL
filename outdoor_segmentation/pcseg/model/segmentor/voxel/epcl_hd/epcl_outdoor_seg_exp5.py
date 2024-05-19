@@ -689,7 +689,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             point_predict = []
             point_labels = []
             coords, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
-            hv, sim, pred_label = self.hd_model.forward(tuple_feat, coords)
+            hv, sim, pred_label = self.hd_model.forward(tuple_feat, coords = coords)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
