@@ -167,7 +167,7 @@ class BatchProjection(nn.Module):
             )
 
         self.weight = nn.parameter.Parameter(
-            torch.empty((in_features, num_projections, out_features), **factory_kwargs),
+            torch.empty((num_projections, in_features, out_features), **factory_kwargs),
             requires_grad=requires_grad,
         )
         self.reset_parameters()
@@ -217,9 +217,9 @@ class HD_model():
         coords = self.xyz(coords[:,2])
         coords = coords.reshape((coords.shape[0], 1, coords.shape[1]))
         #print(coords.shape)
-        #input_x = input_x.transpose(0,1)
+        input_x = input_x.transpose(0,1)
         hv_0 = self.random_projection(input_x)
-        #hv_0 = hv_0.transpose(0,1)
+        hv_0 = hv_0.transpose(0,1)
         #print(hv_0.shape)
         hv_0 = torch.cat((hv_0, coords), dim=1)
         #print(hv_0.shape)
@@ -286,9 +286,9 @@ class HD_model():
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords[idx])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-            #if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
-            #    torch.save(hv_all, f"hvs_{i}.pth")
-            #    torch.save(class_batch, f"class_{i}.pth")
+            if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
+                torch.save(hv_all, f"hvs_{i}.pth")
+                torch.save(class_batch, f"class_{i}.pth")
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
             updates = updates.transpose(0,1)
