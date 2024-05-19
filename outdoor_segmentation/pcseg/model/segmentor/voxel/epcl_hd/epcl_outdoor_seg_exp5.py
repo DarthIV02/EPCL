@@ -167,7 +167,7 @@ class BatchProjection(nn.Module):
             )
 
         self.weight = nn.parameter.Parameter(
-            torch.empty((num_projections, in_features, out_features), **factory_kwargs),
+            torch.empty((in_features, num_projections, out_features), **factory_kwargs),
             requires_grad=requires_grad,
         )
         self.reset_parameters()
@@ -217,9 +217,9 @@ class HD_model():
         coords = self.xyz(coords[:,2])
         coords = coords.reshape((coords.shape[0], 1, coords.shape[1]))
         #print(coords.shape)
-        input_x = input_x.transpose(0,1)
+        #input_x = input_x.transpose(0,1)
         hv_0 = self.random_projection(input_x)
-        hv_0 = hv_0.transpose(0,1)
+        #hv_0 = hv_0.transpose(0,1)
         #print(hv_0.shape)
         hv_0 = torch.cat((hv_0, coords), dim=1)
         #print(hv_0.shape)
