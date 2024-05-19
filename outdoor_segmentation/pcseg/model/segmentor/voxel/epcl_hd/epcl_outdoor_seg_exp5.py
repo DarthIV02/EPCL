@@ -266,11 +266,11 @@ class HD_model():
             classification = classification[not_outlier]
 
         if classification != None:
-            return xyz, features, classification
+            return xyz, not_outlier, features, classification
         elif features != None:
-            return xyz, features
+            return xyz, not_outlier, features
         else:
-            return xyz
+            return xyz, not_outlier
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
@@ -280,7 +280,7 @@ class HD_model():
         classification = classification[true_val]
         coords = kwargs['batch_dict']['lidar'].C[true_val]
 
-        coords, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
+        coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords[idx])
@@ -688,8 +688,9 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
-            coords, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
+            coords, not_outlier, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
             hv, sim, pred_label = self.hd_model.forward(tuple_feat, coords = coords)
+            print(pred_label.shape)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
