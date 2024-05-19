@@ -461,7 +461,7 @@ class Trainer:
             with torch.no_grad():
                 ret_dict = self.model(batch_dict)
             
-            torch.save(ret_dict, f'./complete_vis/results_{i}')
+            #torch.save(ret_dict, f'./complete_vis/results_{i}') # Save vis
             
             point_predict = ret_dict['point_predict']
             point_labels = ret_dict['point_labels']

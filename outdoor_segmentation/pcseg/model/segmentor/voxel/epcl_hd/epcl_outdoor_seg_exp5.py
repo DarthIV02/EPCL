@@ -198,7 +198,7 @@ class HD_model():
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
         self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
         self.stages = torchhd.random(4, d, device=kwargs['device'])
-        #self.xyz = torchhd.level(, d, device=kwargs['device'])
+        self.xyz = torchhd.embeddings.Level(1000, embedding_dim=d, randomness=0.5, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
         self.bicycle = None
@@ -247,15 +247,25 @@ class HD_model():
         input_points = input_points[true_val]
         classification = classification[true_val]
         coords = kwargs['batch_dict']['lidar'].C[true_val]
+        
+        #outlier = [coords[] != 0]
+        #coords = coords
+        #classification = classification[coords != 0]
+        #input_points = input_points[coords != 0]
+
+        #print(min(zs))
+        #zs = zs - min(zs)
+        #print(max(zs))
+        #zs = zs / max(zs)`
         #print(classification.shape)
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords)
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-            if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
-                torch.save(hv_all, f"hvs_{i}.pth")
-                torch.save(class_batch, f"class_{i}.pth")
+            #if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
+            #    torch.save(hv_all, f"hvs_{i}.pth")
+            #    torch.save(class_batch, f"class_{i}.pth")
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
             updates = updates.transpose(0,1)
@@ -665,7 +675,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
 
-            print(point_predict[0].shape)
+            #print(point_predict[0].shape)
             return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'lidar':batch_dict, 
             'output': tuple_feat} #'output_CLIP': output_clip, 'concat_features':concat_feat
 
