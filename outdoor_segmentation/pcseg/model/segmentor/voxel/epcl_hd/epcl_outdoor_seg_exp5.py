@@ -197,7 +197,7 @@ class HD_model():
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = self.random_projection_0, self.random_projection_1, self.random_projection_2)
         self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
-        self.stages = torchhd.random(3, d, device=kwargs['device'])
+        self.stages = torchhd.random(4, d, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
         self.bicycle = None
@@ -218,7 +218,7 @@ class HD_model():
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
         hv_0 = hv_0.sign() # <-- BATCH
-        repeated = self.stages.repeat(input_x.shape[1], 1, 1)
+        repeated = self.stages[:3].repeat(input_x.shape[1], 1, 1)
         hv_0 = torchhd.bind(hv_0, repeated)
 
         hv_all = torch.sum(hv_0, dim=1).sign()
@@ -240,10 +240,12 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
+        print(input_points.shape)
         true_val = classification != 0
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
+        #coords = kwargs['batch_dict']['targets_mapped'].C[true_val]
         #print(classification.shape)
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
@@ -643,7 +645,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
             #coords_xyz = batch_dict['lidar'].C[:, :3].float()
             #offset = batch_dict['offset']
-            self.hd_model.train(tuple_feat, batch_dict['targets'].feats)
+            self.hd_model.train(tuple_feat, batch_dict['targets'].feats, batch_dict = batch_dict)
 
             return {}
         
