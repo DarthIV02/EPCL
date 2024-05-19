@@ -541,6 +541,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
     def forward(self, batch_dict, return_logit=False, return_tta=False, train_hd=False, **kwargs):
         x = batch_dict['lidar']
+        print(x.F.shape)
         x.F = x.F[:, :self.in_feature_dim]
         z = PointTensor(x.F, x.C.float()) # dim=4
 
@@ -651,9 +652,11 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
+            cur_scene_points = []
             hv, sim, pred_label = self.hd_model.forward(tuple_feat)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
+                cur_scene_points.append(cur_scene_pts)
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
                 cur_label = (all_labels.C[:, -1] == idx).cpu().numpy()
                 outputs_mapped = pred_label[cur_scene_pts][cur_inv]
@@ -661,7 +664,9 @@ class EPCLOutdoorSegHD(BaseSegmentor):
                 point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
 
-            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'lidar':batch_dict['lidar'], 'output': tuple_feat} #'output_CLIP': output_clip, 'concat_features':concat_feat
+            print(point_predict[0].shape)
+            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'], 'lidar':batch_dict['lidar'], 
+            'output': tuple_feat, 'cur_scene_points':cur_scene_points} #'output_CLIP': output_clip, 'concat_features':concat_feat
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)
