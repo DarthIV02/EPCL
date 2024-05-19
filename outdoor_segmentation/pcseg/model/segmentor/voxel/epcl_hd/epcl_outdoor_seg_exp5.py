@@ -213,16 +213,16 @@ class HD_model():
 
     def encode(self, input_x, coords):
         #print(input_x.get_device())
-        print(input_x.shape)
+        #print(input_x.shape)
         coords = self.xyz(coords[:,2])
         coords = coords.reshape((coords.shape[0], 1, coords.shape[1]))
-        print(coords.shape)
+        #print(coords.shape)
         input_x = input_x.transpose(0,1)
         hv_0 = self.random_projection(input_x)
         hv_0 = hv_0.transpose(0,1)
-        print(hv_0.shape)
+        #print(hv_0.shape)
         hv_0 = torch.cat((hv_0, coords), dim=1)
-        print(hv_0.shape)
+        #print(hv_0.shape)
         #Wrepeated = self.bias.repeat(input_x.shape[1], 1, 1)
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
         hv_0 = hv_0.sign() # <-- BATCH
@@ -231,7 +231,7 @@ class HD_model():
 
         hv_all = torch.sum(hv_0, dim=1).sign()
 
-        x = input("Enter")
+        #x = input("Enter")
 
         return hv_all
     
