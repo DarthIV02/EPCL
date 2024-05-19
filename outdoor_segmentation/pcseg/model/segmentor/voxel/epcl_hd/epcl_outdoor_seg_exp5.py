@@ -249,9 +249,9 @@ class HD_model():
     
     def clean_z(self, xyz, features=None, classification=None, **kwargs):
         
-        zs = xyz[:,2]
         not_outlier = [zs != 0]
         xyz = xyz[not_outlier]
+        zs = xyz[:,2]
         
         #print(min(zs))
         zs = zs - min(zs)
