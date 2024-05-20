@@ -296,8 +296,8 @@ class HD_model():
                 torch.save(class_batch, f"class_{i}.pth")
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
-            inv = 1.0 / torch.bincount(class_batch)[class_batch]
-            updates = torch.mul(updates, inv)
+            #inv = 1.0 / torch.bincount(class_batch)[class_batch]
+            #updates = torch.mul(updates, inv)
             updates = updates.transpose(0,1)
             
             # Update all of the classes with the actual label
@@ -317,9 +317,9 @@ class HD_model():
             #print("Novelty: ", novelty)
             #print(class_batch[mask_dif], class_batch[mask_dif].shape)
             #print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
-            inv = 1.0 / torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]]
+            #inv = 1.0 / torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]]
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
-            updates = torch.mul(updates, inv)
+            #updates = torch.mul(updates, inv)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
