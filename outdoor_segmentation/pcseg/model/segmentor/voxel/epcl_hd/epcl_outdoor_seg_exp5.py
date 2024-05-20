@@ -314,7 +314,6 @@ class HD_model():
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
             print("Novelty: ", novelty)
             print(class_batch[mask_dif], class_batch[mask_dif].shape)
-            print(torch.bincount(class_batch[mask_dif]))
             print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
             inv = 1.0 / torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]]
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
@@ -340,8 +339,9 @@ class HD_model():
             self.classes_hv.index_add_(0, class_batch, updates_2)
 
         if self.bicycle != None:
-            print(self.bicycle.shape)
+            #print(self.bicycle.shape)
             print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
+            print(self.classes_hv, self.classes_hv)
 
         x = input("Enter")
 
