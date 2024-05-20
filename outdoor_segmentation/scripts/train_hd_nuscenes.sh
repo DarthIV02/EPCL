@@ -26,10 +26,10 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --train_hd \
 --ckp_save_interval 100 \
---lr 0.01 \
+--lr 0.0001 \
 --exp 5 \
 --eval \
---epochs 2 \
+--epochs 1 \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
