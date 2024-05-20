@@ -309,12 +309,12 @@ class HD_model():
             
             # ONLINEHD
             mask_dif = class_batch != pred_labels
-            print("Mask_dif: ", mask_dif)
-            print("Sim: ", sim_all)
+            #print("Mask_dif: ", mask_dif)
+            #print("Sim: ", sim_all)
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
-            print("Novelty: ", novelty)
-            print(class_batch[mask_dif], class_batch[mask_dif].shape)
-            print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
+            #print("Novelty: ", novelty)
+            #print(class_batch[mask_dif], class_batch[mask_dif].shape)
+            #print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
             inv = torch.pow(1.0 / torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]], 2)
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, inv)
@@ -328,7 +328,7 @@ class HD_model():
             # Update positive when different 
             #mask_dif = class_batch != pred_labels
             novelty = 1 - sim_all[mask_dif, class_batch[mask_dif]] # only the ones updated
-            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr*2)
+            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             #updates = torch.mul(updates, -1)
             inv = torch.pow(1.0 / torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]], 2)
             updates = torch.mul(updates, inv)
@@ -341,8 +341,7 @@ class HD_model():
         if self.bicycle != None:
             #print(self.bicycle.shape)
             print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
-            print(torchhd.cosine_similarity(self.classes_hv, self.classes_hv)[0])
-        x = input("Enter")
+            print(torchhd.cosine_similarity(self.classes_hv, self.classes_hv)[2])
 
 class Bottleneck(nn.Module):
     expansion = 4
