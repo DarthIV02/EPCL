@@ -281,21 +281,21 @@ class HD_model():
         coords = kwargs['batch_dict']['lidar'].C[true_val]
 
         coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
-        sub_sample = torch.randperm(input_points.shape[0])[:1000]
+        #sub_sample = torch.randperm()[:1000]
 
-        for i, idx in enumerate(sub_sample.chunk(self.div)):
+        for i, idx in enumerate(input_points.shape[0].chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords[idx])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
                 torch.save(class_batch, f"class_{i}.pth")
-            novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
-            updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
-            updates = updates.transpose(0,1)
+            #novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
+            #updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
+            #updates = updates.transpose(0,1)
             
             # Update all of the classes with the actual label
-            self.classes_hv.index_add_(0, class_batch, updates)
+            #self.classes_hv.index_add_(0, class_batch, updates)
             
             #Substract when class is different then actual
             
