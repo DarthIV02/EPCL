@@ -26,7 +26,7 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --train_hd \
 --ckp_save_interval 100 \
---lr 0.001 \
+--lr 0.01 \
 --exp 5 \
 --eval \
 --pretrained_model ${pretrained_model} \
