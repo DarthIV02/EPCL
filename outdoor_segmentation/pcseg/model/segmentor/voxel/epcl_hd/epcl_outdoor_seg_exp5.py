@@ -287,7 +287,8 @@ class HD_model():
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords[idx])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-            self.bicycle = hv_all[class_batch == 2]
+            if self.bicycle == None and torch.sum(class_batch == 2) > 0:
+                self.bicycle = hv_all[class_batch == 2]
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
                 torch.save(class_batch, f"class_{i}.pth")
@@ -308,7 +309,7 @@ class HD_model():
             mask_dif = class_batch != pred_labels
             
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
-            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr/2)
+            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
