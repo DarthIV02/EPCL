@@ -535,26 +535,33 @@ class Trainer:
         result_dir.mkdir(parents=True, exist_ok=True)
         #dataset = dataloader.dataset
 
-        self.logger.info(f"*************** TRAINED EPOCH {self.cur_epoch+1} {prefix} TRAINING HD *****************")
-        if self.rank == 0:
-            progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
-        metric = {}
-        metric['hist_list'] = []
+        with tqdm.trange(
+            self.start_epoch, self.total_epoch, desc='epochs', dynamic_ncols=True, leave=(self.rank==0),
+        ) as tbar:
 
-        for i, batch_dict in enumerate(dataloader):
-            load_data_to_gpu(batch_dict)
+            for cur_epoch in tbar:
+                self.cur_epoch = cur_epoch
 
-            with torch.no_grad():
-                ret_dict = self.model(batch_dict, train_hd=True)
-            
-            if(i % self.ckp_save_interval == self.ckp_save_interval - 1):
-                self.save_hd_model(i, self.model.hd_model.classes_hv, self.model.hd_model.random_projection)
+                self.logger.info(f"*************** TRAINED EPOCH {self.cur_epoch+1} {prefix} TRAINING HD *****************")
+                if self.rank == 0:
+                    progress_bar = tqdm.tqdm(total=len(dataloader), leave=True, desc='eval', dynamic_ncols=True)
+                metric = {}
+                metric['hist_list'] = []
 
-            if self.rank == 0:
-                progress_bar.update()
-        
-        if self.rank == 0:
-            progress_bar.close()
+                for i, batch_dict in enumerate(dataloader):
+                    load_data_to_gpu(batch_dict)
+
+                    with torch.no_grad():
+                        ret_dict = self.model(batch_dict, train_hd=True)
+                    
+                    if(i % self.ckp_save_interval == self.ckp_save_interval - 1):
+                        self.save_hd_model(i, self.model.hd_model.classes_hv, self.model.hd_model.random_projection)
+
+                    if self.rank == 0:
+                        progress_bar.update()
+                
+                if self.rank == 0:
+                    progress_bar.close()
 
     def train(self):
 
