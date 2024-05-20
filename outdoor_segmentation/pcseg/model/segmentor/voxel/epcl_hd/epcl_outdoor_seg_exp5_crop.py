@@ -193,6 +193,7 @@ class HD_model():
         self.random_projection_0 = torchhd.embeddings.Projection(num_features[0], self.d, device=kwargs['device'])
         self.random_projection_1 = torchhd.embeddings.Projection(num_features[1], self.d, device=kwargs['device'])
         self.random_projection_2 = torchhd.embeddings.Projection(num_features[2], self.d, device=kwargs['device'])
+        self.stages = torchhd.random(3, d, device=kwargs['device'])
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2,}
         #self.random_projection = (self.random_projection_0, self.random_projection_1, self.random_projection_2)
         #self.random_projection = BatchProjection(3, num_features[0], self.d, device=kwargs['device'])
@@ -212,9 +213,9 @@ class HD_model():
         #print(input_x.get_device())
         #hv_0 = self.random_projection(input_x) # <-- BATCH
         #print(hv_0.shape) # (3,#,d)
-        hv_0 = self.random_projection[0](input_x[0]).sign()
-        hv_1 = self.random_projection[1](input_x[1]).sign()
-        hv_2 = self.random_projection[2](input_x[2]).sign()
+        hv_0 = torchhd.bind(self.random_projection[0](input_x[0]).sign(), self.stages[0])
+        hv_1 = torchhd.bind(self.random_projection[1](input_x[1]).sign(), self.stages[1])
+        hv_2 = torchhd.bind(self.random_projection[2](input_x[2]).sign(), self.stages[2])
         hv_all = torch.stack((hv_0, hv_1, hv_2))
         if infer:
             hv_all = torch.sum(hv_all, dim=0).sign()
