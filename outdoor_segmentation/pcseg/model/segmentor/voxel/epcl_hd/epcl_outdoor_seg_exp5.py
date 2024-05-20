@@ -244,8 +244,8 @@ class HD_model():
         
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
-        print(sim)
-        sim = self.softmax(sim)
+        #print(sim)
+        #sim = self.softmax(sim)
         return sim
     
     def clean_z(self, xyz, features=None, classification=None, **kwargs):
