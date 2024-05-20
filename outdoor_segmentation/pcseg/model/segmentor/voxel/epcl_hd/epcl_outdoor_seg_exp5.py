@@ -294,12 +294,14 @@ class HD_model():
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
                 torch.save(class_batch, f"class_{i}.pth")
-            #novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
-            #updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
-            #updates = updates.transpose(0,1)
+            novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
+            updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
+            inv = 1.0 / torch.bincount(class_batch)
+            updates = torch.mul(updates, inv)
+            updates = updates.transpose(0,1)
             
             # Update all of the classes with the actual label
-            #self.classes_hv.index_add_(0, class_batch, updates)
+            self.classes_hv.index_add_(0, class_batch, updates)
             
             #Substract when class is different then actual
             
@@ -327,16 +329,16 @@ class HD_model():
 
             # Update positive when different 
             #mask_dif = class_batch != pred_labels
-            novelty = 1 - sim_all[mask_dif, class_batch[mask_dif]] # only the ones updated
-            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            #novelty = 1 - sim_all[mask_dif, class_batch[mask_dif]] # only the ones updated
+            #updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             #updates = torch.mul(updates, -1)
-            inv = 1.0 / torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]]
-            updates = torch.mul(updates, inv)
-            updates = updates.transpose(0,1)
-            updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
-            updates_2[mask_dif] = updates # update vectors for the ones that changed
+            #inv = 1.0 / torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]]
+            #updates = torch.mul(updates, inv)
+            #updates = updates.transpose(0,1)
+            #updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
+            #updates_2[mask_dif] = updates # update vectors for the ones that changed
 
-            self.classes_hv.index_add_(0, class_batch, updates_2)
+            #self.classes_hv.index_add_(0, class_batch, updates_2)
 
         if self.bicycle != None:
             #print(self.bicycle.shape)
