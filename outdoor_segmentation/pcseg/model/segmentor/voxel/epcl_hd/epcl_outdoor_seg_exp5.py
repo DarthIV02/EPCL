@@ -237,7 +237,7 @@ class HD_model():
     
     def forward(self, input_h, **kwargs):
         #print(input_h.shape)
-        hv = self.encode(input_h, kwargs['coords'])
+        hv = self.encode(input_h)
         sim = self.similarity(hv)
         pred_label = torch.argmax(sim, dim=1)
         return hv, sim, pred_label
