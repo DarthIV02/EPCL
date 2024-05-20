@@ -29,7 +29,7 @@ python -m torch.distributed.launch \
 --lr 0.1 \
 --exp 5 \
 --eval \
---epochs 2
+--epochs 2 \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
