@@ -296,7 +296,7 @@ class HD_model():
                 torch.save(class_batch, f"class_{i}.pth")
             novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
-            inv = 1.0 / torch.bincount(class_batch)
+            inv = 1.0 / torch.bincount(class_batch)[class_batch]
             updates = torch.mul(updates, inv)
             updates = updates.transpose(0,1)
             
