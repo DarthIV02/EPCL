@@ -308,7 +308,7 @@ class HD_model():
             mask_dif = class_batch != pred_labels
             
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
-            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr/2)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
@@ -319,7 +319,7 @@ class HD_model():
             # Update positive when different 
             #mask_dif = class_batch != pred_labels
             novelty = 1 - sim_all[mask_dif, class_batch[mask_dif]] # only the ones updated
-            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr*2)
             #updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
@@ -328,6 +328,8 @@ class HD_model():
             self.classes_hv.index_add_(0, class_batch, updates_2)
         
         print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
+
+        x = input("Enter")
 
 class Bottleneck(nn.Module):
     expansion = 4
