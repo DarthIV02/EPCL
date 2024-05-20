@@ -289,6 +289,7 @@ class HD_model():
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
+                self.bicycle = hv_all[class_batch == 2]
                 torch.save(class_batch, f"class_{i}.pth")
             #novelty = 1 - sim_all[torch.arange(idx.shape[0]), class_batch]
             #updates = hv_all.transpose(0,1)*torch.mul(novelty, self.lr) # Normal HD with novelty
@@ -305,6 +306,7 @@ class HD_model():
             
             # ONLINEHD
             mask_dif = class_batch != pred_labels
+            
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
@@ -324,6 +326,8 @@ class HD_model():
             updates_2[mask_dif] = updates # update vectors for the ones that changed
 
             self.classes_hv.index_add_(0, class_batch, updates_2)
+        
+        print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
 
 class Bottleneck(nn.Module):
     expansion = 4
