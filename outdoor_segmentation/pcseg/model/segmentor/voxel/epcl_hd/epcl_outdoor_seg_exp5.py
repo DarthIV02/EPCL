@@ -289,6 +289,7 @@ class HD_model():
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             if self.bicycle == None and torch.sum(class_batch == 2) > 0:
                 self.bicycle = hv_all[class_batch == 2]
+            
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
                 torch.save(class_batch, f"class_{i}.pth")
@@ -327,9 +328,10 @@ class HD_model():
             updates_2[mask_dif] = updates # update vectors for the ones that changed
 
             self.classes_hv.index_add_(0, class_batch, updates_2)
-        
-        print(self.bicycle.shape)
-        print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
+
+        if self.bicycle != None:
+            print(self.bicycle.shape)
+            print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
 
         x = input("Enter")
 
