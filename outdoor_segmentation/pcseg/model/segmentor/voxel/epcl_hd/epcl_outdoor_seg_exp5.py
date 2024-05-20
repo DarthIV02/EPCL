@@ -315,7 +315,7 @@ class HD_model():
             print("Novelty: ", novelty)
             print(class_batch[mask_dif], class_batch[mask_dif].shape)
             print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
-            inv = 1.0 / torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]]
+            inv = 1.0 / torch.pow(torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]], 2)
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, inv)
             updates = torch.mul(updates, -1)
@@ -330,7 +330,7 @@ class HD_model():
             novelty = 1 - sim_all[mask_dif, class_batch[mask_dif]] # only the ones updated
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr*2)
             #updates = torch.mul(updates, -1)
-            inv = 1.0 / torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]]
+            inv = 1.0 / torch.pow(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]], 2)
             updates = torch.mul(updates, inv)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
