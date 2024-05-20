@@ -312,7 +312,8 @@ class HD_model():
             
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
             print("Novelty: ", novelty)
-            print(class_batch[mask_dif])
+            print(class_batch[mask_dif], class_batch[mask_dif].shape)
+            print(torch.bincount(class_batch[mask_dif]))
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
