@@ -315,7 +315,9 @@ class HD_model():
             print(class_batch[mask_dif], class_batch[mask_dif].shape)
             print(torch.bincount(class_batch[mask_dif]))
             print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
+            print(torch.pow(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]]), -1)
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
+            updates = torch.mul(updates)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
