@@ -314,6 +314,7 @@ class HD_model():
             print("Novelty: ", novelty)
             print(class_batch[mask_dif], class_batch[mask_dif].shape)
             print(torch.bincount(class_batch[mask_dif]))
+            print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
