@@ -26,6 +26,7 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --train_hd \
 --ckp_save_interval 100 \
+--lr 0.00000001 \
 --exp 5 \
 --crop \
 --eval \
