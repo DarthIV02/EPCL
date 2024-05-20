@@ -211,7 +211,7 @@ class HD_model():
         #self.random_projection = {0:self.random_projection_0, 1:self.random_projection_1, 2:self.random_projection_2}
         self.random_projection = self.random_projection.to(*args)
 
-    def encode(self, input_x, coords):
+    def encode(self, input_x, coords=None):
         #print(input_x.get_device())
         #print(input_x.shape)
         #coords = self.xyz(coords[:,2])<----
