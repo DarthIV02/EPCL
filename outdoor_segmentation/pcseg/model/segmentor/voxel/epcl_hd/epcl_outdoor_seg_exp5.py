@@ -308,8 +308,11 @@ class HD_model():
             
             # ONLINEHD
             mask_dif = class_batch != pred_labels
+            print("Mask_dif: ", mask_dif)
             
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
+            print("Novelty: ", novelty)
+            print(class_batch[mask_dif])
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
