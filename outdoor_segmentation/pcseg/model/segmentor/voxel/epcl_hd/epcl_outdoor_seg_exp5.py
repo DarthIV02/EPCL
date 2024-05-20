@@ -309,7 +309,7 @@ class HD_model():
             # ONLINEHD
             mask_dif = class_batch != pred_labels
             print("Mask_dif: ", mask_dif)
-            
+            print("Sim: ", sim_all)
             novelty = 1 - sim_all[mask_dif, pred_labels[mask_dif]] # only the ones updated
             print("Novelty: ", novelty)
             print(class_batch[mask_dif], class_batch[mask_dif].shape)
