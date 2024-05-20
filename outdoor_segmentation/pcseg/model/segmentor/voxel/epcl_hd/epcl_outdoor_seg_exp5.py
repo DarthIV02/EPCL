@@ -283,7 +283,7 @@ class HD_model():
         #coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
         #sub_sample = torch.randperm()[:1000]
 
-        for i, idx in enumerate(torch.arang(input_points.shape[0]).chunk(self.div)):
+        for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords[idx])
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
