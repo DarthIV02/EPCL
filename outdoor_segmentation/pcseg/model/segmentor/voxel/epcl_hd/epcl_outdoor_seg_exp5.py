@@ -700,17 +700,17 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             all_labels = batch_dict['targets_mapped']
             point_predict = []
             point_labels = []
-            coords, not_outlier, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
-            hv, sim, pred_label = self.hd_model.forward(tuple_feat, coords = coords)
+            #coords, not_outlier, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
+            hv, sim, pred_label = self.hd_model.forward(tuple_feat)
             #print(pred_label.shape)
-            pred_label_z = torch.zeros((batch_dict['lidar'].C.shape[0]), dtype=torch.int64, device=self.device)
-            pred_label_z[not_outlier] = pred_label
+            #pred_label_z = torch.zeros((batch_dict['lidar'].C.shape[0]), dtype=torch.int64, device=self.device)
+            #pred_label_z[not_outlier] = pred_label
             #print(pred_label_z.shape)
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
                 cur_label = (all_labels.C[:, -1] == idx).cpu().numpy()
-                outputs_mapped = pred_label_z[cur_scene_pts][cur_inv]
+                outputs_mapped = pred_label[cur_scene_pts][cur_inv]
                 targets_mapped = all_labels.F[cur_label]
                 point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
