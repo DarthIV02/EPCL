@@ -288,7 +288,7 @@ class HD_model():
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             if self.bicycle == None and torch.sum(class_batch == 2) > 0:
-                self.bicycle = hv_all[class_batch == 2]
+                self.bicycle = hv_all[class_batch == 2][:3]
             
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
@@ -315,9 +315,9 @@ class HD_model():
             print(class_batch[mask_dif], class_batch[mask_dif].shape)
             print(torch.bincount(class_batch[mask_dif]))
             print(torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
-            print(1.0 / torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]])
+            inv = 1.0 / torch.bincount(pred_labels[mask_dif])[pred_labels[mask_dif]]
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr)
-            #updates = torch.mul(updates)
+            updates = torch.mul(updates, inv)
             updates = torch.mul(updates, -1)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
@@ -330,6 +330,8 @@ class HD_model():
             novelty = 1 - sim_all[mask_dif, class_batch[mask_dif]] # only the ones updated
             updates = hv_all[mask_dif].transpose(0,1)*torch.mul(novelty, self.lr*2)
             #updates = torch.mul(updates, -1)
+            inv = 1.0 / torch.bincount(class_batch[mask_dif])[class_batch[mask_dif]]
+            updates = torch.mul(updates, inv)
             updates = updates.transpose(0,1)
             updates_2 = torch.zeros((idx.shape[0], self.d), device=self.device) # all zeros original
             updates_2[mask_dif] = updates # update vectors for the ones that changed
