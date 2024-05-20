@@ -343,6 +343,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
         self,
         model_cfgs,
         num_class: int,
+        lr: float
     ):
         super().__init__(model_cfgs, num_class)
         self.in_feature_dim = model_cfgs.IN_FEATURE_DIM
