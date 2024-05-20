@@ -244,6 +244,7 @@ class HD_model():
         
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
+        print(sim)
         sim = self.softmax(sim)
         return sim
     
