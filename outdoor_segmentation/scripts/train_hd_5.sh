@@ -30,6 +30,7 @@ python -m torch.distributed.launch \
 --exp 5 \
 --crop \
 --eval \
+--epochs 1 \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
