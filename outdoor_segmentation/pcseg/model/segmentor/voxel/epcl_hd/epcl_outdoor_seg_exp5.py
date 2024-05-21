@@ -340,10 +340,10 @@ class HD_model():
 
             #self.classes_hv.index_add_(0, class_batch, updates_2)
 
-        if self.bicycle != None:
+        #if self.bicycle != None:
             #print(self.bicycle.shape)
-            print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
-            print(torchhd.cosine_similarity(self.classes_hv, self.classes_hv)[2])
+        #    print(torchhd.cosine_similarity(self.bicycle, self.classes_hv))
+        #    print(torchhd.cosine_similarity(self.classes_hv, self.classes_hv)[2])
 
 class Bottleneck(nn.Module):
     expansion = 4
