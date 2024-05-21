@@ -3,17 +3,17 @@ cd ${ROOT}
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
-#NGPUS=1
-#cfg_name=EPCL_HD
-#cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
-#extra_tag=val_${cfg_name}_nuscenes
-#pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
-
 NGPUS=1
 cfg_name=EPCL_HD
-cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
-extra_tag=val_${cfg_name}_kitti_x5
+cfg_file=tools/cfgs/voxel/nuscenes/${cfg_name}.yaml
+extra_tag=val_${cfg_name}_nuscenes
 pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
+
+#NGPUS=1
+#cfg_name=EPCL_HD
+#cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
+#extra_tag=val_${cfg_name}_kitti_x5
+#pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
 
 set -x
 
@@ -32,7 +32,7 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --eval \
 --exp 5 \
---crop \
+#--crop \
 --pretrained_model ${pretrained_model} \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
