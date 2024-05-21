@@ -516,6 +516,9 @@ class Trainer:
         self.logger.info(table_xy)
 
         dis_matrix = sum(hist_list)
+        conf_matrix_dic = {'classes': class_names, 'values':dis_matrix}
+        torch.load(conf_matrix_dic, self.log_dir / 'result_matrix')
+        
         table = PrettyTable()
         table.title = 'Confusion matrix'
         table.field_names = ["Classes"] + [k for k in class_names[1:]] + ["Points"]
