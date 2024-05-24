@@ -296,9 +296,9 @@ class HD_model():
         print(res)
         print(res.shape)
         self.weight_for_class_i = torch.zeros((self.num_classes), device=self.device)
-        self.weight_for_class_i[no_samples] = res
         print(self.weight_for_class_i)
         print(self.weight_for_class_i.shape)
+        self.weight_for_class_i[no_samples] = res
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
         #coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
