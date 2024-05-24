@@ -289,9 +289,12 @@ class HD_model():
         no_samples = torch.nonzero(self.num_samples_per_class)
         x = torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8 # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
-        print(x[no_samples])
-        print(x[no_samples].shape)
-        self.weight_for_class_i = torch.div(y, x[no_samples])
+        x = x[no_samples].transpose(0,1)[0]
+        print(x)
+        print(x.shape)
+        res = torch.div(y, x)
+        self.weight_for_class_i = torch.zeros((self.num_classes))
+        self.weight_for_class_i[no_samples] = res
         print(self.weight_for_class_i)
         print(self.weight_for_class_i.shape)
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
