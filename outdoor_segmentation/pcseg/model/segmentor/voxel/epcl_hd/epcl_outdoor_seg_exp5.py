@@ -281,7 +281,7 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        self.classes_hv = torch.sum((self.classes_hv, torch.bincount(classification)), dim=1)
+        self.classes_hv = self.classes_hv + torch.bincount(classification)
         print(self.classes_hv)
         print(torch.bincount(classification))
         print(self.classes_hv.shape)
