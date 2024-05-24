@@ -246,7 +246,7 @@ class HD_model():
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
         #print(sim)
-        weight_for_class_i = torch.div(torch.sum(self.num_samples_per_class), (torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8))
+        
         sim = torch.mul(sim, weight_for_class_i)
         print(sim)
         sim = self.softmax(sim)
@@ -286,6 +286,10 @@ class HD_model():
         input_points = input_points[true_val]
         classification = classification[true_val]
         self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
+        x = torch.mul(self.num_samples_per_class, self.num_classes)
+        print(x)
+        print(x.shape)
+        weight_for_class_i = torch.div(torch.sum(self.num_samples_per_class), (x + 1e-8))
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
         #coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
