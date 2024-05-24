@@ -201,7 +201,7 @@ class HD_model():
         self.xyz = torchhd.embeddings.Level(1000, embedding_dim=d, randomness=0.5, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
-        self.num_samples_per_class = torch.zeros(classes)
+        self.num_samples_per_class = torch.zeros(classes, device=kwargs['device'])
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
@@ -281,10 +281,10 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        self.classes_hv = self.classes_hv + torch.bincount(classification)
-        print(self.classes_hv)
+        self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
+        print(self.num_samples_per_class)
         print(torch.bincount(classification))
-        print(self.classes_hv.shape)
+        print(self.num_samples_per_class.shape)
         x = input("Enter")
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
