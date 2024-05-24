@@ -246,7 +246,7 @@ class HD_model():
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
         #print(sim)
-        weight_for_class_i = torch.sum(self.num_samples_per_class) / (self.num_samples_per_class * self.num_classes) + 1e-8
+        weight_for_class_i = torch.div(torch.sum(self.num_samples_per_class), (torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8))
         sim = torch.mul(sim, weight_for_class_i)
         print(sim)
         x = input("Enter")
