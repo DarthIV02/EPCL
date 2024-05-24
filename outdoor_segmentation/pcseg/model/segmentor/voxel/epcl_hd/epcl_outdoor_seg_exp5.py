@@ -249,8 +249,9 @@ class HD_model():
         weight_for_class_i = torch.div(torch.sum(self.num_samples_per_class), (torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8))
         sim = torch.mul(sim, weight_for_class_i)
         print(sim)
-        x = input("Enter")
         sim = self.softmax(sim)
+        print(sim)
+        x = input("Enter")
         return sim
     
     def clean_z(self, xyz, features=None, classification=None, **kwargs):
