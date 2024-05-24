@@ -202,7 +202,7 @@ class HD_model():
         self.xyz = torchhd.embeddings.Level(1000, embedding_dim=d, randomness=0.5, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
-        self.num_samples_per_class = torch.zeros(classes, device=kwargs['device'])
+        self.num_samples_per_class = torch.zeros((classes), device=kwargs['device'])
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
@@ -287,13 +287,15 @@ class HD_model():
         classification = classification[true_val]
         self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
         no_samples = torch.nonzero(self.num_samples_per_class)
-        x = torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8 # vector 17
+        x = torch.mul(self.num_samples_per_class, self.num_classes) # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
         x = x[no_samples].transpose(0,1)[0]
         print(x)
         print(x.shape)
         res = torch.div(y, x)
-        self.weight_for_class_i = torch.zeros((self.num_classes))
+        print(res)
+        print(res.shape)
+        self.weight_for_class_i = torch.zeros((self.num_classes), device=self.device)
         self.weight_for_class_i[no_samples] = res
         print(self.weight_for_class_i)
         print(self.weight_for_class_i.shape)
