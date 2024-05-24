@@ -285,8 +285,8 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        no_samples = torch.nonzero(self.num_samples_per_class)
         self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
+        no_samples = torch.nonzero(self.num_samples_per_class)
         x = torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8 # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
         print(x[no_samples])
