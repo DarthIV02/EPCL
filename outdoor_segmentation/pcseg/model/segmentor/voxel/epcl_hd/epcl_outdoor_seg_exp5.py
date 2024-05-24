@@ -285,12 +285,15 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
+        no_samples = torch.nonzero(self.num_samples_per_class)
         self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
         x = torch.mul(self.num_samples_per_class, self.num_classes) + 1e-8 # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
         print(y)
         print(y.shape)
-        weight_for_class_i = torch.div(y, x)
+        self.weight_for_class_i = torch.div(y, x[no_samples])
+        print(self.weight_for_class_i)
+        print(self.weight_for_class_i.shape)
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
         #coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
