@@ -245,15 +245,14 @@ class HD_model():
         
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
-        print("Similarity")
-        print(sim)
-        print(sim.shape)
+        #print("Similarity")
+        #print(sim)
+        #print(sim.shape)
         
         sim = torch.mul(sim, self.weight_for_class_i)
-        print(sim)
+        #print(sim)
         sim = self.softmax(sim)
-        print("Last: ", sim.shape)
-        x = input("Enter")
+        #print("Last: ", sim.shape)
         return sim
     
     def clean_z(self, xyz, features=None, classification=None, **kwargs):
@@ -292,16 +291,16 @@ class HD_model():
         x = torch.mul(self.num_samples_per_class, self.num_classes) # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
         x = x[no_samples]
-        print(x)
-        print(x.shape)
+        #print(x)
+        #print(x.shape)
         res = torch.div(y, x)
-        print(res)
-        print(res.shape)
+        #print(res)
+        #print(res.shape)
         self.weight_for_class_i = torch.zeros((self.num_classes), device=self.device)
         self.weight_for_class_i[no_samples] = res
-        print(self.weight_for_class_i)
-        print(self.weight_for_class_i.shape)
-        print(self.weight_for_class_i[no_samples])
+        #print(self.weight_for_class_i)
+        #print(self.weight_for_class_i.shape)
+        #print(self.weight_for_class_i[no_samples])
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
         #coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
