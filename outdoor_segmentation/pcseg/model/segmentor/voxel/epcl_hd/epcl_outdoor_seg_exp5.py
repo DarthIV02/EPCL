@@ -288,7 +288,7 @@ class HD_model():
         classification = classification[true_val]
         self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
         no_samples = torch.nonzero(self.num_samples_per_class).transpose(0,1)[0]
-        x = torch.mul(self.num_samples_per_class, self.num_classes) # vector 17
+        x = torch.mul(self.num_samples_per_class, 100) # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
         x = x[no_samples]
         #print(x)
