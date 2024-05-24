@@ -252,7 +252,7 @@ class HD_model():
         sim = torch.mul(sim, self.weight_for_class_i)
         print(sim)
         sim = self.softmax(sim)
-        print(sim)
+        print("Last: ", sim.shape)
         x = input("Enter")
         return sim
     
