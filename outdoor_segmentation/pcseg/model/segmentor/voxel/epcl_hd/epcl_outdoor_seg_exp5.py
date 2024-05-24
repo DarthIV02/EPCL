@@ -286,10 +286,10 @@ class HD_model():
         input_points = input_points[true_val]
         classification = classification[true_val]
         self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
-        no_samples = torch.nonzero(self.num_samples_per_class)
+        no_samples = torch.nonzero(self.num_samples_per_class).transpose(0,1)[0]
         x = torch.mul(self.num_samples_per_class, self.num_classes) # vector 17
         y = torch.sum(self.num_samples_per_class) # should be 1
-        x = x[no_samples].transpose(0,1)[0]
+        x = x[no_samples]
         print(x)
         print(x.shape)
         res = torch.div(y, x)
@@ -298,6 +298,7 @@ class HD_model():
         self.weight_for_class_i = torch.zeros((self.num_classes), device=self.device)
         print(self.weight_for_class_i)
         print(self.weight_for_class_i.shape)
+        print(self.weight_for_class_i[no_samples])
         self.weight_for_class_i[no_samples] = res
         #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
