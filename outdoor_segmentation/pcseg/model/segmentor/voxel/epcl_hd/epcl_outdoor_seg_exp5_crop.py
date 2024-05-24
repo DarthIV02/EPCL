@@ -237,10 +237,10 @@ class HD_model():
         best_sim = torch.max(sim, dim=2).values
         #print(best_sim.shape)
         best_sim_2 = torch.argmax(best_sim, dim=0)
-        print(torch.bincount(best_sim_2))
+        #print(torch.bincount(best_sim_2))
         #print(best_sim_2.shape)
         pred_label = best_ind[best_sim_2, torch.arange(best_ind.shape[1])]
-        print("ALL ", pred_label)
+        #print("ALL ", pred_label)
         hv = torch.sum(hv, dim=0).sign() # hv = hv[best_sim_2, torch.arange(pred_label.shape[0])] <- Best just gets 0
         #print("hv", hv.shape)
         #print("sim: ", sim[best_sim_2, torch.arange(sim.shape[1])].shape)
@@ -256,7 +256,7 @@ class HD_model():
         return sim
     
     def train(self, input_points, classification, **kwargs):
-        print(input_points.shape)
+        #print(input_points.shape)
         for idx in torch.arange(input_points.shape[1]).chunk(self.div):
             hv_all, sim_all, pred_labels = self.forward(input_points[:, idx, :])
             idx = idx.to(self.device)

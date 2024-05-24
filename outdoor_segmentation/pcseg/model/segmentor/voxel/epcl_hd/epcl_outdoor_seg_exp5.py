@@ -201,7 +201,7 @@ class HD_model():
         self.xyz = torchhd.embeddings.Level(1000, embedding_dim=d, randomness=0.5, device=kwargs['device'])
         #self.random_projection_global = torchhd.embeddings.Projection(num_features, self.d)
         self.lr = lr
-        self.bicycle = None
+        self.num_samples_per_class = torch.zeros(classes)
 
     def to(self, *args):
         self.classes_hv = self.classes_hv.to(*args)
@@ -245,7 +245,9 @@ class HD_model():
     def similarity(self, point):
         sim = torchhd.cosine_similarity(point, self.classes_hv)
         #print(sim)
-        #sim = self.softmax(sim)
+        weight_for_class_i = total_samples / (num_samples_in_class_i * num_classes)
+
+        sim = self.softmax(sim)
         return sim
     
     def clean_z(self, xyz, features=None, classification=None, **kwargs):
@@ -279,17 +281,20 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        coords = kwargs['batch_dict']['lidar'].C[true_val]
+        self.classes_hv = torch.sum(self.classes_hv, torch.bincount(classification))
+        print(self.classes_hv)
+        print(torch.bincount(classification))
+        print(self.classes_hv.shape)
+        x = input("Enter")
+        #coords = kwargs['batch_dict']['lidar'].C[true_val]
 
         #coords, not_outlier, input_points, classification = self.clean_z(kwargs['batch_dict']['lidar'].C[true_val], input_points, classification)
         #sub_sample = torch.randperm()[:1000]
 
         for i, idx in enumerate(torch.arange(input_points.shape[0]).chunk(self.div)):
-            hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :], coords = coords[idx])
+            hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :]) # coords = coords[idx]
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
-            if self.bicycle == None and torch.sum(class_batch == 2) > 0:
-                self.bicycle = hv_all[class_batch == 2][:3]
             
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
