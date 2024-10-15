@@ -249,7 +249,7 @@ class HD_model():
         #print(sim)
         #print(sim.shape)
         
-        sim = torch.mul(sim, self.weight_for_class_i)
+        #sim = torch.mul(sim, self.weight_for_class_i)
         #print(sim)
         sim = self.softmax(sim)
         #print("Last: ", sim.shape)
@@ -286,18 +286,20 @@ class HD_model():
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
         classification = classification[true_val]
-        self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
-        no_samples = torch.nonzero(self.num_samples_per_class).transpose(0,1)[0]
-        x = torch.mul(self.num_samples_per_class, 10) # vector 17
-        y = torch.sum(self.num_samples_per_class) # should be 1
-        x = x[no_samples]
+
+        # ADDING WEIGHTS NOPE
+        #self.num_samples_per_class = self.num_samples_per_class + torch.bincount(classification)
+        #no_samples = torch.nonzero(self.num_samples_per_class).transpose(0,1)[0]
+        #x = torch.mul(self.num_samples_per_class, 10) # vector 17
+        #y = torch.sum(self.num_samples_per_class) # should be 1
+        #x = x[no_samples]
         #print(x)
         #print(x.shape)
-        res = torch.div(y, x)
+        #res = torch.div(y, x)
         #print(res)
         #print(res.shape)
-        self.weight_for_class_i = torch.zeros((self.num_classes), device=self.device)
-        self.weight_for_class_i[no_samples] = res
+        #self.weight_for_class_i = torch.zeros((self.num_classes), device=self.device)
+        #self.weight_for_class_i[no_samples] = res
         #print(self.weight_for_class_i)
         #print(self.weight_for_class_i.shape)
         #print(self.weight_for_class_i[no_samples])
