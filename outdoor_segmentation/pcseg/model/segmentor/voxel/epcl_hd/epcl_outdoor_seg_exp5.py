@@ -220,7 +220,6 @@ class HD_model():
         #print(coords.shape)
         input_x = input_x.transpose(0,1)
         hv_0 = self.random_projection(input_x)
-        del input_x
         hv_0 = hv_0.transpose(0,1)
         #print(hv_0.shape)
         #hv_0 = torch.cat((hv_0, coords), dim=1) <----
@@ -229,6 +228,7 @@ class HD_model():
         #hv_0 = torch.cos(hv_0 + self.bias) * torch.sin(hv_0)
         hv_0 = hv_0.sign() # <-- BATCH
         repeated = self.stages[:3].repeat(input_x.shape[1], 1, 1)
+        del input_x
         hv_0 = torchhd.bind(hv_0, repeated)
         del repeated
 
