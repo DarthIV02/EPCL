@@ -189,7 +189,7 @@ class EPCLOutdoorSeg(BaseSegmentor):
         model_cfgs,
         num_class: int,
     ):
-        super().__init__(model_cfgs, num_class)
+        super().__init__(model_cfgs, num_class, lr = None)
         self.in_feature_dim = model_cfgs.IN_FEATURE_DIM
         self.num_layer = model_cfgs.get('NUM_LAYER', [2, 3, 4, 6, 2, 2, 2, 2])
         self.block = {
@@ -394,130 +394,71 @@ class EPCLOutdoorSeg(BaseSegmentor):
 
         x0 = self.stem(x0)
         z0 = voxel_to_point(x0, z, nearest=False)
-        #print("z0")
-        #print(z0.F.shape)
-        #print(z0.C.shape)
-        #print(z0.__dict__)
-
 
         x1 = self.stage1(x0) 
-        #print("x1")
-        #print(x1.F.shape)
         x2 = self.stage2(x1)
-        #print("x2")
-        #print(x2.F.shape)
-        x3 = self.stage3(x2)
-        #print("x3")
-        #print(x3.F.shape) 
+        x3 = self.stage3(x2) 
         x4 = self.stage4(x3) 
-        #print("x4")
-        #print(x4.F.shape)
         z1 = voxel_to_point(x4, z0)
-        #print("z1")
-        #print(z1.__dict__)
-
         
         # epcl encoder
-        #xyz, feats = x4.C, x4.F # <----------------
-        #print("Input CLIP")
-        #print(xyz)
-        #print(xyz.shape)
-        #print(feats)
-        #print(feats.shape)
-        #enter_here = input()
-        #x4.F = self.epcl_encoder(xyz, feats)
-        #print("Output CLIP")
-        #print(x4.F)
-        #print(x4.F.shape)
-        #output_clip = x4.F # <----------------
+        xyz, feats = x4.C, x4.F
+        x4.F = self.epcl_encoder(xyz, feats)
         
-        #x4.F = self.dropout(x4.F)# <----------------
-        #y1 = self.up1[0](x4)# <----------------
-        #print("y1")
-        #print(y1.F.shape)
-        #y1 = torchsparse.cat([y1, x3])# <----------------
-        #y1 = self.up1[1](y1)# <----------------
-        #print("y1")
-        #print(y1.F.shape)
+        x4.F = self.dropout(x4.F)
+        y1 = self.up1[0](x4)
+        y1 = torchsparse.cat([y1, x3])
+        y1 = self.up1[1](y1)
 
-        #y2 = self.up2[0](y1)# <----------------
-        #print("y2")
-        #print(y2.F.shape)
-        #y2 = torchsparse.cat([y2, x2])# <----------------
-        #y2 = self.up2[1](y2)# <----------------
-        #print("y2")
-        #print(y2.F.shape)
-        #z2 = voxel_to_point(y2, z1) # <----------------
-        #print("z2")
-        #print(z2.F.shape)
-        #print(z2.C.shape)
+        y2 = self.up2[0](y1)
+        y2 = torchsparse.cat([y2, x2])
+        y2 = self.up2[1](y2)
+        z2 = voxel_to_point(y2, z1) 
 
-        #y2.F = self.dropout(y2.F)# <----------------
-        #y3 = self.up3[0](y2) # <----------------
-        #print("y3")
-        #print(y3.F.shape)
-        #y3 = torchsparse.cat([y3, x1]) # <----------------
-        #y3 = self.up3[1](y3) # <----------------
-        #print("y3")
-        #print(y3.F.shape)
+        y2.F = self.dropout(y2.F)
+        y3 = self.up3[0](y2) 
+        y3 = torchsparse.cat([y3, x1]) 
+        y3 = self.up3[1](y3) 
  
-        #y4 = self.up4[0](y3)# <----------------
-        #print("y4")
-        #print(y4.F.shape)
-        #y4 = torchsparse.cat([y4, x0]) # <----------------
-        #y4 = self.up4[1](y4) # <----------------
-        #print("y4")
-        #print(y4.F.shape)
-        #z3 = voxel_to_point(y4, z2)# <----------------
-        #print("z3")
-        #print(z3.F.shape)
-        #print(z3.C.shape)
-        #concat_feat = torch.cat([z1.F, z2.F, z3.F], dim=1)# <----------------
-        #out = self.classifier(concat_feat)
-        #print("\nOut")
-        #print(out.shape)
+        y4 = self.up4[0](y3)
+        y4 = torchsparse.cat([y4, x0]) 
+        y4 = self.up4[1](y4) 
+        z3 = voxel_to_point(y4, z2)
+
+        out = self.classifier(torch.cat([z1.F, z2.F, z3.F], dim=1))
 
         if self.training:
             target = batch_dict['targets'].F.long().cuda(non_blocking=True)
 
             coords_xyz = batch_dict['lidar'].C[:, :3].float()
             offset = batch_dict['offset']
-            #loss = self.criterion_losses(out, target, xyz=coords_xyz, offset=offset)
+            loss = self.criterion_losses(out, target, xyz=coords_xyz, offset=offset)
             
-            #ret_dict = {'loss': loss}
-            #disp_dict = {'loss': loss.item()}
-            #tb_dict = {'loss': loss.item()}
-            #return ret_dict, tb_dict, disp_dict
+            ret_dict = {'loss': loss}
+            disp_dict = {'loss': loss.item()}
+            tb_dict = {'loss': loss.item()}
+            return ret_dict, tb_dict, disp_dict
         else:
             invs = batch_dict['inverse_map']
             all_labels = batch_dict['targets_mapped']
-            #point_predict = []
+            point_predict = []
             point_labels = []
-            #point_predict_logits = []
+            point_predict_logits = []
             for idx in range(invs.C[:, -1].max() + 1):
                 cur_scene_pts = (x.C[:, -1] == idx).cpu().numpy()
                 cur_inv = invs.F[invs.C[:, -1] == idx].cpu().numpy()
                 cur_label = (all_labels.C[:, -1] == idx).cpu().numpy()
-                #if return_logit or return_tta:
-                #    outputs_mapped = out[cur_scene_pts][cur_inv].softmax(1)
-                #else:
-                #    outputs_mapped = out[cur_scene_pts][cur_inv].argmax(1)
-                    #print("cur_scene_pts")
-                    #print(cur_scene_pts)
-                    #print("cur_inv")
-                    #print(cur_inv)
-                    #print("outputs_mapped")
-                    #print(outputs_mapped)
-                #    outputs_mapped_logits = out[cur_scene_pts][cur_inv]
+                if return_logit or return_tta:
+                    outputs_mapped = out[cur_scene_pts][cur_inv].softmax(1)
+                else:
+                    outputs_mapped = out[cur_scene_pts][cur_inv].argmax(1)
+                    outputs_mapped_logits = out[cur_scene_pts][cur_inv]
                 targets_mapped = all_labels.F[cur_label]
-                #point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
+                point_predict.append(outputs_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
                 point_labels.append(targets_mapped[:batch_dict['num_points'][idx]].cpu().numpy())
-                #point_predict_logits.append(outputs_mapped_logits[:batch_dict['num_points'][idx]].cpu().numpy())
+                point_predict_logits.append(outputs_mapped_logits[:batch_dict['num_points'][idx]].cpu().numpy())
 
-            """return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'],
-                    'point_predict_logits': point_predict_logits, 'output_CLIP': output_clip, 'z1':z1, 
-                    'concat_features':concat_feat}"""
-        return {'point_labels': point_labels, 'name': batch_dict['name'], 'z1':z1} #'output_CLIP': output_clip, 'concat_features':concat_feat
+            return {'point_predict': point_predict, 'point_labels': point_labels, 'name': batch_dict['name'],'point_predict_logits': point_predict_logits}
 
     def forward_ensemble(self, batch_dict):
         return self.forward(batch_dict, ensemble=True)
