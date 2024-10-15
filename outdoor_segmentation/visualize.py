@@ -14,9 +14,10 @@ import importlib
 import argparse
 from omegaconf import OmegaConf
 import os.path as osp
-from datasets.inference_dataset import *
-from datasets import *
 import torch 
+from train import Trainer
+from pcseg.model import build_network, load_data_to_gpu
+import copy
 
 import csv
 import datetime
@@ -31,6 +32,17 @@ def collate_fn_BEV(data):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser("./visualize.py")
+  parser.add_argument(
+      '--dataset', '-d',
+      type=str,
+      required=True,
+      help='Dataset to visualize. No Default',
+  )
+  parser.add_argument(
+    '-cfg', 
+    '--cfg_file', 
+    help='the path to the setup config file', 
+    default='cfg/train_sk.yaml')
   parser.add_argument(
       '--sequence', '-s',
       type=str,
@@ -86,96 +98,52 @@ if __name__ == '__main__':
     help='Shuffles scans before visualization. Defaults to False'
   )
   parser.add_argument(
-    '-cfg', 
-    '--config', 
-    help='the path to the setup config file', 
-    default='cfg/train_sk.yaml')
+    '--eval',
+    dest='eval',
+    default=True,
+    required=False,
+    help='eval flag',
+  )
+  parser.add_argument(
+    '--exp',
+    dest='exp',
+    default=5,
+    required=False,
+    help='exp flag',
+  )
+  parser.add_argument(
+    '--pretrained_model',
+    dest='pretrained_model',
+    default='/root/main/EPCL_setup/checkpoints/best_checkpoint.pth',
+    help='pretrained model path',
+  )
+  parser.add_argument(
+    '--extra_tag',
+    dest='extra_tag',
+    default='val_EPCL_HD',
+    required=False,
+    help='eval flag',
+  )
   FLAGS, unparsed = parser.parse_known_args()
 
-  cfg = OmegaConf.load(FLAGS.config)
-  cluster_cfg = OmegaConf.load(cfg.cluster_cfg)
-  model_cfg = OmegaConf.load(cfg.model_cfg)
-  cfg = OmegaConf.merge(cfg,cluster_cfg,model_cfg)
-
   #Get info relative to the set
-  if cfg.source == "semantickitti":
-      source_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,"semantic-kitti.yaml"))
-      train_set = SemanticKITTI(source_data_cfg,'train')
-  elif cfg.source == "nuscenes":
-      source_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,"nuscenes.yaml"))
-      train_set = nuScenes(source_data_cfg,'train')
-  else:
-      raise  NameError('source dataset not supported')
+  trainer = Trainer(FLAGS, unparsed)
 
-  if cfg.target == "semantickitti":
-      target_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,"semantic-kitti.yaml"))
-      train_set_2 = SemanticKITTI(target_data_cfg,'train')
-      target_set = SemanticKITTI(target_data_cfg,'valid')
-  elif cfg.target == "nuscenes":
-      target_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,"nuscenes_mini.yaml")) # Change if using full nuscenes
-      train_set_2 = nuScenes(target_data_cfg,'train')
-      target_set = nuScenes(target_data_cfg,'valid')
-  elif cfg.target == "semanticposs":
-      target_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,"semanticposs.yaml"))
-      train_set_2 = SemanticPOSS(target_data_cfg,'train')
-      target_set = SemanticPOSS(target_data_cfg,'valid')
-  elif cfg.target == "semantickitti-nuscenes":
-      target_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,"semantic-kitti-nuscenes.yaml"))
-      train_set_2 = SemanticKITTI_Nuscenes(target_data_cfg,'train')
-      target_set = SemanticKITTI_Nuscenes(target_data_cfg,'valid')
-  elif "pandaset" in cfg.target:
-      target_data_cfg = OmegaConf.load(osp.join(cfg.data_cfg_path,cfg.target+".yaml"))
-      train_set_2 = Pandaset(target_data_cfg,'train')
-      target_set = Pandaset(target_data_cfg,'valid')
+  trainer.cur_epoch -= 1
+  trainer.model.eval()
+  data_config = copy.deepcopy(unparsed.DATA)
+  from pcseg.data import build_dataloader
+  _, test_loader, _ = build_dataloader(
+      data_cfgs=data_config,
+      modality=unparsed.MODALITY,
+      batch_size=1,#cfgs.OPTIM.BATCH_SIZE_PER_GPU,
+      dist=trainer.if_dist_train,
+      workers=FLAGS.workers,
+      logger=trainer.logger,
+      training=False,
+  )
   
-  else:
-      raise  NameError('target dataset not supported')
-  
-  color_dict = target_set.color_map
-
-  #Get info relative to the model
-  if cfg.architecture.model == "KPCONV":
-      module = importlib.import_module('models.kpconv.kpconv')
-      model_information = getattr(module, cfg.architecture.type)()
-      model_information.num_classes = train_set.get_n_label()
-      model_information.ignore_label = -1
-      model_information.in_features_dim = model_cfg.architecture.n_features
-      model_information.train_hd = cfg.train_hd
-      from models.kpconv_model import SemanticSegmentationModel
-      module = importlib.import_module('models.kpconv.architecture')
-      model_type = getattr(module, cfg.architecture.type)
-      model = SemanticSegmentationModel(model_information,cfg,model_type)
-  elif cfg.architecture.model == "SPVCNN":
-      module = importlib.import_module('models.spvcnn.spvcnn')
-      model_information = getattr(module, cfg.architecture.type)
-      model_information.num_classes = train_set.get_n_label()
-      model_information.ignore_label = -1
-      model_information.in_features_dim = model_cfg.architecture.n_features
-      from models.spvcnn_model import SemanticSegmentationSPVCNNModel
-      model = SemanticSegmentationSPVCNNModel(model_information,cfg)
-  else:
-      raise  NameError('model not supported')
-      
-  # Get HD info
-  if cfg.train_hd or cfg.test_hd:
-      hd_cfg = OmegaConf.load(cfg.hd_param)
-      cfg = OmegaConf.merge(cfg,hd_cfg) 
-      from models.HD import OnlineHD
-      device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-      #device = torch.device("cpu")
-      model_hd = OnlineHD(hd_cfg.n_features, hd_cfg.n_dimensions, hd_cfg.n_classes, epochs = hd_cfg.epochs, device=device)
-  
-  # Define the path for the "HD" folder
-  hd_folder = os.path.join(cfg.save_pred_path, f'HD_{hd_cfg.hd_block_stop}')
-
-  # Check if the "HD" folder exists
-  if not os.path.exists(hd_folder):
-      os.makedirs(hd_folder)
-      print(f"Folder 'HD' created at {hd_folder}")
-  else:
-      print(f"Folder 'HD' already exists at {hd_folder}")
-  
-  output_dataset = InferenceDataset(cfg, train_set, target_set, model, model_information, model_hd)
+  color_dict = data_config.color_map
 
   # print summary of what we will do
   print("*" * 80)
@@ -202,7 +170,11 @@ if __name__ == '__main__':
 
   def temp(i):
     start = time.time()
-    points, labels = output_dataset.compute_sequence(0,i)
+    this = next(test_loader)
+    load_data_to_gpu(this)
+    with torch.no_grad():
+        ret_dict = trainer.model(this)
+    points, labels, predict = this['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
     end = time.time()
     print("Loaded points in {0} seconds".format(end-start))
     return points, labels, labels, end-start
@@ -214,7 +186,8 @@ if __name__ == '__main__':
                       verbose_runtime=FLAGS.print_data, 
                       pullData=temp,
                       percent_points=1,    
-                      inference_model=output_dataset)
+                      inference_model=trainer.model.forward()
+                      first = next(test_loader))
                     #key_press=key_press,
                     #canvas = canvas)
 

@@ -7,6 +7,8 @@ from vispy.scene.visuals import Text
 import numpy as np
 from matplotlib import pyplot as plt
 import time
+from pcseg.model import build_network, load_data_to_gpu
+import torch
 
 class LaserScanVis:
   """Class that creates and handles a visualizer for a pointcloud"""
@@ -19,7 +21,8 @@ class LaserScanVis:
                csvwriter=None,          #writes timedata to external file
                pullData=None,           #callable for extracting data to plot
                percent_points = 1.0,
-               inference_model = None):
+               inference_model = None,
+               first = None):
     self.semantics = semantics
     self.predictions = predictions
     self.percent_points = percent_points
@@ -51,10 +54,11 @@ class LaserScanVis:
     for key, value in sem_color_dict.items():
         self.sem_color_lut[key] = np.array(value, np.float32) / 255.0
 
-    self.i = 0
-
     self.reset()
-    pc, pred, labels = self.inference_model.compute_sequence(0,0)
+    load_data_to_gpu(first)
+    with torch.no_grad():
+        ret_dict = inference_model(first)
+    pc, labels, pred = first['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
     self.next_scan(pc, pred, labels)
 
   # method for clock event callback
