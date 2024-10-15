@@ -234,6 +234,9 @@ class HD_model():
 
         #x = input("Enter")
 
+        del hv_0
+        del input_x
+
         return hv_all
     
     def forward(self, input_h, **kwargs):
@@ -348,6 +351,17 @@ class HD_model():
             updates_2[mask_dif] = updates # update vectors for the ones that changed
 
             self.classes_hv.index_add_(0, pred_labels, updates_2)
+
+            del hv_all
+            del idx
+            del class_batch
+            del novelty
+            del updates
+            del mask_dif
+            del updates_2
+            del pred_labels
+            del sim_all
+
 
             # Update positive when different 
             #mask_dif = class_batch != pred_labels
