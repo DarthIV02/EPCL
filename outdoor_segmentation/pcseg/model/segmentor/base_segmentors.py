@@ -8,6 +8,7 @@ class BaseSegmentor(nn.Module):
         self,
         model_cfgs,
         num_class: int,
+        lr = None
     ):
         super().__init__()
         self.model_cfgs = model_cfgs
