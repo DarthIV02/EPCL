@@ -22,7 +22,7 @@ set -x
 
 python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} \
---rdzv_endpoint=localhost:${PORT} \
+#--rdzv_endpoint=localhost:${PORT} \
 train.py \
 --exp 7
 --launcher pytorch \
