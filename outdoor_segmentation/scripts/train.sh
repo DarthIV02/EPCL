@@ -24,7 +24,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} \
 #--rdzv_endpoint=localhost:${PORT} \
 train.py \
---exp 7
+--exp 7 \
 --launcher pytorch \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
