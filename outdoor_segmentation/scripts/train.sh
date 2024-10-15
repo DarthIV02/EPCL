@@ -21,11 +21,9 @@ set -x
 #echo $PORT
 
 python -m torch.distributed.launch \
---nproc_per_node=${NGPUS} \
-#--rdzv_endpoint=localhost:${PORT} \
-train.py \
---exp 7 \
+--nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
+--exp 7 \
 --cfg_file ${cfg_file} \
 --extra_tag ${extra_tag} \
 
