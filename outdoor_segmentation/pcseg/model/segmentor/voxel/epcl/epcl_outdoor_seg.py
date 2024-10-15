@@ -188,6 +188,7 @@ class EPCLOutdoorSeg(BaseSegmentor):
         self,
         model_cfgs,
         num_class: int,
+        lr = None
     ):
         super().__init__(model_cfgs, num_class, lr = None)
         self.in_feature_dim = model_cfgs.IN_FEATURE_DIM

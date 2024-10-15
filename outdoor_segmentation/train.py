@@ -173,8 +173,6 @@ class Trainer:
             num_class = 23
         elif cfgs.DATA.DATASET == 'tls':
             num_class = 6
-
-        print("LR here:", self.args.lr)
         
         # set model
         model = build_network(
