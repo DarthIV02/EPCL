@@ -328,7 +328,7 @@ class Trainer:
 
         torch.save(checkpoint_state, f"{ckp_name}.pth")
     
-    def save_hd_model(self, iter, class_hv, proj_matrix, weights):
+    def save_hd_model(self, iter, class_hv, proj_matrix, weights=None):
         ckp_name = self.ckp_dir / ('checkpoint_hd_model_%d' % iter)
         checkpoint_state = {}
         checkpoint_state['iter'] = iter
