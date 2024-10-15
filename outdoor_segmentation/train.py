@@ -198,7 +198,7 @@ class Trainer:
                 checkpoint_hd = torch.load(self.ckp_dir / (file))
                 model.hd_model.classes_hv = checkpoint_hd['class_hv']
                 model.hd_model.random_projection = checkpoint_hd['projection_matrix']
-                model.hd_model.weight_for_class_i = checkpoint_hd['weight_hvs']
+                #model.hd_model.weight_for_class_i = checkpoint_hd['weight_hvs']
                 print("Loaded HD")
 
         # set optimizer
@@ -334,7 +334,7 @@ class Trainer:
         checkpoint_state['iter'] = iter
         checkpoint_state['class_hv'] = class_hv
         checkpoint_state['projection_matrix'] = proj_matrix
-        checkpoint_state['weight_hvs'] = weights
+        #checkpoint_state['weight_hvs'] = weights
 
         torch.save(checkpoint_state, f"{ckp_name}.pth")
         print(f"Saved model hd iter {iter}")
@@ -560,7 +560,7 @@ class Trainer:
                         ret_dict = self.model(batch_dict, train_hd=True)
                     
                     if(i % self.ckp_save_interval == self.ckp_save_interval - 1):
-                        self.save_hd_model(i, self.model.hd_model.classes_hv, self.model.hd_model.random_projection, self.model.hd_model.weight_for_class_i)
+                        self.save_hd_model(i, self.model.hd_model.classes_hv, self.model.hd_model.random_projection) # self.model.hd_model.weight_for_class_i
 
                     if self.rank == 0:
                         progress_bar.update()
