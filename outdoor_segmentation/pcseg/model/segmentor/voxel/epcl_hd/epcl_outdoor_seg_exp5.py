@@ -316,6 +316,7 @@ class HD_model():
             hv_all, sim_all, pred_labels = self.forward(input_points[idx, :, :]) # coords = coords[idx]
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
+            print(torch.bincount(class_batch))
             idx_non_zero = class_batch != 0
             class_batch[idx_non_zero] = torch.ones((class_batch.shape[0]), dtype=torch.int64, device=self.device)
             
