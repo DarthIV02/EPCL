@@ -317,7 +317,7 @@ class HD_model():
             idx = idx.to(self.device)
             class_batch = classification[idx].type(torch.LongTensor).to(self.device)
             idx_non_zero = class_batch != 0
-            class_batch[idx_non_zero] = torch.ones((class_batch.shape[0]), dtype=torch.int64)
+            class_batch[idx_non_zero] = torch.ones((class_batch.shape[0]), dtype=torch.int64, device=self.device)
             
             if not os.path.exists(f"hvs_{i}"): # SAVE hvs and classification of a single sample
                 torch.save(hv_all, f"hvs_{i}.pth")
