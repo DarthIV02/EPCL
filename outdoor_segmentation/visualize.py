@@ -187,8 +187,8 @@ if __name__ == '__main__':
                       verbose_runtime=FLAGS.print_data, 
                       pullData=temp,
                       percent_points=1,    
-                      inference_model=trainer.model.forward()
-                      first = next(test_loader),)
+                      inference_model=trainer.model.forward(),
+                      first = next(test_loader))
                     #key_press=key_press,
                     #canvas = canvas)
 
