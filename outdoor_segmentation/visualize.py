@@ -133,6 +133,7 @@ if __name__ == '__main__':
   trainer.model.eval()
   data_config = copy.deepcopy(unparsed.DATA)
   from pcseg.data import build_dataloader
+
   _, test_loader, _ = build_dataloader(
       data_cfgs=data_config,
       modality=unparsed.MODALITY,
@@ -181,13 +182,13 @@ if __name__ == '__main__':
 
   # create a visualizer
   # TODO update class variables
-  vis = LaserScanVis(color_dict,
+  vis = LaserScanVis( color_dict,
                       semantics=(not FLAGS.ignore_semantics),
                       verbose_runtime=FLAGS.print_data, 
                       pullData=temp,
                       percent_points=1,    
                       inference_model=trainer.model.forward()
-                      first = next(test_loader))
+                      first = next(test_loader),)
                     #key_press=key_press,
                     #canvas = canvas)
 
