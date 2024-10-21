@@ -127,14 +127,14 @@ tifffile==2021.11.2
 timm==0.9.12
 tinycss2==1.2.1
 toml==0.10.2
-torch==1.13.1
-torch-cluster==1.6.1+pt113cu117
-torch-geometric==2.3.1
+#torch==1.13.1
+#torch-cluster==1.6.1+pt113cu117
+#torch-geometric==2.3.1
 torch-hd==5.4.1
-torch-scatter==2.1.1
-torch-sparse==0.6.17+pt113cu117
-torch-spline-conv==1.2.2+pt113cu117
-torchpack==0.3.1
+#torch-scatter==2.1.1
+#torch-sparse==0.6.17+pt113cu117
+#torch-spline-conv==1.2.2+pt113cu117
+#torchpack==0.3.1
 #torchsparse @ file:///root/EPCL/outdoor_segmentation/package/torchsparse
 torchvision==0.14.1
 tornado==6.2
