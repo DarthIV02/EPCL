@@ -135,7 +135,7 @@ torch-scatter==2.1.1
 torch-sparse==0.6.17+pt113cu117
 torch-spline-conv==1.2.2+pt113cu117
 torchpack==0.3.1
-torchsparse @ file:///home/EPCL/outdoor_segmentation/package/torchsparse
+#torchsparse @ file:///root/EPCL/outdoor_segmentation/package/torchsparse
 torchvision==0.14.1
 tornado==6.2
 tqdm==4.66.2
