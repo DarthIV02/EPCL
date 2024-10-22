@@ -135,8 +135,6 @@ if __name__ == '__main__':
                         help='tcp port for distrbuted training')
   parser.add_argument('--local_rank', type=int, default=0,
                         help='local rank for distributed training')
-  parser.add_argument('--cfg_file', type=str, default='tools/cfgs/voxel/tls/EPCL_HD.yaml',
-                        help='specify the config for training')
   FLAGS, unparsed = parser.parse_known_args()
 
   #Get info relative to the set
