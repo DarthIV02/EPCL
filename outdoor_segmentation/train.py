@@ -123,7 +123,6 @@ class Trainer:
 
     def __init__(self, args, cfgs):
         # set init
-        print(args)
         log_dir, ckp_dir, logger, logger_tb, if_dist_train, total_gpus, cfgs = \
             self.init(args, cfgs)
         print("IF DIST: ", if_dist_train)
@@ -265,6 +264,7 @@ class Trainer:
             if_dist_train = False
             total_gpus = 1
         else:
+            print(args)
             total_gpus, cfgs.LOCAL_RANK = getattr(common_utils, 'init_dist_%s' % args.launcher)(
                 args.tcp_port, args.local_rank, backend='nccl'
             )
