@@ -141,8 +141,6 @@ if __name__ == '__main__':
                         help='set extra config keys if needed')
   parser.add_argument('--batch_size', type=int, default=None, required=False,
                         help='batch size for model training.')
-  parser.add_argument('--epochs', type=int, default=None, required=False,
-                        help='number of epochs for model training.')
   parser.add_argument('--fix_random_seed', action='store_true', default=True,
                         help='whether to fix random seed.')
   parser.add_argument('--crop', action='store_true', default=False,
