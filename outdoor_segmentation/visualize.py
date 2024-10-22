@@ -194,8 +194,14 @@ if __name__ == '__main__':
       logger=trainer.logger,
       training=False,
   )
+
+  with open(f"./pcseg/data/dataset/tls/tls.yaml") as stream:
+    try:
+        colors = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
   
-  color_dict = data_config.color_map
+  color_dict = colors.color_map
 
   # print summary of what we will do
   print("*" * 80)
