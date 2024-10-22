@@ -201,7 +201,7 @@ if __name__ == '__main__':
     except yaml.YAMLError as exc:
         print(exc)
   
-  color_dict = colors.color_map
+  color_dict = colors['color_map']
 
   # print summary of what we will do
   print("*" * 80)
