@@ -118,6 +118,12 @@ if __name__ == '__main__':
     help='pretrained model path',
   )
   parser.add_argument(
+    '--launcher',
+    dest='launcher',
+    default='pytorch',
+    help='launcher',
+  )
+  parser.add_argument(
     '--extra_tag',
     dest='extra_tag',
     default='val_EPCL_HD',
