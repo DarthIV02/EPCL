@@ -61,7 +61,7 @@ class LaserScanVis:
         ret_dict = inference_model(first)
     pc, labels, pred = first['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
     print(pc.shape)
-    print(labels.shape)
+    print(len(labels))
     print(pred.shape)
     if isinstance(pred, torch.Tensor):
       if pred.size() != labels.size():
