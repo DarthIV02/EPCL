@@ -255,8 +255,8 @@ if __name__ == '__main__':
   print("\tq: quit (exit program)")
   
   # if log_data flag is false, do not specify filewriter
-  if not FLAGS.log_data:
-    # run visualizer
-    vis.run()
+  
+  # run visualizer
+  vis.run()
 
-    quit()
+  quit()
