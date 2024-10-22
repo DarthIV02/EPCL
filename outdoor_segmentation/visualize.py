@@ -141,6 +141,8 @@ if __name__ == '__main__':
                         help='set extra config keys if needed')
   parser.add_argument('--batch_size', type=int, default=None, required=False,
                         help='batch size for model training.')
+  parser.add_argument('--epochs', type=int, default=None, required=False,
+                        help='number of epochs for model training.')
   FLAGS, unparsed = parser.parse_known_args()
   cfg_from_yaml_file(FLAGS.cfg_file, cfgs)
   cfgs.TAG = Path(FLAGS.cfg_file).stem
