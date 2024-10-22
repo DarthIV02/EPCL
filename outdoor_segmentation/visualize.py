@@ -97,6 +97,7 @@ if __name__ == '__main__':
     action='store_true',
     help='Shuffles scans before visualization. Defaults to False'
   )
+  # Trainer arguments
   parser.add_argument(
     '--eval',
     dest='eval',
@@ -132,6 +133,8 @@ if __name__ == '__main__':
   )
   parser.add_argument('--tcp_port', type=int, default=18888,
                         help='tcp port for distrbuted training')
+  parser.add_argument('--local_rank', type=int, default=0,
+                        help='local rank for distributed training')
   FLAGS, unparsed = parser.parse_known_args()
 
   #Get info relative to the set
