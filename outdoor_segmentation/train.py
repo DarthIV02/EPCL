@@ -200,7 +200,7 @@ class Trainer:
                 model.hd_model.classes_hv = checkpoint_hd['class_hv']
                 model.hd_model.random_projection = checkpoint_hd['projection_matrix']
                 #model.hd_model.weight_for_class_i = checkpoint_hd['weight_hvs']
-                print("Loaded HD")
+                print("Loaded HD") 
 
         # set optimizer
         self.optimizer = build_optimizer(
@@ -340,7 +340,7 @@ class Trainer:
         #checkpoint_state['weight_hvs'] = weights
 
         torch.save(checkpoint_state, f"{ckp_name}.pth")
-        print(f"Saved model hd iter {iter}")
+        print(f"Saved model hd iter {iter}: {ckp_name}.pth")
 
     def resume(self, filename):
         if not os.path.isfile(filename):
