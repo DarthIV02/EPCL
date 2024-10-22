@@ -182,12 +182,12 @@ if __name__ == '__main__':
 
   trainer.cur_epoch -= 1
   trainer.model.eval()
-  data_config = copy.deepcopy(unparsed.DATA)
+  data_config = copy.deepcopy(cfgs.DATA)
   from pcseg.data import build_dataloader
 
   _, test_loader, _ = build_dataloader(
       data_cfgs=data_config,
-      modality=unparsed.MODALITY,
+      modality=cfgs.MODALITY,
       batch_size=1,#cfgs.OPTIM.BATCH_SIZE_PER_GPU,
       dist=trainer.if_dist_train,
       workers=FLAGS.workers,
