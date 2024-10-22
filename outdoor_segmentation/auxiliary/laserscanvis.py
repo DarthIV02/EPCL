@@ -59,16 +59,10 @@ class LaserScanVis:
     load_data_to_gpu(first)
     with torch.no_grad():
         ret_dict = inference_model(first)
+    print(first.keys())
     pc, labels, pred = first['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
     print(pc.shape)
-    print(labels[0].shape)
-    print(pred[0].shape)
-    if isinstance(pred, torch.Tensor):
-      if pred.size() != labels.size():
-          pred = nn.functional.softmax(pred, dim=1).argmax(dim=1)
-          pred = pred.detach().cpu().numpy()
-          labels = labels.detach().cpu().numpy()
-    self.next_scan(pc, pred, labels)
+    self.next_scan(pc, pred[0], labels[0])
 
   # method for clock event callback
   def next_scan(self, points, pred, labels, time_x=None, event=None):
