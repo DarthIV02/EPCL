@@ -228,7 +228,7 @@ if __name__ == '__main__':
 
   def temp(i):
     start = time.time()
-    this = next(test_loader)
+    this = next(iter(test_loader))
     load_data_to_gpu(this)
     with torch.no_grad():
         ret_dict = trainer.model(this)
@@ -245,7 +245,7 @@ if __name__ == '__main__':
                       pullData=temp,
                       percent_points=1,    
                       inference_model=trainer.model,
-                      first = next(test_loader))
+                      first = next(iter(test_loader)))
                     #key_press=key_press,
                     #canvas = canvas)
 
