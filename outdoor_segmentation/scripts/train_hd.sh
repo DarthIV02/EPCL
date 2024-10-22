@@ -9,6 +9,12 @@ cfg_file=tools/cfgs/voxel/tls/${cfg_name}.yaml
 extra_tag=val_${cfg_name}_tls
 pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
 
+#NGPUS=1
+#cfg_name=EPCL_HD
+#cfg_file=tools/cfgs/voxel/semantic_kitti/${cfg_name}.yaml
+#extra_tag=val_${cfg_name}_tls
+#pretrained_model=/root/main/EPCL_setup/checkpoints/best_checkpoint.pth
+
 set -x
 
 #while true
