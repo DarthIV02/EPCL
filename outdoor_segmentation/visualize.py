@@ -129,7 +129,7 @@ if __name__ == '__main__':
   parser.add_argument(
     '--extra_tag',
     dest='extra_tag',
-    default='val_EPCL_HD',
+    default='val_EPCL_HD_tls',
     required=False,
     help='eval flag',
   )
