@@ -143,6 +143,34 @@ if __name__ == '__main__':
                         help='batch size for model training.')
   parser.add_argument('--epochs', type=int, default=None, required=False,
                         help='number of epochs for model training.')
+  parser.add_argument('--fix_random_seed', action='store_true', default=True,
+                        help='whether to fix random seed.')
+  parser.add_argument('--crop', action='store_true', default=False,
+                        help='Choose encoding')
+  parser.add_argument('--epochs', type=int, default=None, required=False,
+                        help='number of epochs for model training.')
+  parser.add_argument('--sync_bn', action='store_true', default=False,
+                      help='whether to use sync bn.')
+  parser.add_argument('--ckp', type=str, default=None,
+                      help='checkpoint to start from')
+  parser.add_argument('--amp', action='store_true', default=False,
+                        help='whether to use mixture precision training.')
+  parser.add_argument('--ckp_save_interval', type=int, default=1,
+                      help='number of training epochs')
+  parser.add_argument('--max_ckp_save_num', type=int, default=30,
+                      help='max number of saved checkpoint')
+  parser.add_argument('--merge_all_iters_to_one_epoch', action='store_true', default=False,
+                      help='')
+  # == hd configs ==
+  parser.add_argument('--lr', type=float, default=0.01, required=False,
+                      help='Learning rate for HD.')
+  parser.add_argument('--train_hd', action='store_true', default=False,
+                        help='only perform training on hd')
+  parser.add_argument('--eval_interval', type=int, default=50,
+                      help='number of training epochs')
+  # == device configs ==
+  parser.add_argument('--workers', type=int, default=1,  
+                      help='number of workers for dataloader') 
   FLAGS, unparsed = parser.parse_known_args()
   cfg_from_yaml_file(FLAGS.cfg_file, cfgs)
   cfgs.TAG = Path(FLAGS.cfg_file).stem
