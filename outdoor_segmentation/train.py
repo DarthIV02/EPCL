@@ -267,10 +267,14 @@ class Trainer:
         else:
             print(args)
             print(cfgs)
-            total_gpus, cfgs.LOCAL_RANK = getattr(common_utils, 'init_dist_%s' % args.launcher)(
-                args.tcp_port, args.local_rank, backend='nccl'
-            )
-            if_dist_train = True
+            try:
+                total_gpus, cfgs.LOCAL_RANK = getattr(common_utils, 'init_dist_%s' % args.launcher)(
+                    args.tcp_port, args.local_rank, backend='nccl'
+                )
+                if_dist_train = True
+            except:
+                if_dist_train = False
+                total_gpus = 1
 
         if args.batch_size is None:
             args.batch_size = cfgs.OPTIM.BATCH_SIZE_PER_GPU
