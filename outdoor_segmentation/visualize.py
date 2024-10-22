@@ -137,6 +137,8 @@ if __name__ == '__main__':
                         help='tcp port for distrbuted training')
   parser.add_argument('--local_rank', type=int, default=0,
                         help='local rank for distributed training')
+  parser.add_argument('--set', dest='set_cfgs', default=None, nargs=argparse.REMAINDER,
+                        help='set extra config keys if needed')
   FLAGS, unparsed = parser.parse_known_args()
   cfg_from_yaml_file(FLAGS.cfg_file, cfgs)
   cfgs.TAG = Path(FLAGS.cfg_file).stem
