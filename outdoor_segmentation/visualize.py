@@ -206,7 +206,7 @@ if __name__ == '__main__':
   # print summary of what we will do
   print("*" * 80)
   print("INTERFACE:")
-  print("Config", FLAGS.config)
+  print("Config", FLAGS.cfg_file)
   print("Sequence", FLAGS.sequence)
   print("ignore_semantics", FLAGS.ignore_semantics)
   print("log_path", FLAGS.log_path)
