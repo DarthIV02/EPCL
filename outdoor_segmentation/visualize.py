@@ -130,6 +130,8 @@ if __name__ == '__main__':
     required=False,
     help='eval flag',
   )
+  parser.add_argument('--tcp_port', type=int, default=18888,
+                        help='tcp port for distrbuted training')
   FLAGS, unparsed = parser.parse_known_args()
 
   #Get info relative to the set
