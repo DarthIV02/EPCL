@@ -192,6 +192,7 @@ class Trainer:
                 logger=logger
             )
             if not self.args.train_hd:
+                print(self.ckp_dir)
                 file = os.listdir(self.ckp_dir)[-1]
                 if file == None:
                     raise FileNotFoundError
