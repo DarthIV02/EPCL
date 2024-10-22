@@ -65,7 +65,9 @@ class LaserScanVis:
   def next_scan(self, points, pred, labels, time_x=None, event=None):
     #print(points)
     #print(points.shape)
-    centroid = torch.mean(points, dim=0)
+    # centroid = torch.mean(points, dim=0)
+    points = points.numpy()
+    centroid = np.mean(points, axis=0)
     centered_points = points - centroid
     data = self.prep_data((centered_points, pred, labels, time_x))
     self.update_scan(data)
