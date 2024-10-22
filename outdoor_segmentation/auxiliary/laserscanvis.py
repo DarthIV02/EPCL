@@ -60,6 +60,8 @@ class LaserScanVis:
     with torch.no_grad():
         ret_dict = inference_model(first)
     print(first.keys())
+    print(first['name'])
+    print(first['lidar'])
     pc, labels, pred = first['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
     print(pc.shape)
     self.next_scan(pc, pred[0], labels[0])
