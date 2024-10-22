@@ -245,7 +245,7 @@ if __name__ == '__main__':
                       pullData=temp,
                       percent_points=1,    
                       inference_model=trainer.model,
-                      first = test_loader[0])
+                      first = next(test_loader))
                     #key_press=key_press,
                     #canvas = canvas)
 
