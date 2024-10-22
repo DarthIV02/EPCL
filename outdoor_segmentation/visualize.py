@@ -228,7 +228,7 @@ if __name__ == '__main__':
 
   def temp(i):
     start = time.time()
-    this = test_loader[i]
+    this = next(test_loader)
     load_data_to_gpu(this)
     with torch.no_grad():
         ret_dict = trainer.model(this)
