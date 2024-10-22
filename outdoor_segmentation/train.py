@@ -265,6 +265,7 @@ class Trainer:
             total_gpus = 1
         else:
             print(args)
+            print(cfgs)
             total_gpus, cfgs.LOCAL_RANK = getattr(common_utils, 'init_dist_%s' % args.launcher)(
                 args.tcp_port, args.local_rank, backend='nccl'
             )
