@@ -212,9 +212,12 @@ class LaserScanVis:
   def key_press(self, event):
     self.canvas.events.key_press.block()
     if event.key == 'N' and not self.clock.running:
-      self.i += 1
-      pc, pred, label = self.inference_model.compute_sequence(0, self.i)
-      self.next_scan(pc, pred, label)
+      first = next(iter(self.pullData))
+      load_data_to_gpu(first)
+      with torch.no_grad():
+          ret_dict = self.inference_model(first)
+      pc, labels, pred = first['original_p'][0][:,:3].float(), ret_dict['point_labels'], ret_dict['point_predict']
+      self.next_scan(pc, pred, labels)
     elif event.key == 'Q' or event.key == 'Escape':
       self.destroy()
     elif event.key == ' ':

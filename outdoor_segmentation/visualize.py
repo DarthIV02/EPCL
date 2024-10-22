@@ -227,22 +227,23 @@ if __name__ == '__main__':
     quit()
 
   def temp(i):
-    start = time.time()
-    this = next(iter(test_loader))
-    load_data_to_gpu(this)
-    with torch.no_grad():
-        ret_dict = trainer.model(this)
-    points, labels, predict = this['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
-    end = time.time()
-    print("Loaded points in {0} seconds".format(end-start))
-    return points, labels, labels, end-start
+    #start = time.time()
+    #this = next(iter(test_loader))
+    #load_data_to_gpu(this)
+    #with torch.no_grad():
+    #    ret_dict = trainer.model(this)
+    #points, labels, predict = this['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
+    #end = time.time()
+    #print("Loaded points in {0} seconds".format(end-start))
+    #return points, labels, labels, end-start
+    pass
 
   # create a visualizer
   # TODO update class variables
   vis = LaserScanVis( color_dict,
                       semantics=(not FLAGS.ignore_semantics),
                       verbose_runtime=FLAGS.print_data, 
-                      pullData=temp,
+                      pullData=test_loader,
                       percent_points=1,    
                       inference_model=trainer.model,
                       first = next(iter(test_loader)))
@@ -255,8 +256,8 @@ if __name__ == '__main__':
   print("\tq: quit (exit program)")
   
   # if log_data flag is false, do not specify filewriter
-  
-  # run visualizer
-  vis.run()
+  if not FLAGS.log_data:
+    # run visualizer
+    vis.run()
 
-  quit()
+    quit()
