@@ -9,6 +9,7 @@ from matplotlib import pyplot as plt
 import time
 from pcseg.model import build_network, load_data_to_gpu
 import torch
+import torch.nn as nn
 
 class LaserScanVis:
   """Class that creates and handles a visualizer for a pointcloud"""
@@ -59,6 +60,11 @@ class LaserScanVis:
     with torch.no_grad():
         ret_dict = inference_model(first)
     pc, labels, pred = first['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
+    if isinstance(pred, torch.Tensor):
+      if pred.size() != labels.size():
+          pred = nn.functional.softmax(pred, dim=1).argmax(dim=1)
+          pred = pred.detach().cpu().numpy()
+          labels = labels.detach().cpu().numpy()
     self.next_scan(pc, pred, labels)
 
   # method for clock event callback
