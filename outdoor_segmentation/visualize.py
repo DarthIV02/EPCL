@@ -139,6 +139,8 @@ if __name__ == '__main__':
                         help='local rank for distributed training')
   parser.add_argument('--set', dest='set_cfgs', default=None, nargs=argparse.REMAINDER,
                         help='set extra config keys if needed')
+  parser.add_argument('--batch_size', type=int, default=None, required=False,
+                        help='batch size for model training.')
   FLAGS, unparsed = parser.parse_known_args()
   cfg_from_yaml_file(FLAGS.cfg_file, cfgs)
   cfgs.TAG = Path(FLAGS.cfg_file).stem
