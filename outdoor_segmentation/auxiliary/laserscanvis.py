@@ -61,7 +61,7 @@ class LaserScanVis:
         ret_dict = inference_model(first)
     print(first.keys())
     print(first['name'])
-    print(first['lidar'].__dict__)
+    print(first['lidar'].F.shape)
     pc, labels, pred = first['lidar'].C.float(), ret_dict['point_labels'], ret_dict['point_predict']
     print(pc.shape)
     self.next_scan(pc, pred[0], labels[0])
