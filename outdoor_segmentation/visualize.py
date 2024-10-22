@@ -18,6 +18,8 @@ import torch
 from train import Trainer
 from pcseg.model import build_network, load_data_to_gpu
 import copy
+from tools.utils.train.config import cfgs, cfg_from_list, cfg_from_yaml_file, log_config_to_file
+from pathlib import Path
 
 import csv
 import datetime
@@ -136,9 +138,15 @@ if __name__ == '__main__':
   parser.add_argument('--local_rank', type=int, default=0,
                         help='local rank for distributed training')
   FLAGS, unparsed = parser.parse_known_args()
+  cfg_from_yaml_file(FLAGS.cfg_file, cfgs)
+  cfgs.TAG = Path(FLAGS.cfg_file).stem
+  cfgs.EXP_GROUP_PATH = '/'.join(FLAGS.cfg_file.split('/')[2:-1])
+
+  if FLAGS.set_cfgs is not None:
+      cfg_from_list(FLAGS.set_cfgs, cfgs)
 
   #Get info relative to the set
-  trainer = Trainer(FLAGS, unparsed)
+  trainer = Trainer(FLAGS, cfgs)
 
   trainer.cur_epoch -= 1
   trainer.model.eval()
