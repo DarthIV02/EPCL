@@ -155,7 +155,8 @@ class LaserScanVis:
   def update_scan(self, data):
     points, gt_labels, pred_labels, t = data
 
-    print(np.bincount(pred_labels))
+    print("Labels:", np.bincount(pred_labels))
+    print("Ground:", np.bincount(gt_labels))
 
     start = time.time()
     self.get_colors(points, gt_labels, pred_labels)
