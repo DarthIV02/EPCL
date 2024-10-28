@@ -195,7 +195,7 @@ if __name__ == '__main__':
       training=False,
   )
 
-  with open(f"./pcseg/data/dataset/{cfgs.dataset}/{cfgs.dataset}.yaml") as stream:
+  with open(f"./pcseg/data/dataset/{FLAGS.dataset}/{cfgs.dataset}.yaml") as stream:
     try:
         colors = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
