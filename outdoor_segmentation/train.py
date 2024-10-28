@@ -288,7 +288,7 @@ class Trainer:
         if args.fix_random_seed:
             common_utils.set_random_seed(42)
 
-        log_dir = cfgs.ROOT_DIR / cfgs.EXP_GROUP_PATH / cfgs.TAG / args.extra_tag
+        log_dir = cfgs.ROOT_DIR / 'logs' / cfgs.EXP_GROUP_PATH[5:] / cfgs.TAG / args.extra_tag
         ckp_dir = log_dir / 'ckp'
         log_dir.mkdir(parents=True, exist_ok=True)
         ckp_dir.mkdir(parents=True, exist_ok=True)
