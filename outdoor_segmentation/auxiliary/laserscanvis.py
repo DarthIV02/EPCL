@@ -155,6 +155,8 @@ class LaserScanVis:
   def update_scan(self, data):
     points, gt_labels, pred_labels, t = data
 
+    print(torch.bincount(pred_labels))
+
     start = time.time()
     self.get_colors(points, gt_labels, pred_labels)
     load = time.time()
