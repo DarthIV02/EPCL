@@ -137,6 +137,7 @@ class SemkittiVoxelDataset(data.Dataset):
             'targets_mapped': labels_,
             'inverse_map': inverse_map,
             'num_points': np.array([num_points_current_frame]), # for multi frames
+            'original_p': feat_,
         }
 
         return ret
