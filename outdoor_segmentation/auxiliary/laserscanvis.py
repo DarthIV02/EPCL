@@ -134,13 +134,17 @@ class LaserScanVis:
     return color_range.reshape(256, 3).astype(np.float32) / 255.0
 
   def get_colors(self, points, gt_labels, pred_labels):
+        
+        if len(pred_labels) == 1:
+          pred_labels = pred_labels[0]
 
         print("Points:", points)
         print("Points:", len(points))
         print("Points:", points.shape)
         print("Labels:", pred_labels)
         print("Labels:", len(pred_labels))
-        print("Ground:", gt_labels.shape)
+        print("Ground:", gt_labels)
+        print("Ground:", len(gt_labels))
         print("Labels:", np.bincount(pred_labels))
         print("Ground:", np.bincount(gt_labels))
 
