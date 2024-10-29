@@ -67,7 +67,7 @@ class SemantickittiDataset(data.Dataset):
         random.shuffle(self.annos_another)
         print(f'The total sample is {len(self.annos)}')
 
-        self._sample_idx = [int(i[:-6]) for i in self.annos]#np.arange(len(self.annos))
+        self._sample_idx = [int(i[-10:-4]) for i in self.annos]#np.arange(len(self.annos))
 
         self.samples_per_epoch = self.data_cfgs.get('SAMPLES_PER_EPOCH', -1)
         if self.samples_per_epoch == -1 or not self.training:
