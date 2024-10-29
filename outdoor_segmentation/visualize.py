@@ -127,6 +127,7 @@ if __name__ == '__main__':
     help='launcher',
   )
   parser.add_argument(
+    '-extra_tag', 
     '--extra_tag',
     dest='extra_tag',
     default='val_EPCL_HD_tls',
