@@ -228,7 +228,7 @@ class Trainer:
         if args.ckp is not None:
             self.resume(args.ckp)
         else:
-            ckp_list = glob.glob(str(ckp_dir / '*checkpoint_epoch_*.pth'))
+            ckp_list = glob.glob(str(ckp_dir + '/*checkpoint_epoch_*.pth'))
             if cfgs.LOCAL_RANK == 0:
                 print('found checkpoint list:', ckp_list)
             if len(ckp_list) > 0:
