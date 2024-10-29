@@ -293,8 +293,6 @@ class Trainer:
 
         log_dir = os.path.join(partial, cfgs.TAG, args.extra_tag) # , 
         ckp_dir = os.path.join(log_dir, 'ckp')
-        print("Log Dir", log_dir)
-        x = input()
         os.makedirs(log_dir, parents=True, exist_ok=True)
         os.makedirs(ckp_dir, parents=True, exist_ok=True)
 
