@@ -214,6 +214,7 @@ if __name__ == '__main__':
   print("print_data", FLAGS.print_data)
   print("enable_auto", FLAGS.enable_auto)
   print("shuffle", FLAGS.shuffle)
+  print("extra_tag", FLAGS.extra_tag)
   print("*" * 80)
 
   # prevent updating log_path if log_data not used
