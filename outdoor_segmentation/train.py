@@ -547,7 +547,7 @@ class Trainer:
 
     def train_hd(self, dataloader, prefix):
         result_dir = self.log_dir + '/eval' + ('/epoch_%s' % (self.cur_epoch+1))
-        os.mkdir(result_dir, exist_ok=True) # parents=True, 
+        os.makedirs(result_dir, exist_ok=True) # parents=True, 
         #dataset = dataloader.dataset
 
         with tqdm.trange(
