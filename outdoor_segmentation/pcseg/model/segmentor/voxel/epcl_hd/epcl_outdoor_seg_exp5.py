@@ -244,6 +244,7 @@ class HD_model():
         #print(input_h.shape)
         hv = self.encode(input_h)
         sim = self.similarity(hv)
+        print("ForwardHD", sim)
         pred_label = torch.argmax(sim, dim=1)
         return hv, sim, pred_label
         
