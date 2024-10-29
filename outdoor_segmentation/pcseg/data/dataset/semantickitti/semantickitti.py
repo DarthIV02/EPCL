@@ -178,6 +178,7 @@ class SemantickittiDataset(data.Dataset):
         }
 
         print(pc_data['labels'])
+        print(len(pc_data['labels']))
         print(np.bincount(pc_data['labels']))
 
         return pc_data
