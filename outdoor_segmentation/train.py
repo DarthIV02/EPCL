@@ -291,8 +291,9 @@ class Trainer:
         log_dir = os.path.join(os.getcwd(), 'logs', cfgs.EXP_GROUP_PATH[5:], cfgs.TAG, args.extra_tag)
         ckp_dir = os.path.join(log_dir, 'ckp')
         print("Log Dir", log_dir)
-        log_dir.mkdir(parents=True, exist_ok=True)
-        ckp_dir.mkdir(parents=True, exist_ok=True)
+        x = input()
+        os.makedirs(log_dir, parents=True, exist_ok=True)
+        os.makedirs(ckp_dir, parents=True, exist_ok=True)
 
         log_file = log_dir / ('log_train_%s.txt' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
         logger = common_utils.create_logger(log_file, rank=cfgs.LOCAL_RANK)
