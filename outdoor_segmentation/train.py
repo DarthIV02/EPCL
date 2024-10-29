@@ -315,13 +315,13 @@ class Trainer:
         if cfgs.LOCAL_RANK == 0:
             os.system('cp %s %s' % (args.cfg_file, log_dir))
 
-        logger_tb = SummaryWriter(log_dir=str(log_dir / 'tensorboard')) if cfgs.LOCAL_RANK == 0 else None
+        logger_tb = SummaryWriter(log_dir=str(log_dir + '/tensorboard')) if cfgs.LOCAL_RANK == 0 else None
 
         return log_dir, ckp_dir, logger, logger_tb, if_dist_train, total_gpus, cfgs
 
     def save_checkpoint(self):
         trained_epoch = self.cur_epoch + 1
-        ckp_name = self.ckp_dir / ('checkpoint_epoch_%d' % trained_epoch)
+        ckp_name = self.ckp_dir + ('/checkpoint_epoch_%d' % trained_epoch)
         checkpoint_state = {}
         checkpoint_state['epoch'] = trained_epoch
         checkpoint_state['it'] = self.it
@@ -339,7 +339,7 @@ class Trainer:
         torch.save(checkpoint_state, f"{ckp_name}.pth")
     
     def save_hd_model(self, iter, class_hv, proj_matrix, weights=None):
-        ckp_name = self.ckp_dir / ('checkpoint_hd_model_%d' % iter)
+        ckp_name = self.ckp_dir + ('/checkpoint_hd_model_%d' % iter)
         checkpoint_state = {}
         checkpoint_state['iter'] = iter
         checkpoint_state['class_hv'] = class_hv
