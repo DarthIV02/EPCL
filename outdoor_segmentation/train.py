@@ -288,9 +288,8 @@ class Trainer:
         if args.fix_random_seed:
             common_utils.set_random_seed(42)
 
-        print(os.getcwd())
-        print(os.path.join(os.getcwd(), 'logs'))
-        log_dir = os.path.join(os.getcwd(), 'logs', cfgs.EXP_GROUP_PATH[5:], cfgs.TAG, args.extra_tag)
+        partial = os.path.join(os.getcwd(), 'logs')
+        log_dir = os.path.join(partial, cfgs.EXP_GROUP_PATH[5:], cfgs.TAG, args.extra_tag)
         ckp_dir = os.path.join(log_dir, 'ckp')
         print("Log Dir", log_dir)
         x = input()
