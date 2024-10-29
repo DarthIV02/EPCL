@@ -290,6 +290,7 @@ class Trainer:
 
         log_dir = cfgs.ROOT_DIR / 'logs' / cfgs.EXP_GROUP_PATH[5:] / cfgs.TAG / args.extra_tag
         ckp_dir = log_dir / 'ckp'
+        print("Log Dir", log_dir)
         log_dir.mkdir(parents=True, exist_ok=True)
         ckp_dir.mkdir(parents=True, exist_ok=True)
 
