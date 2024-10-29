@@ -60,8 +60,9 @@ class LaserScanVis:
     with torch.no_grad():
         ret_dict = inference_model(first)
     pc, labels, pred = first['original_p'][0][:,:3].float(), ret_dict['point_labels'], ret_dict['point_predict']
-    print("Pred", pred[0])
-    print("Labels", labels[0])
+    print("Pred_1", pred[0])
+    print("Pred_1", np.bincount(pred[0]))
+    print("Labels_1", labels[0])
     self.next_scan(pc, pred[0], labels[0])
 
   # method for clock event callback
