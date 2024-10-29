@@ -296,7 +296,7 @@ class Trainer:
         os.makedirs(log_dir, exist_ok=True) # parents=True,
         os.makedirs(ckp_dir, exist_ok=True) # parents=True,
 
-        log_file = log_dir / ('log_train_%s.txt' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
+        log_file = log_dir + ('/log_train_%s.txt' % datetime.datetime.now().strftime('%Y%m%d-%H%M%S'))
         logger = common_utils.create_logger(log_file, rank=cfgs.LOCAL_RANK)
 
         # log to file
