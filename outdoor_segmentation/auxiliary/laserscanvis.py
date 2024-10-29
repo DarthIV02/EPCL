@@ -159,11 +159,11 @@ class LaserScanVis:
         viridis_map = self.get_mpl_colormap("viridis")
         self.viridis_color = viridis_map[viridis_range]
 
-        sem_label = gt_labels #& 0xFFFF  # semantic label in lower half
+        sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
         self.sem_label_color = self.sem_color_lut[sem_label]
         self.sem_label_color = self.sem_label_color.reshape((-1, 3))
 
-        sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
+        sem_label = gt_labels #& 0xFFFF  # semantic label in lower half
         self.sem_gt_label_color = self.sem_color_lut[sem_label]
         self.sem_gt_label_color = self.sem_gt_label_color.reshape((-1, 3))
 

@@ -177,6 +177,8 @@ class SemantickittiDataset(data.Dataset):
             'path': self.annos[index],
         }
 
+        print(np.bincount(pc_data['labels']))
+
         return pc_data
 
     @staticmethod
