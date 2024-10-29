@@ -48,13 +48,13 @@ class SemantickittiDataset(data.Dataset):
             self.split = 'test'
 
         if self.split == 'train':
-            self.seqs = ['00'] # '01', '02', '03', '04', '05', '06', '07', '09', '10'
+            self.seqs = ['01'] # '01', '02', '03', '04', '05', '06', '07', '09', '10'
         elif self.split == 'val':
-            self.seqs = ['01']
+            self.seqs = ['02']
         elif self.split == 'train_val':
-            self.seqs = ['00', '01'] # , '02', '03', '04', '05', '06', '07', '09', '10', '08'
+            self.seqs = ['01', '02'] # , '02', '03', '04', '05', '06', '07', '09', '10', '08'
         elif self.split == 'test':
-            self.seqs = ['02'] # , '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
+            self.seqs = ['00'] # , '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'
         else:
             raise Exception('split must be train/val/train_val/test.')
         
@@ -62,12 +62,11 @@ class SemantickittiDataset(data.Dataset):
         for seq in self.seqs:
             self.annos += absoluteFilePaths('/'.join([self.root_path, str(seq).zfill(2), 'velodyne']))
         self.annos.sort()
-        print("self.annos", self.annos)
         self.annos_another = self.annos.copy()
         random.shuffle(self.annos_another)
         print(f'The total sample is {len(self.annos)}')
 
-        self._sample_idx = [int(i[-10:-4]) for i in self.annos]#np.arange(len(self.annos))
+        self._sample_idx = np.arange(len(self.annos))
 
         self.samples_per_epoch = self.data_cfgs.get('SAMPLES_PER_EPOCH', -1)
         if self.samples_per_epoch == -1 or not self.training:
