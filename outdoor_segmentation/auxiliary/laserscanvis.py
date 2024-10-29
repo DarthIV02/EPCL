@@ -137,6 +137,8 @@ class LaserScanVis:
         
         if len(pred_labels) == 1:
           pred_labels = pred_labels[0]
+        if len(gt_labels) == 1:
+          gt_labels = gt_labels[0]
 
         print("Points:", points)
         print("Points:", len(points))
