@@ -288,8 +288,8 @@ class Trainer:
         if args.fix_random_seed:
             common_utils.set_random_seed(42)
 
-        log_dir = '.' / 'logs' / cfgs.EXP_GROUP_PATH[5:] / cfgs.TAG / args.extra_tag
-        ckp_dir = log_dir / 'ckp'
+        log_dir = os.path.join('.', 'logs', cfgs.EXP_GROUP_PATH[5:],cfgs.TAG, args.extra_tag)
+        ckp_dir = os.path.join(log_dir, 'ckp')
         print("Log Dir", log_dir)
         log_dir.mkdir(parents=True, exist_ok=True)
         ckp_dir.mkdir(parents=True, exist_ok=True)
