@@ -546,7 +546,7 @@ class Trainer:
         return {}
 
     def train_hd(self, dataloader, prefix):
-        result_dir = self.log_dir / 'eval' / ('epoch_%s' % (self.cur_epoch+1))
+        result_dir = self.log_dir + '/eval' + ('/epoch_%s' % (self.cur_epoch+1))
         result_dir.mkdir(parents=True, exist_ok=True)
         #dataset = dataloader.dataset
 
