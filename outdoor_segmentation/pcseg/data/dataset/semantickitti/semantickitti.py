@@ -62,11 +62,12 @@ class SemantickittiDataset(data.Dataset):
         for seq in self.seqs:
             self.annos += absoluteFilePaths('/'.join([self.root_path, str(seq).zfill(2), 'velodyne']))
         self.annos.sort()
+        print("self.annos", self.annos)
         self.annos_another = self.annos.copy()
         random.shuffle(self.annos_another)
         print(f'The total sample is {len(self.annos)}')
 
-        self._sample_idx = np.arange(len(self.annos))
+        self._sample_idx = [int(i[:-6]) for i in self.annos]#np.arange(len(self.annos))
 
         self.samples_per_epoch = self.data_cfgs.get('SAMPLES_PER_EPOCH', -1)
         if self.samples_per_epoch == -1 or not self.training:
