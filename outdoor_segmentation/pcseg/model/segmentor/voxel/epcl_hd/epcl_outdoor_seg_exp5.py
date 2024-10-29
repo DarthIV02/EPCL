@@ -763,7 +763,8 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             #coords, not_outlier, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
             hv, sim, pred_label = self.hd_model.forward(tuple_feat)
             print("HD_output:", pred_label.shape)
-            print("HD_output:", pred_label)
+            print("HD_output:", torch.bincount(pred_label[0]))
+
             #pred_label_z = torch.zeros((batch_dict['lidar'].C.shape[0]), dtype=torch.int64, device=self.device)
             #pred_label_z[not_outlier] = pred_label
             #print(pred_label_z.shape)
