@@ -130,8 +130,8 @@ if __name__ == '__main__':
     '-extra_tag', 
     '--extra_tag',
     dest='extra_tag',
-    default='val_EPCL_HD_tls',
-    required=False,
+    #default='val_EPCL_HD_tls',
+    required=True,
     help='eval flag',
   )
   parser.add_argument('--tcp_port', type=int, default=18888,
