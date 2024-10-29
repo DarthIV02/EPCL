@@ -75,6 +75,7 @@ class SemkittiVoxelDataset(data.Dataset):
         'Generates one sample of data'
         pc_data = self.point_cloud_dataset[index]
         point_label = pc_data['labels'].reshape(-1)
+        print(point_label)
         point = pc_data['xyzret'][:,:4].astype(np.float32)
 
         num_points_current_frame = point.shape[0]
