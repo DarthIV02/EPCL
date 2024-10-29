@@ -75,7 +75,8 @@ class SemkittiVoxelDataset(data.Dataset):
         'Generates one sample of data'
         pc_data = self.point_cloud_dataset[index]
         point_label = pc_data['labels'].reshape(-1)
-        print(point_label)
+        print("Point Label", point_label)
+        print("Point Label", np.bincount(point_label))
         point = pc_data['xyzret'][:,:4].astype(np.float32)
 
         num_points_current_frame = point.shape[0]
@@ -129,6 +130,7 @@ class SemkittiVoxelDataset(data.Dataset):
         
         lidar = SparseTensor(feat, pc)
         labels = SparseTensor(labels, pc)
+        print("Labels", np.bincount(labels))
         labels_ = SparseTensor(point_label, pc_)
         inverse_map = SparseTensor(inverse_map, pc_)
         ret = {
