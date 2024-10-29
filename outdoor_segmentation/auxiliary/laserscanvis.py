@@ -172,7 +172,7 @@ class LaserScanVis:
 
   #@getTime
   def update_scan(self, data):
-    points, gt_labels, pred_labels, t = data
+    points, pred_labels, gt_labels, t = data
 
     start = time.time()
     self.get_colors(points, gt_labels, pred_labels)
