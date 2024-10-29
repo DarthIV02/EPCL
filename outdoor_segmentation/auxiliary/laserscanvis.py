@@ -134,6 +134,16 @@ class LaserScanVis:
     return color_range.reshape(256, 3).astype(np.float32) / 255.0
 
   def get_colors(self, points, gt_labels, pred_labels):
+
+        print("Points:", points)
+        print("Points:", len(points))
+        print("Points:", points.shape)
+        print("Labels:", pred_labels)
+        print("Labels:", len(pred_labels))
+        print("Ground:", gt_labels.shape)
+        print("Labels:", np.bincount(pred_labels))
+        print("Ground:", np.bincount(gt_labels))
+
         power = 16
         range_data = np.linalg.norm(points, 2, axis=1)
         range_data = range_data**(1 / power)
@@ -154,12 +164,6 @@ class LaserScanVis:
   #@getTime
   def update_scan(self, data):
     points, gt_labels, pred_labels, t = data
-
-    print("Labels:", pred_labels)
-    print("Labels:", len(pred_labels))
-    print("Ground:", gt_labels.shape)
-    print("Labels:", np.bincount(pred_labels))
-    print("Ground:", np.bincount(gt_labels))
 
     start = time.time()
     self.get_colors(points, gt_labels, pred_labels)
