@@ -130,7 +130,7 @@ class SemkittiVoxelDataset(data.Dataset):
         
         lidar = SparseTensor(feat, pc)
         labels = SparseTensor(labels, pc)
-        print("Labels", np.bincount(labels))
+        print("Labels", labels)
         labels_ = SparseTensor(point_label, pc_)
         inverse_map = SparseTensor(inverse_map, pc_)
         ret = {
