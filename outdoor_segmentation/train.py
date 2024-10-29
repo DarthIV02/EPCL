@@ -289,6 +289,7 @@ class Trainer:
             common_utils.set_random_seed(42)
 
         partial = os.path.join(os.getcwd(), 'logs')
+        print(cfgs.EXP_GROUP_PATH[5:])
         partial = partial + '/' + cfgs.EXP_GROUP_PATH[5:]
 
         log_dir = os.path.join(partial, cfgs.TAG, args.extra_tag) # , 
