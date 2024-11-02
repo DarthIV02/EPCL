@@ -184,7 +184,7 @@ class BatchProjection(nn.Module):
 
 
 class HD_model():
-    def __init__(self, classes = 5, d = 1500, num_features=(409, 204, 153), lr = 0.01, **kwargs):
+    def __init__(self, classes = 20, d = 2000, num_features=(409, 204, 153), lr = 0.01, **kwargs):
         self.d = d
         self.div = kwargs['div']
         self.device = kwargs['device']
@@ -754,7 +754,7 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             #coords_xyz = batch_dict['lidar'].C[:, :3].float()
             #offset = batch_dict['offset']
             print("Classification")
-            print(batch_dict['targets'].feats)
+            print(batch_dict['targets'].__dict__)
             print(torch.bincount(batch_dict['targets'].feats))
             here = input()
             self.hd_model.train(tuple_feat, batch_dict['targets'].feats, batch_dict = batch_dict)

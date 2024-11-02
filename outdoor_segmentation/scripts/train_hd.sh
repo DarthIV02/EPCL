@@ -31,6 +31,7 @@ python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
 --train_hd \
+--crop \
 --ckp_save_interval 5 \
 --exp 5 \
 --eval \
