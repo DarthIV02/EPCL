@@ -287,6 +287,7 @@ class HD_model():
     
     def train(self, input_points, classification, **kwargs):
         #classification = classification
+
         true_val = classification != 0
         #input_points = input_points.transpose(0,1)
         input_points = input_points[true_val]
@@ -752,6 +753,10 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
             #coords_xyz = batch_dict['lidar'].C[:, :3].float()
             #offset = batch_dict['offset']
+            print("Classification")
+            print(batch_dict['targets'].feats)
+            print(torch.bincount(batch_dict['targets'].feats))
+            here = input()
             self.hd_model.train(tuple_feat, batch_dict['targets'].feats, batch_dict = batch_dict)
 
             return {}
@@ -763,8 +768,6 @@ class EPCLOutdoorSegHD(BaseSegmentor):
             point_labels = []
             #coords, not_outlier, tuple_feat = self.hd_model.clean_z(batch_dict['lidar'].C, tuple_feat)
             hv, sim, pred_label = self.hd_model.forward(tuple_feat)
-            print("HD_output:", pred_label.shape)
-            print("HD_output:", torch.bincount(pred_label))
 
             #pred_label_z = torch.zeros((batch_dict['lidar'].C.shape[0]), dtype=torch.int64, device=self.device)
             #pred_label_z[not_outlier] = pred_label
