@@ -290,7 +290,7 @@ class Trainer:
 
         partial = os.path.join(os.getcwd(), 'logs')
         print(cfgs.EXP_GROUP_PATH[5:])
-        partial = partial + '/' + cfgs.EXP_GROUP_PATH[5:]
+        partial = partial + '/' + cfgs.EXP_GROUP_PATH#[5:]
 
         log_dir = os.path.join(partial, cfgs.TAG, args.extra_tag) # , 
         ckp_dir = os.path.join(log_dir, 'ckp')
