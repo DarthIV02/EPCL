@@ -36,6 +36,7 @@ set -x
 python -m torch.distributed.launch \
 --nproc_per_node=${NGPUS} train.py \
 --launcher pytorch \
+--crop \
 --eval \
 --exp 5 \
 --pretrained_model ${pretrained_model} \
