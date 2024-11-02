@@ -496,7 +496,7 @@ class Trainer:
 
         if self.if_dist_train:
             rank, world_size = common_utils.get_dist_info()
-            metric = common_utils.merge_results_dist([metric], world_size, tmpdir=result_dir / 'tmpdir')
+            metric = common_utils.merge_results_dist([metric], world_size, tmpdir=result_dir + '/' + 'tmpdir')
         
         if self.rank != 0:
             return {}
