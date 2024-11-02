@@ -457,7 +457,7 @@ class Trainer:
     
     def evaluate(self, dataloader, prefix):
         result_dir = self.log_dir + '/' + 'eval' + '/' + ('epoch_%s' % (self.cur_epoch+1))
-        os.mkdir(result_dir, exist_ok=True)
+        os.makedirs(result_dir, exist_ok=True)
         dataset = dataloader.dataset
 
         class_names = dataset.class_names
