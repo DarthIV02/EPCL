@@ -67,10 +67,12 @@ class LaserScanVis:
       self.lidars.sort()
       print(self.lidars)
 
-    #self.real_i = 0
-    print(first['name'])
-    print(self.lidars[int(first['name'][0][-5])-1])
-    las_file = laspy.read(self.lidars[int(first['name'][0][-6:-4])-1])
+      #self.real_i = 0
+      print(first['name'])
+      print(self.lidars[int(first['name'][0][-5])-1])
+      las_file = laspy.read(self.lidars[int(first['name'][0][-6:-4])-1])
+    else:
+      las_file = None
 
     self.reset()
     load_data_to_gpu(first)
