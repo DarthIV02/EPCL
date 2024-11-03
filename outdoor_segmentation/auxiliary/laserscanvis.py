@@ -71,9 +71,9 @@ class LaserScanVis:
       print(las.x)
       print(las.y)
       print(las.z)
-      print(las.r)
-      print(las.g)
-      print(las.b)
+      print(las.red)
+      print(las.green)
+      print(las.blue)
 
     self.reset()
     load_data_to_gpu(first)
