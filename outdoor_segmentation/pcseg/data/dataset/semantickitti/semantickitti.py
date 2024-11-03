@@ -50,9 +50,9 @@ class SemantickittiDataset(data.Dataset):
         if self.split == 'train':
             self.seqs = ['01', '02', '03', '04', '05', '06', '07', '09', '10'] #  # '01'
         elif self.split == 'val':
-            self.seqs = ['11'] # '02'
+            self.seqs = ['08'] # '02'
         elif self.split == 'train_val':
-            self.seqs = ['02', '03', '04', '05', '06', '07', '09', '10', '08'] # , '01', '02'
+            self.seqs = ['01', '02', '03', '04', '05', '06', '07', '09', '10', '08'] # , '01', '02'
         elif self.split == 'test':
             self.seqs = ['12', '13', '14', '15', '16', '17', '18', '19', '20', '21'] # , '00'
         else:
