@@ -60,7 +60,7 @@ class LaserScanVis:
         self.sem_color_lut[key] = np.array(value, np.float32) / 255.0
 
     if dataset == 'tls':
-      base = data_config.DATA.DATA_PATH[:-33]
+      base = data_config['DATA']['DATA_PATH'][:-33]
       lidars = os.listdir(base + 'lidar_test')
       lidars = [base + '/lidar_test/' + i for i in lidars]
       print(lidars)
