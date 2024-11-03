@@ -78,7 +78,7 @@ class SemantickittiDataset(data.Dataset):
             self.resample()
         else:
             self.sample_idx = self._sample_idx
-            #self.resample()
+            self.resample()
 
     def __len__(self):
         return len(self.sample_idx)
