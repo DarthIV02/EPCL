@@ -178,7 +178,7 @@ class SemantickittiDataset(data.Dataset):
         }
 
         print("Path", pc_data['path'])
-        print("Labels og: ", np.bincount(pc_data['labels']))
+        print("Labels og: ", np.bincount(pc_data['labels'][0]))
 
         return pc_data
 
