@@ -21,6 +21,7 @@ class SemkittiVoxelDataset(data.Dataset):
         training=True,
         root_path=None,
         logger=None,
+        vis=None,
     ):
         super().__init__()
         self.data_cfgs = data_cfgs

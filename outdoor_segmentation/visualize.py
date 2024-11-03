@@ -244,6 +244,8 @@ if __name__ == '__main__':
                       pullData=test_loader,
                       percent_points=1,    
                       inference_model=trainer.model,
+                      dataset=FLAGS.dataset,
+                      data_config = data_config,
                       first = next(iter(test_loader)))
                     #key_press=key_press,
                     #canvas = canvas)
