@@ -177,8 +177,7 @@ class SemantickittiDataset(data.Dataset):
             'path': self.annos[index],
         }
 
-        print(pc_data['path'])
-        x = input()
+        print("Path", pc_data['path'])
 
         return pc_data
 
