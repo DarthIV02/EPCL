@@ -66,15 +66,9 @@ class LaserScanVis:
       self.lidars = [base + 'lidar_test/' + i for i in self.lidars]
       self.lidars.sort()
 
-    self.real_i = 0
+    #self.real_i = 0
 
-    las_file = laspy.read(self.lidars[0])
-    #print(las_file.xyz.shape)
-    #print(las_file.red)
-    #print(min(las_file.red))
-    #print(max(las_file.red))
-    #print(las_file.green)
-    #print(las_file.blue)
+    las_file = laspy.read(self.lidars[int(first['name'][-5])])
 
     self.reset()
     load_data_to_gpu(first)
@@ -205,7 +199,7 @@ class LaserScanVis:
                            face_color=self.viridis_color[..., ::-1],
                            edge_color=self.viridis_color[..., ::-1],
                            size=0.5)
-    print("Real Scan: ", self.lidars[self.real_i])
+    print("Real Scan: ", self.lidars[int(first['name'][-5])])
     scan_data = time.time()
     # plot semantics
     if self.semantics:
@@ -261,9 +255,7 @@ class LaserScanVis:
           ret_dict = self.inference_model(first)
       pc, labels, pred = first['original_p'][0][:,:3].float(), ret_dict['point_labels'], ret_dict['point_predict']
       if self.dataset == 'tls':
-        self.real_i += 1
-        self.real_i = self.real_i % len(self.lidars)
-        las_file = laspy.read(self.lidars[self.real_i])
+        las_file = laspy.read(self.lidars[int(first['name'][-5])])
         self.next_scan(pc, pred, labels, real=las_file)
       else:
         self.next_scan(pc, pred, labels)
