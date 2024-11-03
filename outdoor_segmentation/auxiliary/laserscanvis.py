@@ -175,9 +175,11 @@ class LaserScanVis:
           self.viridis_color = viridis_map[viridis_range]
         else:
           try:
-            print(real.r)
+            real.red = real.r
+            real.green = real.g
+            real.blue = real.b
           except:
-            print(real.red)
+            pass
           red_8bit = (real.red / 256).astype(int).reshape(-1, 1) / 255.
           green_8bit = (real.green / 256).astype(int).reshape(-1, 1) / 255.
           blue_8bit = (real.blue / 256).astype(int).reshape(-1, 1) / 255.
