@@ -69,6 +69,11 @@ class LaserScanVis:
       las = fh.read()
       print(las.points)
       print(las.x)
+      print(las.y)
+      print(las.z)
+      print(las.r)
+      print(las.g)
+      print(las.b)
 
     self.reset()
     load_data_to_gpu(first)
