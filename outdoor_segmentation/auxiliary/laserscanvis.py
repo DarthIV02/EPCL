@@ -66,7 +66,8 @@ class LaserScanVis:
       self.lidars.sort()
 
     las_file = laspy.read(self.lidars[0])
-    help(las_file)
+    print(las_file.xyz.shape)
+    print(las_file.rgb)
 
     self.reset()
     load_data_to_gpu(first)
