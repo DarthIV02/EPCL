@@ -67,7 +67,11 @@ class LaserScanVis:
 
     las_file = laspy.read(self.lidars[0])
     print(las_file.xyz.shape)
-    print(las_file.rgb)
+    print(las_file.red)
+    print(min(las_file.red))
+    print(max(las_file.red))
+    print(las_file.green)
+    print(las_file.blue)
 
     self.reset()
     load_data_to_gpu(first)
