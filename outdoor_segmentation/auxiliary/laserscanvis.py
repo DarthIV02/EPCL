@@ -64,11 +64,11 @@ class LaserScanVis:
       self.lidars = os.listdir(base + 'lidar_test')
       self.lidars = [base + 'lidar_test/' + i for i in self.lidars]
       self.lidars.sort()
-      print(self.lidars)
 
     with laspy.open(self.lidars[0]) as fh:
       las = fh.read()
-      print(las)
+      print(las.points)
+      print(las.x)
 
     self.reset()
     load_data_to_gpu(first)
