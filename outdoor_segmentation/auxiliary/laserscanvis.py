@@ -255,7 +255,12 @@ class LaserScanVis:
       with torch.no_grad():
           ret_dict = self.inference_model(first)
       pc, labels, pred = first['original_p'][0][:,:3].float(), ret_dict['point_labels'], ret_dict['point_predict']
-      self.next_scan(pc, pred, labels)
+      if self.dataset == 'tls':
+        self.real_i += 1
+        las_file = laspy.read(self.lidars[self.real_i])
+        self.next_scan(pc, pred, labels, real=las_file)
+      else:
+        self.next_scan(pc, pred, labels)
     elif event.key == 'Q' or event.key == 'Escape':
       self.destroy()
     elif event.key == ' ':
