@@ -161,6 +161,8 @@ class TLSDataset(data.Dataset):
             'path': self.annos[index],
         }
 
+        print("Og Path: ", pc_data['path'])
+
         return pc_data
 
     @staticmethod

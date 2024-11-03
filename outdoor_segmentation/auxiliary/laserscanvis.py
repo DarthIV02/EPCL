@@ -199,7 +199,8 @@ class LaserScanVis:
     self.scan_vis.set_data(real.xyz,
                            face_color=self.viridis_color[..., ::-1],
                            edge_color=self.viridis_color[..., ::-1],
-                           size=1)
+                           size=0.5)
+    print("Real Scan: ", self.lidars[0])
     scan_data = time.time()
     # plot semantics
     if self.semantics:
