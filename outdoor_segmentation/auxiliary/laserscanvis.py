@@ -164,20 +164,19 @@ class LaserScanVis:
         if len(gt_labels) == 1:
           gt_labels = gt_labels[0]
 
-        if self.dataset != 'tls':
-          power = 16
-          range_data = np.linalg.norm(points, 2, axis=1)
-          range_data = range_data**(1 / power)
-          viridis_range = ((range_data - range_data.min()) /
-                          (range_data.max() - range_data.min()) *
-                          255).astype(np.uint8)
-          viridis_map = self.get_mpl_colormap("viridis")
-          self.viridis_color = viridis_map[viridis_range]
-        else:
+        #if self.dataset != 'tls':
+        power = 16
+        range_data = np.linalg.norm(points, 2, axis=1)
+        range_data = range_data**(1 / power)
+        viridis_range = ((range_data - range_data.min()) /
+                        (range_data.max() - range_data.min()) *
+                        255).astype(np.uint8)
+        viridis_map = self.get_mpl_colormap("viridis")
+        self.viridis_color = viridis_map[viridis_range]
+        #else:
           #real.red
           #self.viridis_color =
-          pass 
-
+        
         sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
         self.sem_label_color = self.sem_color_lut[sem_label]
         self.sem_label_color = self.sem_label_color.reshape((-1, 3))
