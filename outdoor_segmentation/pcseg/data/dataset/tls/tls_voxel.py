@@ -21,6 +21,7 @@ class TlsVoxelDataset(data.Dataset):
         training=True,
         root_path=None,
         logger=None,
+        vis=None
     ):
         super().__init__()
         self.data_cfgs = data_cfgs
@@ -38,6 +39,7 @@ class TlsVoxelDataset(data.Dataset):
             root_path=self.root_path,
             logger=logger,
             if_scribble=True if self.data_cfgs.DATASET == 'scribblekitti' else False,
+            vis=vis
         )
 
         self.voxel_size = data_cfgs.VOXEL_SIZE

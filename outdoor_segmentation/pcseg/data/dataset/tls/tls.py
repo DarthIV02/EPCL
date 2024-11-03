@@ -25,6 +25,7 @@ class TLSDataset(data.Dataset):
         root_path: str = None,
         logger = None,
         if_scribble: bool = False,
+        vis = False
     ):
         super().__init__()
         self.data_cfgs = data_cfgs
@@ -32,7 +33,7 @@ class TLSDataset(data.Dataset):
         self.training = training
         self.logger = logger
         self.class_names = class_names
-        self.tta = data_cfgs.get('TTA', False)
+        self.tta = vis
         self.train_val = data_cfgs.get('TRAINVAL', False)
         self.augment = data_cfgs.AUGMENT
         self.if_scribble = if_scribble

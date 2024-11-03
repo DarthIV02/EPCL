@@ -62,6 +62,7 @@ def build_dataloader(
     training: bool = True,
     merge_all_iters_to_one_epoch: bool = False,
     total_epochs: int = 0,
+    vis: bool=False,
 ):
     if modality == 'range':
         if data_cfgs.DATASET == 'nuscenes':
@@ -107,6 +108,7 @@ def build_dataloader(
         root_path=root_path,
         training=training,
         logger=logger,
+        vis=vis
     )
 
     if merge_all_iters_to_one_epoch:

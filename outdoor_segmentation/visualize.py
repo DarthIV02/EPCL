@@ -108,6 +108,13 @@ if __name__ == '__main__':
     help='eval flag',
   )
   parser.add_argument(
+    '--visualize',
+    dest='vis',
+    default=True,
+    required=False,
+    help='Visualize flag',
+  )
+  parser.add_argument(
     '--exp',
     dest='exp',
     default=5,
@@ -194,6 +201,7 @@ if __name__ == '__main__':
       workers=FLAGS.workers,
       logger=trainer.logger,
       training=False,
+      vis=True
   )
 
   with open(f"./pcseg/data/dataset/{FLAGS.dataset}/{FLAGS.dataset}.yaml") as stream:
