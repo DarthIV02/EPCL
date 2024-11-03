@@ -164,23 +164,24 @@ class LaserScanVis:
         if len(gt_labels) == 1:
           gt_labels = gt_labels[0]
 
-        #if self.dataset != 'tls':
-        power = 16
-        range_data = np.linalg.norm(points, 2, axis=1)
-        range_data = range_data**(1 / power)
-        viridis_range = ((range_data - range_data.min()) /
-                        (range_data.max() - range_data.min()) *
-                        255).astype(np.uint8)
-        viridis_map = self.get_mpl_colormap("viridis")
-        self.viridis_color = viridis_map[viridis_range]
-        #else:
-          #real.red
-          #self.viridis_color =
+        if self.dataset != 'tls':
+          power = 16
+          range_data = np.linalg.norm(points, 2, axis=1)
+          range_data = range_data**(1 / power)
+          viridis_range = ((range_data - range_data.min()) /
+                          (range_data.max() - range_data.min()) *
+                          255).astype(np.uint8)
+          viridis_map = self.get_mpl_colormap("viridis")
+          self.viridis_color = viridis_map[viridis_range]
+        else:
+          red_8bit = (real.red / 256).astype(int)
+          green_8bit = (real.green / 256).astype(int)
+          blue_8bit = (real.blue / 256).astype(int)
+          self.viridis_color = np.vstack([red_8bit, green_8bit, blue_8bit])          
         
         sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
         self.sem_label_color = self.sem_color_lut[sem_label]
         self.sem_label_color = self.sem_label_color.reshape((-1, 3))
-        print("Shape: ", self.sem_label_color.shape)
 
         sem_label = gt_labels #& 0xFFFF  # semantic label in lower half
         self.sem_gt_label_color = self.sem_color_lut[sem_label]
