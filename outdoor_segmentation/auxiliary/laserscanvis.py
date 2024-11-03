@@ -174,22 +174,15 @@ class LaserScanVis:
           viridis_map = self.get_mpl_colormap("viridis")
           self.viridis_color = viridis_map[viridis_range]
         else:
-          try:
-            print("recolor")
-            print("r: ", real.Red)
-            print("reshape")
-            print(real.Red.reshape(-1, 1))
-            print("Reshape done")
-            red_8bit = real.Red.reshape(-1, 1) / 255.
-            print(red_8bit)
-            green_8bit = real.Green.reshape(-1, 1) / 255.
-            blue_8bit = real.Blue.reshape(-1, 1) / 255.
-          except:
+          if max(real.red) > 255:
             red_8bit = (real.red / 256).astype(int).reshape(-1, 1) / 255.
             green_8bit = (real.green / 256).astype(int).reshape(-1, 1) / 255.
             blue_8bit = (real.blue / 256).astype(int).reshape(-1, 1) / 255.
+          else:
+            red_8bit = real.red.reshape(-1, 1) / 255.
+            green_8bit = real.green.reshape(-1, 1) / 255.
+            blue_8bit = real.blue.reshape(-1, 1) / 255.
           self.viridis_color = np.hstack((red_8bit, green_8bit, blue_8bit))
-          print(self.viridis_color)    
         
         sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
         self.sem_label_color = self.sem_color_lut[sem_label]
