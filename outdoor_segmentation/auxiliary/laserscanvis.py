@@ -200,7 +200,7 @@ class LaserScanVis:
                            face_color=self.viridis_color[..., ::-1],
                            edge_color=self.viridis_color[..., ::-1],
                            size=0.5)
-    print("Real Scan: ", self.lidars[0])
+    print("Real Scan: ", self.lidars[self.real_i])
     scan_data = time.time()
     # plot semantics
     if self.semantics:
@@ -257,6 +257,7 @@ class LaserScanVis:
       pc, labels, pred = first['original_p'][0][:,:3].float(), ret_dict['point_labels'], ret_dict['point_predict']
       if self.dataset == 'tls':
         self.real_i += 1
+        self.real_i = self.real_i % len(self.lidars)
         las_file = laspy.read(self.lidars[self.real_i])
         self.next_scan(pc, pred, labels, real=las_file)
       else:
