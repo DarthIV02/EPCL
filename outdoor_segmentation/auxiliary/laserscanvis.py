@@ -65,20 +65,22 @@ class LaserScanVis:
       self.lidars = [base + 'lidar_test/' + i for i in self.lidars]
       self.lidars.sort()
 
+    self.real_i = 0
+
     las_file = laspy.read(self.lidars[0])
-    print(las_file.xyz.shape)
-    print(las_file.red)
-    print(min(las_file.red))
-    print(max(las_file.red))
-    print(las_file.green)
-    print(las_file.blue)
+    #print(las_file.xyz.shape)
+    #print(las_file.red)
+    #print(min(las_file.red))
+    #print(max(las_file.red))
+    #print(las_file.green)
+    #print(las_file.blue)
 
     self.reset()
     load_data_to_gpu(first)
     with torch.no_grad():
         ret_dict = inference_model(first)
     pc, labels, pred = first['original_p'][0][:,:3].float(), ret_dict['point_labels'], ret_dict['point_predict']
-    self.next_scan(pc, pred[0], labels[0])
+    self.next_scan(pc, pred[0], labels[0], real=las_file)
 
   # method for clock event callback
   def next_scan(self, points, pred, labels, time_x=None, event=None, real=None):
@@ -89,7 +91,10 @@ class LaserScanVis:
     centroid = np.mean(points, axis=0)
     centered_points = points - centroid
     data = self.prep_data((centered_points, pred, labels, time_x))
-    self.update_scan(data)
+    if real != None:
+      self.update_scan(data, real=real)
+    else:
+      self.update_scan(data)
 
   def reset(self):
     """ Reset. """
@@ -151,7 +156,7 @@ class LaserScanVis:
 
     return color_range.reshape(256, 3).astype(np.float32) / 255.0
 
-  def get_colors(self, points, gt_labels, pred_labels):
+  def get_colors(self, points, gt_labels, pred_labels, real=None):
         
         if len(pred_labels) == 1:
           pred_labels = pred_labels[0]
@@ -168,22 +173,25 @@ class LaserScanVis:
           viridis_map = self.get_mpl_colormap("viridis")
           self.viridis_color = viridis_map[viridis_range]
         else:
-          pass
+          #real.red
+          #self.viridis_color =
+          pass 
 
         sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
         self.sem_label_color = self.sem_color_lut[sem_label]
         self.sem_label_color = self.sem_label_color.reshape((-1, 3))
+        print("Shape: ", self.sem_label_color.shape)
 
         sem_label = gt_labels #& 0xFFFF  # semantic label in lower half
         self.sem_gt_label_color = self.sem_color_lut[sem_label]
         self.sem_gt_label_color = self.sem_gt_label_color.reshape((-1, 3))
 
   #@getTime
-  def update_scan(self, data):
+  def update_scan(self, data, real=None):
     points, pred_labels, gt_labels, t = data
 
     start = time.time()
-    self.get_colors(points, gt_labels, pred_labels)
+    self.get_colors(points, gt_labels, pred_labels, real=real)
     load = time.time()
 
     # Raw scan -> change
