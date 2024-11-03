@@ -99,19 +99,20 @@ class SemantickittiDataset(data.Dataset):
         return ringID
 
     def __getitem__(self, index):
+        print("index", index)
         raw_data = np.fromfile(self.annos[self.sample_idx[index]], dtype=np.float32).reshape((-1, 4))
 
         if self.split == 'test':
             annotated_data = np.expand_dims(np.zeros_like(raw_data[:, 0], dtype=int), axis=1)
         else:
             if self.if_scribble:  # ScribbleKITTI (weak label)
-                annos = self.annos[index].replace('SemanticKITTI', 'ScribbleKITTI')
+                annos = self.annos[self.sample_idx[index]].replace('SemanticKITTI', 'ScribbleKITTI')
                 annotated_data = np.fromfile(
                     annos.replace('velodyne', 'scribbles')[:-3] + 'label', dtype=np.uint32
                 ).reshape((-1, 1))
             else:  # SemanticKITTI (full label)
                 annotated_data = np.fromfile(
-                    self.annos[index].replace('velodyne', 'labels')[:-3] + 'label', dtype=np.uint32
+                    self.annos[self.sample_idx[index]].replace('velodyne', 'labels')[:-3] + 'label', dtype=np.uint32
                 ).reshape((-1, 1))
             
             annotated_data = annotated_data & 0xFFFF
@@ -120,16 +121,16 @@ class SemantickittiDataset(data.Dataset):
         prob = np.random.choice(2, 1)
         if self.augment == 'GlobalAugment_LP':
             if self.split == 'train' and prob == 1:
-                raw_data1 = np.fromfile(self.annos_another[index], dtype=np.float32).reshape((-1, 4))
+                raw_data1 = np.fromfile(self.annos_another[self.sample_idx[index]], dtype=np.float32).reshape((-1, 4))
 
                 if self.if_scribble:  # ScribbleKITTI (weak label)
-                    annos1 = self.annos_another[index].replace('SemanticKITTI', 'ScribbleKITTI')
+                    annos1 = self.annos_another[self.sample_idx[index]].replace('SemanticKITTI', 'ScribbleKITTI')
                     annotated_data1 = np.fromfile(
                         annos1.replace('velodyne', 'scribbles')[:-3] + 'label', dtype=np.uint32
                     ).reshape((-1, 1))
                 else: # SemanticKITTI (full label)
                     annotated_data1 = np.fromfile(
-                        self.annos_another[index].replace('velodyne', 'labels')[:-3] + 'label', dtype=np.uint32
+                        self.annos_another[self.sample_idx[index]].replace('velodyne', 'labels')[:-3] + 'label', dtype=np.uint32
                     ).reshape((-1, 1))
                 
                 annotated_data1 = annotated_data1 & 0xFFFF
@@ -143,16 +144,16 @@ class SemantickittiDataset(data.Dataset):
                 )
             
             elif self.split == 'train' and prob == 0:
-                raw_data1 = np.fromfile(self.annos_another[index], dtype=np.float32).reshape((-1, 4))
+                raw_data1 = np.fromfile(self.annos_another[self.sample_idx[index]], dtype=np.float32).reshape((-1, 4))
 
                 if self.if_scribble:  # ScribbleKITTI (weak label)
-                    annos1 = self.annos_another[index].replace('SemanticKITTI', 'ScribbleKITTI')
+                    annos1 = self.annos_another[self.sample_idx[index]].replace('SemanticKITTI', 'ScribbleKITTI')
                     annotated_data1 = np.fromfile(
                         annos1.replace('velodyne', 'scribbles')[:-3] + 'label', dtype=np.uint32
                     ).reshape((-1, 1))
                 else: # SemanticKITTI (full label)
                     annotated_data1 = np.fromfile(
-                        self.annos_another[index].replace('velodyne', 'labels')[:-3] + 'label', dtype=np.uint32
+                        self.annos_another[self.sample_idx[index]].replace('velodyne', 'labels')[:-3] + 'label', dtype=np.uint32
                     ).reshape((-1, 1))
                 
                 annotated_data1 = annotated_data1 & 0xFFFF
@@ -174,7 +175,7 @@ class SemantickittiDataset(data.Dataset):
         pc_data = {
             'xyzret': raw_data,
             'labels': annotated_data.astype(np.uint8),
-            'path': self.annos[index],
+            'path': self.annos[self.sample_idx[index]],
         }
 
         #print("Path", pc_data['path'])
