@@ -753,10 +753,10 @@ class EPCLOutdoorSegHD(BaseSegmentor):
 
             #coords_xyz = batch_dict['lidar'].C[:, :3].float()
             #offset = batch_dict['offset']
-            print("Classification")
-            print(batch_dict['targets'].__dict__)
-            print(torch.bincount(batch_dict['targets'].feats))
-            here = input()
+            #print("Classification")
+            #print(batch_dict['targets'].__dict__)
+            #print(torch.bincount(batch_dict['targets'].feats))
+            #here = input()
             self.hd_model.train(tuple_feat, batch_dict['targets'].feats, batch_dict = batch_dict)
 
             return {}
