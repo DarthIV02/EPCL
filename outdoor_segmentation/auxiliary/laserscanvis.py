@@ -174,6 +174,8 @@ class LaserScanVis:
           viridis_map = self.get_mpl_colormap("viridis")
           self.viridis_color = viridis_map[viridis_range]
         else:
+          print(real.r)
+          print(real.red)
           red_8bit = (real.red / 256).astype(int).reshape(-1, 1) / 255.
           green_8bit = (real.green / 256).astype(int).reshape(-1, 1) / 255.
           blue_8bit = (real.blue / 256).astype(int).reshape(-1, 1) / 255.
