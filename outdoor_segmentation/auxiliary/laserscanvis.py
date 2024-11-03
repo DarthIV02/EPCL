@@ -176,14 +176,14 @@ class LaserScanVis:
         else:
           try:
             print("recolor")
-            print("r: ", real.R)
+            print("r: ", real.Red)
             print("reshape")
-            print(real.R.reshape(-1, 1))
+            print(real.Red.reshape(-1, 1))
             print("Reshape done")
-            red_8bit = real.R.reshape(-1, 1) / 255.
+            red_8bit = real.Red.reshape(-1, 1) / 255.
             print(red_8bit)
-            green_8bit = real.G.reshape(-1, 1) / 255.
-            blue_8bit = real.B.reshape(-1, 1) / 255.
+            green_8bit = real.Green.reshape(-1, 1) / 255.
+            blue_8bit = real.Blue.reshape(-1, 1) / 255.
           except:
             red_8bit = (real.red / 256).astype(int).reshape(-1, 1) / 255.
             green_8bit = (real.green / 256).astype(int).reshape(-1, 1) / 255.
