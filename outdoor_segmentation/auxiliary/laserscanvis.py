@@ -61,9 +61,14 @@ class LaserScanVis:
 
     if dataset == 'tls':
       base = data_config['DATA_PATH'][:-33]
-      lidars = os.listdir(base + 'lidar_test')
-      lidars = [base + '/lidar_test/' + i for i in lidars]
-      print(lidars)
+      self.lidars = os.listdir(base + 'lidar_test')
+      self.lidars = [base + 'lidar_test/' + i for i in self.lidars]
+      self.lidars.sort()
+      print(self.lidars)
+
+    with laspy.open(self.lidars[0]) as fh:
+      las = fh.read()
+      print(las)
 
     self.reset()
     load_data_to_gpu(first)
@@ -73,7 +78,7 @@ class LaserScanVis:
     self.next_scan(pc, pred[0], labels[0])
 
   # method for clock event callback
-  def next_scan(self, points, pred, labels, time_x=None, event=None):
+  def next_scan(self, points, pred, labels, time_x=None, event=None, real=None):
     #print(points)
     #print(points.shape)
     # centroid = torch.mean(points, dim=0)
