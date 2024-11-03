@@ -67,7 +67,7 @@ class LaserScanVis:
       self.lidars.sort()
 
     #self.real_i = 0
-    print(int(first['name'][-5])-1)
+    print(first['name'])
     las_file = laspy.read(self.lidars[int(first['name'][-5])-1])
 
     self.reset()
