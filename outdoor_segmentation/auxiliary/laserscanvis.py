@@ -71,7 +71,8 @@ class LaserScanVis:
       print(las.x)
       print(las.y)
       print(las.z)
-      print(las.red)
+      print(min(las.red))
+      print(max(las.red))
       print(las.green)
       print(las.blue)
 
