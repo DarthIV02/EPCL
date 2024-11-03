@@ -177,8 +177,7 @@ class LaserScanVis:
           red_8bit = (real.red / 256).astype(int).reshape(-1, 1) / 255.
           green_8bit = (real.green / 256).astype(int).reshape(-1, 1) / 255.
           blue_8bit = (real.blue / 256).astype(int).reshape(-1, 1) / 255.
-          self.viridis_color = np.hstack((red_8bit, green_8bit, blue_8bit))
-          print(self.viridis_color.shape)     
+          self.viridis_color = np.hstack((red_8bit, green_8bit, blue_8bit))    
         
         sem_label = pred_labels #& 0xFFFF  # semantic label in lower half
         self.sem_label_color = self.sem_color_lut[sem_label]
@@ -197,7 +196,7 @@ class LaserScanVis:
     load = time.time()
 
     # Raw scan -> change
-    self.scan_vis.set_data(points,
+    self.scan_vis.set_data(real.xyz,
                            face_color=self.viridis_color[..., ::-1],
                            edge_color=self.viridis_color[..., ::-1],
                            size=1)
