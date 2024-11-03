@@ -65,7 +65,7 @@ class LaserScanVis:
       self.lidars = [base + 'lidar_test/' + i for i in self.lidars]
       self.lidars.sort()
 
-    las_file = laspy.file.File(self.lidars[0], mode='r')
+    las_file = laspy.read(self.lidars[0])
     help(las_file)
 
     self.reset()
