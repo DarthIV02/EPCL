@@ -33,6 +33,7 @@ class LaserScanVis:
     self.percent_points = percent_points
     self.pullData = pullData
     self.inference_model = inference_model
+    self.dataset = dataset
 
     # useful for determining runtime data, not required
     self.csvwriter = csvwriter
