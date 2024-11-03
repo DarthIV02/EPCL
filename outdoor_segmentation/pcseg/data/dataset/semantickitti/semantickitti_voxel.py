@@ -77,6 +77,7 @@ class SemkittiVoxelDataset(data.Dataset):
         point_label = pc_data['labels'].reshape(-1)
         print("Point Label", point_label)
         print("Point Label", np.bincount(point_label))
+        print(pc_data['path'])
         point = pc_data['xyzret'][:,:4].astype(np.float32)
 
         num_points_current_frame = point.shape[0]
@@ -126,6 +127,7 @@ class SemkittiVoxelDataset(data.Dataset):
 
         pc = pc_[inds]
         feat = feat_[inds]
+
         labels = point_label[inds]
         
         lidar = SparseTensor(feat, pc)
