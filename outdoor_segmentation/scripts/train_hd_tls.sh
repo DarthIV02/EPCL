@@ -32,7 +32,6 @@ python -m torch.distributed.launch \
 --launcher pytorch \
 --train_hd \
 --ckp_save_interval 5 \
---crop
 --exp 5 \
 --eval \
 --pretrained_model ${pretrained_model} \
