@@ -62,8 +62,8 @@ class LaserScanVis:
 
     if dataset == 'tls':
       base = data_config['DATA_PATH'][:-33]
-      self.lidars = os.listdir(base + 'lidar_test')
-      self.lidars = [base + 'lidar_test/' + i for i in self.lidars]
+      self.lidars = os.listdir(base + 'lidar_test/train/')
+      self.lidars = [base + 'lidar_test/train/' + i for i in self.lidars]
       self.lidars.sort()
 
     #self.real_i = 0
