@@ -65,6 +65,7 @@ class LaserScanVis:
       self.lidars = os.listdir(base + 'lidar_test/train/')
       self.lidars = [base + 'lidar_test/train/' + i for i in self.lidars]
       self.lidars.sort()
+      print(self.lidars)
 
     #self.real_i = 0
     print(first['name'])
