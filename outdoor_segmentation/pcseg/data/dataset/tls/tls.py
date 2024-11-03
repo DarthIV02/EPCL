@@ -51,11 +51,11 @@ class TLSDataset(data.Dataset):
         if self.split == 'train':
             self.seqs = ['00']
         elif self.split == 'val':
-            self.seqs = ['01']
+            self.seqs = ['02']
         elif self.split == 'train_val':
             self.seqs = ['00', '01']
         elif self.split == 'test':
-            self.seqs = ['02']
+            self.seqs = ['01']
         else:
             raise Exception('split must be train/val/train_val/test.')
         
