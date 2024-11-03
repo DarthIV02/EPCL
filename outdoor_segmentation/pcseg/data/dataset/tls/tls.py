@@ -53,13 +53,14 @@ class TLSDataset(data.Dataset):
         elif self.split == 'val':
             self.seqs = ['02']
         elif self.split == 'train_val':
-            self.seqs = ['00', '01']
+            self.seqs = ['00', '02']
         elif self.split == 'test':
             self.seqs = ['01']
         else:
             raise Exception('split must be train/val/train_val/test.')
         
         self.annos = []
+        print("Seq: ", self.seqs)
         for seq in self.seqs:
             self.annos += absoluteFilePaths('/'.join([self.root_path, str(seq).zfill(2), 'velodyne']))
         self.annos.sort()
