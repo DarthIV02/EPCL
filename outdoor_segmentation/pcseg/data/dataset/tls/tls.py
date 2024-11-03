@@ -33,7 +33,7 @@ class TLSDataset(data.Dataset):
         self.training = training
         self.logger = logger
         self.class_names = class_names
-        self.tta = vis
+        self.tta = data_cfgs.get('TTA', False)
         self.train_val = data_cfgs.get('TRAINVAL', False)
         self.augment = data_cfgs.AUGMENT
         self.if_scribble = if_scribble
@@ -160,9 +160,6 @@ class TLSDataset(data.Dataset):
             'labels': annotated_data.astype(np.uint8),
             'path': self.annos[index],
         }
-
-        print("Og Path: ", pc_data['path'])
-
         return pc_data
 
     @staticmethod
