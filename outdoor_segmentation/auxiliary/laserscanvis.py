@@ -178,6 +178,7 @@ class LaserScanVis:
     self.get_colors(points, gt_labels, pred_labels)
     load = time.time()
 
+    # Raw scan -> change
     self.scan_vis.set_data(points,
                            face_color=self.viridis_color[..., ::-1],
                            edge_color=self.viridis_color[..., ::-1],

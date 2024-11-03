@@ -8,7 +8,7 @@ DATA:
     AUGMENT: 'GlobalAugment_LP'  # choices: ['GlobalAugment', 'GlobalAugment_LP']
     NUM_POINTS: 1000000
     TRAINVAL: False           # train set: train + val
-    TTA: False
+    TTA: True
     SAMPLES_PER_EPOCH: 24
 
 MODEL:
