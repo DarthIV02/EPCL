@@ -51,7 +51,7 @@ class TLSDataset(data.Dataset):
         if self.split == 'train':
             self.seqs = ['00']
         elif self.split == 'val':
-            self.seqs = ['02']
+            self.seqs = ['00']
         elif self.split == 'train_val':
             self.seqs = ['00', '02']
         elif self.split == 'test':
