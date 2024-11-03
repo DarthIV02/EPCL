@@ -99,7 +99,7 @@ class SemantickittiDataset(data.Dataset):
         return ringID
 
     def __getitem__(self, index):
-        raw_data = np.fromfile(self.annos[index], dtype=np.float32).reshape((-1, 4))
+        raw_data = np.fromfile(self.annos[self.sample_idx[index]], dtype=np.float32).reshape((-1, 4))
 
         if self.split == 'test':
             annotated_data = np.expand_dims(np.zeros_like(raw_data[:, 0], dtype=int), axis=1)
